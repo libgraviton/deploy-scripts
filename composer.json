@@ -6,6 +6,14 @@
         {
             "name": "Lucas Bickel",
             "email": "lucas.bickel@swisscom.com"
+        },
+        {
+            "name": "Ramon Boss",
+            "email": "ramon.boss@swisscom.com"
+        },
+        {
+            "name": "Leonard Gfeller",
+            "email": "leonard.gfeller@swisscom.com"
         }
     ],
     "require": {},

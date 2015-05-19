@@ -1,4 +1,7 @@
 <?php
+/**
+ * Validate deploy class
+ */
 
 namespace Graviton\Deploy;
 
@@ -9,7 +12,11 @@ namespace Graviton\Deploy;
  */
 class DeployTest extends \PHPUnit_Framework_TestCase
 {
-  function testInstantuateClass() {
-    new Deploy();
-  }
+    /**
+     * @return void
+     */
+    public function testInstantuateClass()
+    {
+        new Deploy();
+    }
 }

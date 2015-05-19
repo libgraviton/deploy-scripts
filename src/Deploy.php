@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class to deploy graviton
+ */
 
 namespace Graviton\Deploy;
 

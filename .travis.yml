@@ -12,4 +12,3 @@ script:
   - ./vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
   - composer check
-  

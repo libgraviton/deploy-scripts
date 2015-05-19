@@ -15,7 +15,7 @@ class DeployTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testInstantuateClass()
+    public function testInstanceClass()
     {
         $deploy = new Deploy();
         $this->assertInstanceOf('\Graviton\Deploy\Deploy', $deploy);

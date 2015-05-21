@@ -15,4 +15,21 @@ use Symfony\Component\Process\Process;
  */
 class Deployment
 {
+    /**
+     * Deploy steps
+     *
+     * @var array
+     */
+    private $steps = array();
+    
+    /**
+     * Add new step
+     *
+     * @param StepInterface $step
+     */
+    public function add(StepInterface $step)
+    {
+        array_push($this->steps, $step);
+        return $this;
+    }
 }

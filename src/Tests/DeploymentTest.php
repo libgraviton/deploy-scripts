@@ -13,4 +13,14 @@ namespace Graviton\Deployment;
  */
 class DeploymentTest extends \PHPUnit_Framework_TestCase
 {
+
+    public function testAdd()
+    {
+        $deployment = new Deployment();
+        $step = $this->getMockBuilder('Graviton\Deployment\StepInterface')
+            ->getMock();
+        $fluentAdd = $deployment->add($step);
+        $this->assertAttributeCount(1, 'steps', $deployment);
+        $this->assertInstanceOf('Graviton\Deployment\Deployment', $fluentAdd);
+    }
 }

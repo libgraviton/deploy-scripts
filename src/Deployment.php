@@ -32,4 +32,9 @@ class Deployment
         array_push($this->steps, $step);
         return $this;
     }
+    
+    public function deploy()
+    {
+        
+    }
 }

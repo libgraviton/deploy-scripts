@@ -26,4 +26,24 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Graviton\Deployment\Deployment', $deployment->add($step));
         $this->assertAttributeCount(1, 'steps', $deployment);
     }
+    
+    /**
+     * testDoIt
+     *
+     * @return void
+     */
+    public function testDeploy()
+    {
+        $deployment = new Deployment();
+        $step = $this->getMockBuilder('Graviton\Deployment\StepInterface')
+            ->getMock();
+        $step->method('getCommand')
+            ->willReturn('helloWorldCmd');
+        $step->expects($this->once())
+            ->method('getCommand');
+        
+        $deployment->add($step);
+        
+        $deployment->deploy();
+    }
 }

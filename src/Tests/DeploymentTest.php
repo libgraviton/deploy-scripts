@@ -20,21 +20,11 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $deployment = new Deployment($this->getProcessFactoryDouble());
+        $deployment = new Deployment($this->getProcessBuilderDouble());
         $step = $this->getStepDouble();
 
         $this->assertInstanceOf('Graviton\Deployment\Deployment', $deployment->add($step));
         $this->assertAttributeCount(1, 'steps', $deployment);
-    }
-
-    /**
-     * testDeployWithZeroSteps
-     *
-     * @return void
-     */
-    public function testDeployWithZeroSteps()
-    {
-        
     }
 
     /**
@@ -47,30 +37,31 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $command = 'helloWorldCmd';
 
         $step = $this->getStepDouble();
-        $step->method('getCommand')
+        $step
+            ->expects($this->once())
+            ->method('getCommand')
             ->willReturn($command);
-        $step->expects($this->once())
-            ->method('getCommand');
 
-        $processMock = $this->getMockBuilder('Symfony\Component\Process\Process')
-            ->setConstructorArgs(array($command))
-            ->getMock();
-        $processMock->expects($this->once())
-            ->method('run');
+        $process = $this->getProcessDouble();
+        $process
+            ->expects($this->once())
+            ->method('mustRun');
 
-        $processFactory = $this->getProcessFactoryDouble();
+        $processBuilder = $this->getProcessBuilderDouble();
+        $processBuilder
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->equalTo($command))
+            ->willReturn($processBuilder);
+        $processBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->willReturn($process);
 
-        $processFactory->method('create')
-            ->willReturn($processMock);
-
-        $processFactory->expects($this->once())
-            ->method('create');
-
-        $deployment = new Deployment($processFactory);
-
-        $deployment->add($step);
-
-        $deployment->deploy();
+        $deployment = new Deployment($processBuilder);
+        $deployment
+            ->add($step)
+            ->deploy();
     }
 
     /**
@@ -80,7 +71,48 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeployWithManySteps()
     {
-        
+        $command = 'helloWorldCmd';
+
+        $step = $this->getStepDouble();
+        $step
+            ->expects($this->exactly(2))
+            ->method('getCommand')
+            ->willReturn($command);
+
+        $process = $this->getProcessDouble();
+        $process
+            ->expects($this->exactly(2))
+            ->method('mustRun');
+
+        $processBuilder = $this->getProcessBuilderDouble();
+        $processBuilder
+            ->expects($this->exactly(2))
+            ->method('add')
+            ->with($this->equalTo($command))
+            ->willReturn($processBuilder);
+        $processBuilder
+            ->expects($this->exactly(2))
+            ->method('getProcess')
+            ->willReturn($process);
+
+        $deployment = new Deployment($processBuilder);
+        $deployment
+            ->add($step)
+            ->add($step)
+            ->deploy();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getProcessDouble()
+    {
+        $process = $this->getMockBuilder('\Symfony\Component\Process\Process')
+            ->disableOriginalConstructor()
+            ->setMethods(array('mustRun'))
+            ->getMock();
+
+        return $process;
     }
 
     /**
@@ -96,10 +128,10 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * get a process factory double
      *
-     * @return ProcessFactory
+     * @return \Symfony\Component\Process\ProcessBuilder
      */
-    private function getProcessFactoryDouble()
+    private function getProcessBuilderDouble()
     {
-        return $this->getMock('Graviton\Deployment\ProcessFactory');
+        return $this->getMock('\Symfony\Component\Process\ProcessBuilder');
     }
 }

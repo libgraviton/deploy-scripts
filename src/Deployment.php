@@ -5,6 +5,8 @@
 
 namespace Graviton\Deployment;
 
+use Symfony\Component\Process\ProcessBuilder;
+
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -18,22 +20,22 @@ class Deployment
      * @var StepInterface[]
      */
     private $steps = array();
-    
+
     /**
-     * Factory for process
+     * Builder for process
      *
-     * @var ProcessFactory
+     * @var ProcessBuilder
      */
-    private $processFactory;
-    
+    private $processBuilder;
+
     /**
      * Constructor with ProcessFactory param
      *
-     * @param ProcessFactory $processFactory factory to create processes
+     * @param ProcessBuilder $processBuilder factory to create processes
      */
-    public function __construct(ProcessFactory $processFactory)
+    public function __construct(ProcessBuilder $processBuilder)
     {
-        $this->processFactory = $processFactory;
+        $this->processBuilder = $processBuilder;
     }
 
     /**
@@ -47,7 +49,7 @@ class Deployment
         $this->steps[] = $step;
         return $this;
     }
-    
+
     /**
      * deploys the steps
      *
@@ -57,8 +59,8 @@ class Deployment
     {
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
-            $process = $this->processFactory->create($command);
-            $process->run();
+            $process = $this->processBuilder->add($command)->getProcess();
+            $process->mustRun();
         }
     }
 }

@@ -20,8 +20,8 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $deployment = new Deployment();
-        $step = $this->getMock('Graviton\Deployment\StepInterface');
+        $deployment = new Deployment($this->getProcessFactoryDouble());
+        $step = $this->getStepDouble();
         
         $this->assertInstanceOf('Graviton\Deployment\Deployment', $deployment->add($step));
         $this->assertAttributeCount(1, 'steps', $deployment);
@@ -34,16 +34,34 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeploy()
     {
-        $deployment = new Deployment();
-        $step = $this->getMockBuilder('Graviton\Deployment\StepInterface')
-            ->getMock();
+        $step = $this->getStepDouble();
         $step->method('getCommand')
             ->willReturn('helloWorldCmd');
         $step->expects($this->once())
             ->method('getCommand');
         
+        
+        
+        $processFactory = $this->getProcessFactoryDouble();
+        $processFactory->method('create')
+            ->willReturn($this->getMock('Symfony\Component\Process\Process'));
+        $processFactory->expects($this->once())
+            ->method('create');
+        
+        $deployment = new Deployment($processFactory);
+        
         $deployment->add($step);
         
         $deployment->deploy();
+    }
+    
+    private function getStepDouble()
+    {
+        return $this->getMock('Graviton\Deployment\StepInterface');
+    }
+    
+    private function getProcessFactoryDouble()
+        {
+        return $this->getMock('Graviton\Deployment\ProcessFactory');
     }
 }

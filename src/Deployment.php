@@ -22,6 +22,22 @@ class Deployment
     private $steps = array();
     
     /**
+     * Factory for process
+     *
+     * @var ProcessFactory
+     */
+    private $processFactory;
+    
+    /**
+     * 
+     * @param ProcessFactory $processFactory
+     */
+    public function __construct(ProcessFactory $processFactory)
+    {
+        $this->processFactory = $processFactory;
+    }
+
+    /**
      * Add new step
      *
      * @param StepInterface $step step to add
@@ -29,12 +45,16 @@ class Deployment
      */
     public function add(StepInterface $step)
     {
-        array_push($this->steps, $step);
+        $this->steps[] = $step;
         return $this;
     }
     
     public function deploy()
     {
-        
+        foreach ($this->steps as $step)
+        {
+            $command = $step->getCommand();
+            $process = $this->processFactory->create($command);
+        }
     }
 }

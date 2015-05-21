@@ -9,10 +9,10 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Graviton\\Deploy\\": "src/"}
+        "psr-4": { "Graviton\\Deployment\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": { "Graviton\\Deploy\\": "src/Tests/"}
+        "psr-4": { "Graviton\\Deployment\\": "src/Tests/"}
     },
     "require": {
         "symfony/console": "^2.6",

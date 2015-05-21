@@ -1,21 +1,22 @@
 <?php
 /**
- * Interface for a step
+ *  base class to gather basic information for a step.
  */
 
-namespace Graviton\Deployment;
+namespace Graviton\Deployment\Steps;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-interface StepInterface
+abstract class AbstractStep implements StepInterface
 {
     /**
-     * returns the command
-     *
      * @return string
      */
-    public function getCommand();
+    public function cfCommand()
+    {
+        return $_ENV['SYMFONY__DEPLOYMENT__CF_COMMAND'];
+    }
 }

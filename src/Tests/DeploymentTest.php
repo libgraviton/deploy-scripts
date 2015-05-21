@@ -13,7 +13,11 @@ namespace Graviton\Deployment;
  */
 class DeploymentTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * testAdd
+     *
+     * @return void
+     */
     public function testAdd()
     {
         $deployment = new Deployment();

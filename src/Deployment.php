@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class to deploy graviton
  */
@@ -25,7 +24,8 @@ class Deployment
     /**
      * Add new step
      *
-     * @param StepInterface $step
+     * @param StepInterface $step step to add
+     * @return Deployment
      */
     public function add(StepInterface $step)
     {

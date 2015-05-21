@@ -18,7 +18,7 @@ class Deployment
     /**
      * Deploy steps
      *
-     * @var array
+     * @var StepInterface[]
      */
     private $steps = array();
     

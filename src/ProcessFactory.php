@@ -1,4 +1,7 @@
 <?php
+/**
+ * Creates a process instance
+ */
 
 namespace Graviton\Deployment;
 
@@ -11,6 +14,12 @@ use Symfony\Component\Process\Process;
  */
 class ProcessFactory
 {
+    /**
+     * create a new process
+     *
+     * @param string $command command for process
+     * @return Process
+     */
     public function create($command)
     {
         return new Process($command);

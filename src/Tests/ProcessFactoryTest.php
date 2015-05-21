@@ -1,4 +1,7 @@
 <?php
+/**
+ * Tests ProcessFactory
+ */
 
 namespace Graviton\Deployment;
 
@@ -9,6 +12,11 @@ namespace Graviton\Deployment;
  */
 class ProcessFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * testCreate
+     *
+     * @return void
+     */
     public function testCreate()
     {
         $processFactory = new ProcessFactory();

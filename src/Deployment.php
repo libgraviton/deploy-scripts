@@ -29,8 +29,9 @@ class Deployment
     private $processFactory;
     
     /**
-     * 
-     * @param ProcessFactory $processFactory
+     * Constructor with ProcessFactory param
+     *
+     * @param ProcessFactory $processFactory factory to create processes
      */
     public function __construct(ProcessFactory $processFactory)
     {
@@ -49,12 +50,17 @@ class Deployment
         return $this;
     }
     
+    /**
+     * deploys the steps
+     *
+     * @return void
+     */
     public function deploy()
     {
-        foreach ($this->steps as $step)
-        {
+        foreach ($this->steps as $step) {
             $command = $step->getCommand();
             $process = $this->processFactory->create($command);
+            $process->run();
         }
     }
 }

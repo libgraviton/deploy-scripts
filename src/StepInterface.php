@@ -1,4 +1,7 @@
 <?php
+/**
+ * Interface for a step
+ */
 
 namespace Graviton\Deployment;
 
@@ -9,5 +12,10 @@ namespace Graviton\Deployment;
  */
 interface StepInterface
 {
+    /**
+     * returns the command
+     *
+     * @return string
+     */
     public function getCommand();
 }

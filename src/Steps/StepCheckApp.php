@@ -28,7 +28,6 @@ final class StepCheckApp extends AbstractStep
         $this->applicationName = $applicationName;
     }
 
-
     /**
      * returns the command
      *
@@ -36,12 +35,10 @@ final class StepCheckApp extends AbstractStep
      */
     public function getCommand()
     {
-        return sprintf(
-            '%s %s "%s-%s"',
+        return array(
             $this->cfCommand(),
             'app',
-            $this->applicationName,
-            $this->slice
+            $this->applicationName . '-' . $this->slice
         );
     }
 }

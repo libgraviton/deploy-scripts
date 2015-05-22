@@ -17,6 +17,6 @@ abstract class AbstractStep implements StepInterface
      */
     public function cfCommand()
     {
-        return $_ENV['SYMFONY__DEPLOYMENT__CF_COMMAND'];
+        return $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'];
     }
 }

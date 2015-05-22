@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for a step
+ * Step to log off a Cloud Foundry instance.
  */
 
 namespace Graviton\Deployment\Steps;
@@ -10,12 +10,19 @@ namespace Graviton\Deployment\Steps;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-interface StepInterface
+class StepLogout extends AbstractStep
 {
+
     /**
      * returns the command
      *
-     * @return array
+     * @return string
      */
-    public function getCommand();
+    public function getCommand()
+    {
+        return array(
+            $this->cfCommand(),
+            'logout'
+        );
+    }
 }

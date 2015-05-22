@@ -21,16 +21,18 @@ composer require graviton/deploy-scripts
 ## Configuration
 ### Environment variables
 
-- ```SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME```
+- **SYMFONY__DEPLOYMENT__CF_COMMAND**
+  Shell command to call Cloud foundry (e.g. ```/usr/bin/cf```).
+- **SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME**
   Cloud Foundry login username.  
-- ```SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD```
-  Cloud Foundry login password
-- ```SYMFONY__DEPLOYMENT__CF_ORGANISATION```
-  Cloud Foundry ORG to be used
-- ```SYMFONY__DEPLOYMENT__CF_SPACE```
-  Cloud Foundry SPACE to be used
-- ```SYMFONY__DEPLOYMENT__CF_API_ENDPOINT```
-  Cloud Foundry API-URL to be used
+- **SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD**
+  Cloud Foundry login password.
+- **SYMFONY__DEPLOYMENT__CF_ORGANISATION**
+  Cloud Foundry ORG to be used.
+- **SYMFONY__DEPLOYMENT__CF_SPACE**
+  Cloud Foundry SPACE to be used.
+- **SYMFONY__DEPLOYMENT__CF_API_ENDPOINT**
+  Cloud Foundry API-URL to be used.
 
 ## Usage
 ### Console command

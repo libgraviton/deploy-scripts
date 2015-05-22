@@ -10,7 +10,7 @@ namespace Graviton\Deployment\Steps;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepLogout extends AbstractStep
+final class StepLogout extends AbstractStep
 {
 
     /**

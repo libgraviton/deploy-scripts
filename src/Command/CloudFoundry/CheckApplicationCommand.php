@@ -20,7 +20,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class CheckApplicationCommand extends Command
+final class CheckApplicationCommand extends Command
 {
     /**
      * Configures the current command.
@@ -38,11 +38,10 @@ class CheckApplicationCommand extends Command
                 'Which application shall be checked?'
             )
             ->addArgument(
-               'slice',
-               InputArgument::REQUIRED,
-               'Which deployed slice (green or blue) do you want to check?'
-            )
-        ;
+                'slice',
+                InputArgument::REQUIRED,
+                'Which deployed slice (green or blue) do you want to check?'
+            );
     }
 
     /**

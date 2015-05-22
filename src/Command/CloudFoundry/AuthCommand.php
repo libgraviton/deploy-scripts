@@ -17,7 +17,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class AuthCommand extends Command
+final class AuthCommand extends Command
 {
     /**
      * Configures the current command.

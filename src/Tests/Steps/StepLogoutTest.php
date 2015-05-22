@@ -14,12 +14,21 @@ use Graviton\Deployment\Steps\StepLogout;
  */
 class StepLogoutTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Will be called before the SUT is instantiated
+     *
+     * @return void
+     */
     public static function setUpBeforeClass()
     {
         $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
     }
 
-
+    /**
+     * Validate getCommand
+     *
+     * @return void
+     */
     public function testGetCommand()
     {
         $step = new StepLogout();

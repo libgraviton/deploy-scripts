@@ -105,9 +105,11 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $methods
+     * Provides an instance of the \Symfony\Component\Process\Process
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param array $methods Set of methods to be stubbed.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Process\Process
      */
     protected function getProcessDouble(array $methods = array())
     {
@@ -122,7 +124,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * get a step double
      *
-     * @return StepInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|StepInterface
      */
     private function getStepDouble()
     {
@@ -132,7 +134,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * get a process factory double
      *
-     * @return \Symfony\Component\Process\ProcessBuilder
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Process\ProcessBuilder
      */
     private function getProcessBuilderDouble()
     {

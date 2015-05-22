@@ -14,6 +14,11 @@ use Graviton\Deployment\Steps\StepAuth;
  */
 class StepAuthTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Will be called before the SUT is instantiated
+     *
+     * @return void
+     */
     public static function setUpBeforeClass()
     {
         $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
@@ -21,7 +26,11 @@ class StepAuthTest extends \PHPUnit_Framework_TestCase
         $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'] = 'mySecret';
     }
 
-
+    /**
+     * Validate getCommand
+     *
+     * @return void
+     */
     public function testGetCommand()
     {
         $step = new StepAuth();

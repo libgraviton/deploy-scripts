@@ -34,8 +34,8 @@ final class LogoutCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * @param InputInterface  $input  User input on console
+     * @param OutputInterface $output Output of the command
      *
      * @return void
      */

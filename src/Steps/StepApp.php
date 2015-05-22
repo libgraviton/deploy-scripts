@@ -19,8 +19,10 @@ final class StepApp extends AbstractStep
     private $applicationName;
 
     /**
-     * @param string $applicationName
-     * @param string $slice
+     * @param string $applicationName Name of the CF-application to be checked
+     * @param string $slice           deployment location in blue/green deployment.
+     *
+     * @link http://martinfowler.com/bliki/BlueGreenDeployment.html
      */
     public function __construct($applicationName, $slice)
     {

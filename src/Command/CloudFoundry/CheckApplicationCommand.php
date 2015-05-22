@@ -7,6 +7,8 @@ namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\StepCheckApp;
+use Graviton\Deployment\Steps\StepLogin;
+use Graviton\Deployment\Steps\StepLogout;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +62,9 @@ class CheckApplicationCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
+            ->add(new StepLogin())
             ->add(new StepCheckApp($name, $slice))
+            ->add(new StepLogout())
             ->deploy();
 
         $output->writeln('... done');

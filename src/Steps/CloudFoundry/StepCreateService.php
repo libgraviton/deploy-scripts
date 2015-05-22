@@ -21,7 +21,7 @@ final class StepCreateService extends AbstractStep
 
     /**
      * @param string $applicationName Name of the CF-application to be checked
-     * @param string $serviceName Name of the CF service to create
+     * @param string $serviceName     Name of the CF service to create
      */
     public function __construct($applicationName, $serviceName)
     {
@@ -39,7 +39,8 @@ final class StepCreateService extends AbstractStep
         return array(
             $this->cfCommand(),
             'cs',
-            $this->serviceName, $_SERVER['SYMFONY__DEPLOYMENT__CF_' . strtoupper($this->serviceName) . '_TYPE'],
+            $this->serviceName,
+            $_SERVER['SYMFONY__DEPLOYMENT__CF_' . strtoupper($this->serviceName) . '_TYPE'],
             $this->applicationName . '-' . $this->serviceName
         );
     }

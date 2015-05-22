@@ -1,16 +1,21 @@
 <?php
 /**
- * Class to deploy graviton
+ * Interface for a step
  */
 
-namespace Graviton\Deploy;
+namespace Graviton\Deployment\Steps;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class Deploy
+interface StepInterface
 {
-  
+    /**
+     * returns the command
+     *
+     * @return array
+     */
+    public function getCommand();
 }

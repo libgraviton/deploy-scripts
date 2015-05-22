@@ -16,7 +16,7 @@ final class StepAuth extends AbstractStep
     /**
      * returns the command
      *
-     * @return string
+     * @return array
      */
     public function getCommand()
     {

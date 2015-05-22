@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Command to create a Cloud Foundry service.
  */
@@ -20,6 +21,7 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 final class CreateServiceCommand extends Command
 {
+
     /**
      * Configures the current command.
      *
@@ -29,9 +31,11 @@ final class CreateServiceCommand extends Command
     {
         $this
             ->setName('graviton:deployment:cf:createService')
-            ->setDescription('Create a CF service. Use environment variable: '.
-                '"SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE"'.
-                'to make the service type available to the command.')
+            ->setDescription(
+                'Create a CF service. Use environment variable: ' .
+                '"SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE"' .
+                'to make the service type available to the command.'
+            )
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,
@@ -56,7 +60,7 @@ final class CreateServiceCommand extends Command
     {
         $applicationname = $input->getArgument('applicationname');
         $servicename = $input->getArgument('servicename');
-        
+
         $output->writeln('Creating ' . $servicename . ' service ...');
 
         $deployment = new Deployment(new ProcessBuilder());

@@ -29,7 +29,9 @@ final class CreateMongoDBCommand extends Command
     {
         $this
             ->setName('graviton:deployment:cf:createService')
-            ->setDescription('Create a CF service')
+            ->setDescription('Create a CF service. Use environment variable: '.
+                '"SYMFONY__DEPLOYMENT__CF_MONGODB_TYPE"'.
+                'to make the mongodb type available to the command.')
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,

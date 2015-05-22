@@ -18,7 +18,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class CreateMongoDBCommand extends Command
+final class CreateServiceCommand extends Command
 {
     /**
      * Configures the current command.
@@ -28,10 +28,10 @@ final class CreateMongoDBCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('graviton:deployment:cf:createMongoDBService')
+            ->setName('graviton:deployment:cf:createService')
             ->setDescription('Create a CF service. Use environment variable: '.
-                '"SYMFONY__DEPLOYMENT__CF_MONGODB_TYPE"'.
-                'to make the mongodb type available to the command.')
+                '"SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE"'.
+                'to make the service type available to the command.')
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,
@@ -54,10 +54,10 @@ final class CreateMongoDBCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Creating mongodb service ...');
-        
         $applicationname = $input->getArgument('applicationname');
         $servicename = $input->getArgument('servicename');
+        
+        $output->writeln('Creating ' . $servicename . ' service ...');
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment

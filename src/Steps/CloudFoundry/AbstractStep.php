@@ -3,7 +3,9 @@
  *  base class to gather basic information for a step.
  */
 
-namespace Graviton\Deployment\Steps;
+namespace Graviton\Deployment\Steps\CloudFoundry;
+
+use Graviton\Deployment\Steps\StepInterface;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>

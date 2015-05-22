@@ -1,18 +1,18 @@
 <?php
 /**
- * Test suite for the Auth step.
+ * Test suite for the Login step.
  */
 
-namespace Graviton\Deployment\Tests\Steps;
+namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
-use Graviton\Deployment\Steps\StepAuth;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepAuthTest extends \PHPUnit_Framework_TestCase
+class StepLoginTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Will be called before the SUT is instantiated
@@ -24,6 +24,9 @@ class StepAuthTest extends \PHPUnit_Framework_TestCase
         $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
         $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME'] = 'Jon';
         $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'] = 'mySecret';
+        $_SERVER['SYMFONY__DEPLOYMENT__CF_ORGANISATION'] = 'ORG';
+        $_SERVER['SYMFONY__DEPLOYMENT__CF_SPACE'] = 'SPACE';
+        $_SERVER['SYMFONY__DEPLOYMENT__CF_API_ENDPOINT'] = 'API_URL';
     }
 
     /**
@@ -33,10 +36,19 @@ class StepAuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $step = new StepAuth();
+        $step = new StepLogin();
 
         $this->assertEquals(
-            array('/usr/bin/cf' , 'auth' , 'Jon', 'mySecret'),
+            array(
+                '/usr/bin/cf',
+                'login',
+                '-u',
+                'Jon',
+                '-p', 'mySecret',
+                '-o', 'ORG',
+                '-s', 'SPACE',
+                '-a', 'API_URL',
+            ),
             $step->getCommand()
         );
     }

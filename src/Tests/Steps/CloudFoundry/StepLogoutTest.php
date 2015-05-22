@@ -3,9 +3,9 @@
  * Test suite for the Logout step.
  */
 
-namespace Graviton\Deployment\Tests\Steps;
+namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
-use Graviton\Deployment\Steps\StepLogout;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>

@@ -3,7 +3,7 @@
  * Step to verify the existence of an application in a Cloud Foundry instance.
  */
 
-namespace Graviton\Deployment\Steps;
+namespace Graviton\Deployment\Steps\CloudFoundry;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>

@@ -3,9 +3,9 @@
  * Test suite for the CheckApp step.
  */
 
-namespace Graviton\Deployment\Tests\Steps;
+namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
-use Graviton\Deployment\Steps\StepApp;
+use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>

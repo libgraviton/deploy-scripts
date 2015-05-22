@@ -10,7 +10,7 @@ namespace Graviton\Deployment\Steps;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class StepCheckApp extends AbstractStep
+final class StepApp extends AbstractStep
 {
     /** @var string  */
     private $slice;

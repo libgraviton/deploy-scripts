@@ -5,14 +5,14 @@
 
 namespace Graviton\Deployment\Tests\Steps;
 
-use Graviton\Deployment\Steps\StepCheckApp;
+use Graviton\Deployment\Steps\StepApp;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepCheckAppTest extends \PHPUnit_Framework_TestCase
+class StepAppTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -22,7 +22,7 @@ class StepCheckAppTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCommand()
     {
-        $step = new StepCheckApp('my_application', 'blue');
+        $step = new StepApp('my_application', 'blue');
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'app' , 'my_application-blue'),

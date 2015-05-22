@@ -33,10 +33,8 @@ composer require graviton/deploy-scripts
   Cloud Foundry SPACE to be used.
 - **SYMFONY__DEPLOYMENT__CF_API_ENDPOINT**
   Cloud Foundry API-URL to be used.
-- **SYMFONY__DEPLOYMENT__CF_MONGODB_TYPE**
-  Cloud Foundry MongoDB Type to be used.
-- **SYMFONY__DEPLOYMENT__CF_ATMOSS3_TYPE**
-  Cloud Foundry Atmoss3 Type to be used.
+- **SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE**
+  Cloud Foundry service Type to be used.
 
 ## Usage
 ### Console command

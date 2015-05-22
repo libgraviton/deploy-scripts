@@ -28,7 +28,7 @@ final class CreateMongoDBCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('graviton:deployment:cf:createService')
+            ->setName('graviton:deployment:cf:createMongoDBService')
             ->setDescription('Create a CF service. Use environment variable: '.
                 '"SYMFONY__DEPLOYMENT__CF_MONGODB_TYPE"'.
                 'to make the mongodb type available to the command.')

@@ -46,7 +46,7 @@ $>./bin/console
 see tests ;) 
 
 ## Development
-We welcome contributions as a pull requewst on the develop branch.
+We welcome contributions as a pull request on the develop branch.
 
 ## Available Commands
 ### Cloud Foundry specific

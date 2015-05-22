@@ -6,7 +6,7 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Deployment;
-use Graviton\Deployment\Steps\StepLogin;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

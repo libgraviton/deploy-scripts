@@ -30,8 +30,6 @@ class Deployment
     private $processBuilder;
 
     /**
-     * Constructor with ProcessFactory param
-     *
      * @param ProcessBuilder $processBuilder factory to create processes
      */
     public function __construct(ProcessBuilder $processBuilder)
@@ -66,7 +64,7 @@ class Deployment
                 ->setArguments($command)
                 ->getProcess();
             $process->mustRun();
-            $process->getOutput();
+            print $process->getOutput();
         }
     }
 }

@@ -31,5 +31,5 @@
             "./vendor/bin/phpcs --standard=ENTB --ignore='*.css' --ignore='*.js' src/ src/Tests/"
         ]
     },
-    "bin": ["bin/console"]
+    "bin": ["bin/deploy"]
 }

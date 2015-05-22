@@ -1,4 +1,7 @@
 <?php
+/**
+ * Command to verify the existence of an a application in a Cloud Foundry.
+ */
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
@@ -17,6 +20,11 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class CheckApplicationCommand extends Command
 {
+    /**
+     * Configures the current command.
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this
@@ -35,6 +43,14 @@ class CheckApplicationCommand extends Command
         ;
     }
 
+    /**
+     * Executes the current command.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');

@@ -5,6 +5,8 @@
 
 namespace Graviton\Deployment;
 
+use Graviton\Deployment\Steps\StepInterface;
+
 /**
  * @author  List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -34,7 +36,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeployWithOneStep()
     {
-        $command = 'helloWorldCmd';
+        $command = array('helloWorldCmd');
 
         $step = $this->getStepDouble();
         $step
@@ -50,7 +52,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $processBuilder = $this->getProcessBuilderDouble();
         $processBuilder
             ->expects($this->once())
-            ->method('add')
+            ->method('setArguments')
             ->with($this->equalTo($command))
             ->willReturn($processBuilder);
         $processBuilder
@@ -71,7 +73,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeployWithManySteps()
     {
-        $command = 'helloWorldCmd';
+        $command = array('helloWorldCmd');
 
         $step = $this->getStepDouble();
         $step
@@ -87,7 +89,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $processBuilder = $this->getProcessBuilderDouble();
         $processBuilder
             ->expects($this->exactly(2))
-            ->method('add')
+            ->method('setArguments')
             ->with($this->equalTo($command))
             ->willReturn($processBuilder);
         $processBuilder
@@ -103,13 +105,15 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $methods
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getProcessDouble()
+    protected function getProcessDouble(array $methods = array())
     {
         $process = $this->getMockBuilder('\Symfony\Component\Process\Process')
             ->disableOriginalConstructor()
-            ->setMethods(array('mustRun'))
+            ->setMethods($methods)
             ->getMock();
 
         return $process;
@@ -122,7 +126,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     private function getStepDouble()
     {
-        return $this->getMock('Graviton\Deployment\StepInterface');
+        return $this->getMock('Graviton\Deployment\Steps\StepInterface');
     }
 
     /**

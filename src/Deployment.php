@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment;
 
+use Graviton\Deployment\Steps\StepInterface;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -42,11 +43,13 @@ class Deployment
      * Add new step
      *
      * @param StepInterface $step step to add
+     *
      * @return Deployment
      */
     public function add(StepInterface $step)
     {
         $this->steps[] = $step;
+
         return $this;
     }
 
@@ -59,8 +62,11 @@ class Deployment
     {
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
-            $process = $this->processBuilder->add($command)->getProcess();
+            $process = $this->processBuilder
+                ->setArguments($command)
+                ->getProcess();
             $process->mustRun();
+            $process->getOutput();
         }
     }
 }

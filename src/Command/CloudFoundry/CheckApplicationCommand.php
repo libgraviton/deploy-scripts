@@ -6,9 +6,9 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Deployment;
-use Graviton\Deployment\Steps\StepApp;
-use Graviton\Deployment\Steps\StepLogin;
-use Graviton\Deployment\Steps\StepLogout;
+use Graviton\Deployment\Steps\CloudFoundry\StepApp;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

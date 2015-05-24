@@ -28,13 +28,7 @@ final class LoginCommand extends AbstractCommand
     {
         $this
             ->setName('graviton:deployment:cf:login')
-            ->setDescription(
-                'Authorises a user to a CF instance. Use environment variables: ' .
-                '"SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME", "SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD" ' .
-                '"SYMFONY__DEPLOYMENT__CF_ORGANISATION", "SYMFONY__DEPLOYMENT__CF_SPACE" ' .
-                'and "SYMFONY__DEPLOYMENT__CF_API_ENDPOINT"' .
-                'to make your credentials available to the command.'
-            );
+            ->setDescription('Authorises a user to a CF instance.');
     }
 
     /**

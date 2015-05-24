@@ -31,11 +31,7 @@ final class CreateServiceCommand extends AbstractCommand
     {
         $this
             ->setName('graviton:deployment:cf:createService')
-            ->setDescription(
-                'Create a CF service. Use environment variable: ' .
-                '"SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE"' .
-                'to make the service type available to the command.'
-            )
+            ->setDescription('Create a CF service.')
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,

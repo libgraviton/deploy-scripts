@@ -28,9 +28,7 @@ final class AuthCommand extends AbstractCommand
     {
         $this
             ->setName('graviton:deployment:cf:auth')
-            ->setDescription(
-                'Authorises a user to a CF instance.'
-            );
+            ->setDescription('Authorises a user to a CF instance.');
     }
 
     /**

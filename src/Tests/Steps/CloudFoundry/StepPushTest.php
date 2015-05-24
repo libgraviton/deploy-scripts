@@ -5,9 +5,13 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
-
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 
+/**
+ * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link     http://swisscom.ch
+ */
 class StepPushTest extends \PHPUnit_Framework_TestCase
 {
     /**

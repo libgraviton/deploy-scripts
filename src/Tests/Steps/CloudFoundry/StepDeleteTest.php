@@ -19,6 +19,10 @@ class StepDeleteTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provide
      *
+     * @param bool  $force     Flag to force a deletion or not.
+     * @param bool  $delMapped Flag to force a deletion of routes mapped by the or not.
+     * @param array $flags     Flags representing the two parameters for the cf delete command.
+     *
      * @return void
      */
     public function testGetCommand($force, $delMapped, array $flags)
@@ -27,11 +31,14 @@ class StepDeleteTest extends \PHPUnit_Framework_TestCase
         $step = new StepDelete($configuration, 'my_application', 'blue', $force, $delMapped);
 
         $this->assertEquals(
-            array_merge(array('/usr/bin/cf' , 'delete' , 'my_application-blue'), $flags),
+            array_merge(array('/usr/bin/cf', 'delete', 'my_application-blue'), $flags),
             $step->getCommand()
         );
     }
 
+    /**
+     * @return array
+     */
     public function provide()
     {
         return array(

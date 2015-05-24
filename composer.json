@@ -30,19 +30,7 @@
             "./vendor/bin/phpcs --standard=PSR1 --ignore='*.css' --ignore='*.js' src/ src/Tests/",
             "./vendor/bin/phpcs --standard=PSR2 --ignore='*.css' --ignore='*.js' src/ src/Tests/",
             "./vendor/bin/phpcs --standard=ENTB --ignore='*.css' --ignore='*.js' src/ src/Tests/"
-        ],
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
-        ],
-        "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ]
     },
-    "bin": ["bin/deploy"],
-    "extra": {
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml",
-            "env-map": {}
-        }
-    }
+    "bin": ["bin/deploy"]
 }

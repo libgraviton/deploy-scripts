@@ -15,16 +15,6 @@ use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
  */
 class StepCreateMongoTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Will be called before the SUT is instantiated
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_MONGODB_TYPE'] = 'mongotype';
-    }
 
     /**
      * Validate getCommand
@@ -33,7 +23,10 @@ class StepCreateMongoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $step = new StepCreateService('my_application', 'mongodb');
+        $configuration['cf']['command'] = '/usr/bin/cf';
+        $configuration['cf']['services']['mongodb']['type'] = 'mongotype';
+
+        $step = new StepCreateService($configuration, 'my_application', 'mongodb');
 
         $this->assertEquals(
             array('/usr/bin/cf', 'cs', 'mongodb', 'mongotype', 'my_application-mongodb'),

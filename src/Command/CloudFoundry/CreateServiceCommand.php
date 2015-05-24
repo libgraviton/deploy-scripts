@@ -6,9 +6,9 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class CreateServiceCommand extends Command
+final class CreateServiceCommand extends AbstractCommand
 {
 
     /**
@@ -65,7 +65,7 @@ final class CreateServiceCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
-            ->add(new StepCreateService($applicationname, $servicename))
+            ->add(new StepCreateService($this->configuration, $applicationname, $servicename))
             ->deploy();
 
         $output->writeln('... done');

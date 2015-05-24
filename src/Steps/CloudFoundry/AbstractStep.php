@@ -14,11 +14,15 @@ use Graviton\Deployment\Steps\StepInterface;
  */
 abstract class AbstractStep implements StepInterface
 {
+    /** @var array Current application configuration.*/
+    protected $configuration;
+
+
     /**
-     * @return string
+     * @param array $configuration Current application configuration.
      */
-    public function cfCommand()
+    public function __construct(array $configuration)
     {
-        return $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'];
+        $this->configuration = $configuration;
     }
 }

@@ -5,9 +5,9 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
@@ -17,7 +17,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class LogoutCommand extends Command
+final class LogoutCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -45,7 +45,7 @@ final class LogoutCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
-            ->add(new StepLogout())
+            ->add(new StepLogout($this->configuration))
             ->deploy();
 
         $output->writeln('... done');

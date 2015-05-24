@@ -15,23 +15,14 @@ use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 class StepAppTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Will be called before the SUT is instantiated
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
-    }
-
-    /**
      * Validate getCommand
      *
      * @return void
      */
     public function testGetCommand()
     {
-        $step = new StepApp('my_application', 'blue');
+        $configuration['cf']['command'] = '/usr/bin/cf';
+        $step = new StepApp($configuration, 'my_application', 'blue');
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'app' , 'my_application-blue'),

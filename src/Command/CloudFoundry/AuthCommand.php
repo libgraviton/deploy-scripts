@@ -5,9 +5,9 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
@@ -17,7 +17,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class AuthCommand extends Command
+final class AuthCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -29,9 +29,7 @@ final class AuthCommand extends Command
         $this
             ->setName('graviton:deployment:cf:auth')
             ->setDescription(
-                'Authorises a user to a CF instance. Use environment variables: ' .
-                '"SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME", "SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD" ' .
-                'to make your credentials available to the command.'
+                'Authorises a user to a CF instance.'
             );
     }
 
@@ -49,7 +47,7 @@ final class AuthCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
-            ->add(new StepAuth())
+            ->add(new StepAuth($this->configuration))
             ->deploy();
 
         $output->writeln('... done');

@@ -5,9 +5,9 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
@@ -17,7 +17,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class LoginCommand extends Command
+final class LoginCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -29,10 +29,10 @@ final class LoginCommand extends Command
         $this
             ->setName('graviton:deployment:cf:login')
             ->setDescription(
-                'Authorises a user to a CF instance. Use environment variables: '.
-                '"SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME", "SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD" '.
-                '"SYMFONY__DEPLOYMENT__CF_ORGANISATION", "SYMFONY__DEPLOYMENT__CF_SPACE" '.
-                'and "SYMFONY__DEPLOYMENT__CF_API_ENDPOINT"'.
+                'Authorises a user to a CF instance. Use environment variables: ' .
+                '"SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME", "SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD" ' .
+                '"SYMFONY__DEPLOYMENT__CF_ORGANISATION", "SYMFONY__DEPLOYMENT__CF_SPACE" ' .
+                'and "SYMFONY__DEPLOYMENT__CF_API_ENDPOINT"' .
                 'to make your credentials available to the command.'
             );
     }
@@ -51,7 +51,7 @@ final class LoginCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
-            ->add(new StepLogin())
+            ->add(new StepLogin($this->configuration))
             ->deploy();
 
         $output->writeln('... done');

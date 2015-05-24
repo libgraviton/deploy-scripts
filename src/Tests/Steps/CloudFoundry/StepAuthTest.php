@@ -15,25 +15,17 @@ use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
 class StepAuthTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Will be called before the SUT is instantiated
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME'] = 'Jon';
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'] = 'mySecret';
-    }
-
-    /**
      * Validate getCommand
      *
      * @return void
      */
     public function testGetCommand()
     {
-        $step = new StepAuth();
+        $configuration['cf']['command'] = '/usr/bin/cf';
+        $configuration['cf']['credentials']['username'] = 'Jon';
+        $configuration['cf']['credentials']['password'] = 'mySecret';
+
+        $step = new StepAuth($configuration);
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'auth' , 'Jon', 'mySecret'),

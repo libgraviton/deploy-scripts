@@ -12,21 +12,26 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  */
 final class StepRoute extends AbstractStep
 {
-    /** @var string  */
+    /** @var string */
     private $target;
 
-    /** @var string  */
+    /** @var string */
     private $map;
 
     /**
-     * @param string $targetName Name of the target (deploy or old)
-     * @param string $map        Art of the map (map or unmap)
+     *
+     * @param array  $configuration Current application configuration.
+     * @param string $targetName    Name of the target (deploy or old)
+     * @param string $map           Art of the map (map or unmap)
      */
-    public function __construct($targetName, $map)
+    public function __construct(array $configuration, $targetName, $map)
     {
+        parent::__construct($configuration);
+
         $this->target = $targetName;
         $this->map = $map;
     }
+
     /**
      * returns the command
      *
@@ -35,12 +40,12 @@ final class StepRoute extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->cfCommand(),
+            $this->configuration['cf']['command'],
             $this->map . '-route',
             $this->target,
-            $_SERVER['SYMFONY__DEPLOYMENT__CF_DOMAIN'],
+            $this->configuration['cf']['credentials']['domain'],
             '-n',
-            $_SERVER['SYMFONY__DEPLOYMENT__APP_ROUTE']
+            $this->configuration['cf']['credentials']['api_url'],
 
         );
     }

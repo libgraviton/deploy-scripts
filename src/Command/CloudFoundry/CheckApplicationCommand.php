@@ -5,11 +5,11 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class CheckApplicationCommand extends Command
+final class CheckApplicationCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -61,9 +61,9 @@ final class CheckApplicationCommand extends Command
 
         $deployment = new Deployment(new ProcessBuilder());
         $deployment
-            ->add(new StepLogin())
-            ->add(new StepApp($name, $slice))
-            ->add(new StepLogout())
+            ->add(new StepLogin($this->configuration))
+            ->add(new StepApp($this->configuration, $name, $slice))
+            ->add(new StepLogout($this->configuration))
             ->deploy();
 
         $output->writeln('... done');

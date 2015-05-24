@@ -12,7 +12,6 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  */
 final class StepLogout extends AbstractStep
 {
-
     /**
      * returns the command
      *
@@ -21,7 +20,7 @@ final class StepLogout extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->cfCommand(),
+            $this->configuration['cf']['command'],
             'logout'
         );
     }

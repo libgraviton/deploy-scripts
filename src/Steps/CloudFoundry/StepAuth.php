@@ -12,7 +12,6 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  */
 final class StepAuth extends AbstractStep
 {
-
     /**
      * returns the command
      *
@@ -21,10 +20,10 @@ final class StepAuth extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->cfCommand(),
+            $this->configuration['cf']['command'],
             'auth',
-            $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME'],
-            $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'],
+            $this->configuration['cf']['credentials']['username'],
+            $this->configuration['cf']['credentials']['password'],
         );
     }
 }

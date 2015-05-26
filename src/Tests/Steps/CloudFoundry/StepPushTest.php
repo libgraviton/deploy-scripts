@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 
 /**
@@ -12,7 +13,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepPush;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepPushTest extends \PHPUnit_Framework_TestCase
+class StepPushTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -21,8 +22,7 @@ class StepPushTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $step = new StepPush($configuration, 'my_application', 'blue');
+        $step = new StepPush($this->getConfigurationSet(), 'my_application', 'blue');
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'push' , 'my_application-blue'),

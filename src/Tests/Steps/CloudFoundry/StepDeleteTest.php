@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepDelete;
 
 /**
@@ -12,7 +13,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepDelete;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepDeleteTest extends \PHPUnit_Framework_TestCase
+class StepDeleteTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -27,8 +28,7 @@ class StepDeleteTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand($force, $delMapped, array $flags)
     {
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $step = new StepDelete($configuration, 'my_application', 'blue', $force, $delMapped);
+        $step = new StepDelete($this->getConfigurationSet(), 'my_application', 'blue', $force, $delMapped);
 
         $this->assertEquals(
             array_merge(array('/usr/bin/cf', 'delete', 'my_application-blue'), $flags),

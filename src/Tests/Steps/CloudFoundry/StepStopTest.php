@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepStop;
 
 /**
@@ -12,7 +13,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepStop;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepStopTest extends \PHPUnit_Framework_TestCase
+class StepStopTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -21,8 +22,7 @@ class StepStopTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $step = new StepStop($configuration, 'my_application', 'blue');
+        $step = new StepStop($this->getConfigurationSet(), 'my_application', 'blue');
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'stop' , 'my_application-blue'),

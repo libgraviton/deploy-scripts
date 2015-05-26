@@ -18,6 +18,9 @@ final class StepDelete extends AbstractStep
     /** @var string Name of the CF-application to be deleted */
     private $applicationName;
 
+    /** @var bool  */
+    private $delMappedRoutes;
+
     /** @var bool Flag to force a deletion or not. */
     private $force;
 

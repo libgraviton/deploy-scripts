@@ -12,6 +12,11 @@ namespace Graviton\Deployment;
  */
 class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Provides a predefined configuration set.
+     *
+     * @return array
+     */
     public function getConfigurationSet()
     {
         $configuration = [];

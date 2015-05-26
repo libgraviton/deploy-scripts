@@ -7,7 +7,8 @@ namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
-use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
+use Graviton\Deployment\Steps\CloudFoundry\StepPush;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
@@ -17,7 +18,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class AuthCommand extends AbstractCommand
+final class PushCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -51,7 +52,7 @@ final class AuthCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
+        $applicationName = $input->getArgument('name');
         $slice = $input->getArgument('slice');
 
         $output->writeln('Pushing application to a Cloudfounrdy instance. Stated messages:');

@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('org')->cannotBeEmpty()->isRequired()->end()
                                 ->scalarNode('space')->cannotBeEmpty()->isRequired()->end()
                                 ->scalarNode('api_url')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('domain')->cannotBeEmpty()->isRequired()->end()
                             ->end()
                         ->end()
                         ->arrayNode('services')

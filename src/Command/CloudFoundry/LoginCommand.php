@@ -26,9 +26,7 @@ final class LoginCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this
-            ->setName('graviton:deployment:cf:login')
-            ->setDescription('Authorises a user to a CF instance.');
+        parent::configure('graviton:deployment:cf:login', 'Authorises a user to a CF instance.');
     }
 
     /**
@@ -41,13 +39,8 @@ final class LoginCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Authorising user. Stated messages:');
-
-        $deployment = new Deployment(new ProcessBuilder());
-        $deployment
-            ->add(new StepLogin($this->configuration))
-            ->deploy();
-
-        $output->writeln('... done');
+        $step = new StepLogin($this->configuration);
+        $message = 'Authorising user. Stated messages:';
+        parent::execute($step, $message, $input, $output);
     }
 }

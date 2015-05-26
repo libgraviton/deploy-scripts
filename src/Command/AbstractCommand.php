@@ -4,7 +4,7 @@
  */
 namespace Graviton\Deployment\Command;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Graviton\Deployment\Configuration;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -22,12 +22,12 @@ abstract class AbstractCommand extends Command
     /**
      * Constructor.
      *
-     * @param ConfigurationInterface $configuration current application configuration loader.
-     * @param string|null            $name          The name of the command;
+     * @param Configuration $configuration          current application configuration loader.
+     * @param string|null   $name                   The name of the command;
      *                                              passing null means it must be set in configure()
      *
      */
-    public function __construct(ConfigurationInterface $configuration, $name = null)
+    public function __construct(Configuration $configuration, $name = null)
     {
         parent::__construct($name);
 

@@ -118,6 +118,24 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeCount(2, 'steps', $deployment);
     }
 
+    /**
+     * Validates registerSteps
+     *
+     * @return void
+     */
+    public function testNoStepsRegistered()
+    {
+        $deployment = new Deployment($this->getProcessBuilderDouble());
+        $deployment->registerSteps(array());
+
+        ob_start();
+        $deployment->deploy();
+        $output = ob_get_clean();
+
+        $this->assertSame('No steps registered! Aborting.', $output);
+        $this->assertAttributeCount(0, 'steps', $deployment);
+    }
+
 
     /**
      * Provides an instance of the \Symfony\Component\Process\Process

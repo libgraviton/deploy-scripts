@@ -30,7 +30,7 @@ final class CreateServiceCommand extends AbstractCommand
     {
         $this
             ->setName('graviton:deployment:cf:createService')
-            ->setDescription('Create a CF service.')
+            ->setDescription('Create a Cloud Foundry service.')
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,

@@ -43,4 +43,19 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Configuration file (app/config/config.yml) missing.');
         }
     }
+
+    /**
+     * Provides a double of the \Symfony\Component\Config\Definition\Processor
+     *
+     * @param array $methods List of methods to be stubbed
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Config\Definition\Processor
+     */
+    public function getConfigurationProcessorDouble(array $methods = array())
+    {
+        return $this->getMockBuilder('\Symfony\Component\Config\Definition\Processor')
+            ->disableOriginalConstructor()
+            ->setMethods($methods)
+            ->getMock();
+    }
 }

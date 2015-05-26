@@ -36,7 +36,7 @@ final class CreateServiceCommand extends AbstractCommand
             ->addArgument(
                 'applicationname',
                 InputArgument::REQUIRED,
-                'Which application shall be checked?'
+                'Which application shall contain the new service?'
             )
             ->addArgument(
                 'servicename',

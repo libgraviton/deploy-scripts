@@ -10,41 +10,10 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class StepStop extends AbstractStep
+final class StepStop extends AbstractCommonStep
 {
-    /** @var string */
-    private $slice;
-
-    /** @var string */
-    private $applicationName;
-
     /**
-     *
-     * @param array  $configuration   Current application configuration.
-     * @param string $applicationName Name of the CF-application to be checked
-     * @param string $slice           deployment location in blue/green deployment.
-     *
-     * @link http://martinfowler.com/bliki/BlueGreenDeployment.html
+     * @var string Name of the step to be registered.
      */
-    public function __construct(array $configuration, $applicationName, $slice)
-    {
-        parent::__construct($configuration);
-
-        $this->slice = $slice;
-        $this->applicationName = $applicationName;
-    }
-
-    /**
-     * returns the command
-     *
-     * @return array
-     */
-    public function getCommand()
-    {
-        return array(
-            $this->configuration['cf']['command'],
-            'stop',
-            $this->applicationName . '-' . $this->slice
-        );
-    }
+    protected static $stepName = 'stop';
 }

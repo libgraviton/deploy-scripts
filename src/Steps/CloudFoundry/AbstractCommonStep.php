@@ -21,6 +21,9 @@ abstract class AbstractCommonStep extends AbstractStep
     /** @var string */
     private $applicationName;
 
+    /** @var string Name of the step to be registered. */
+    protected static $stepName;
+
     /**
      *
      * @param array  $configuration   Current application configuration.

@@ -29,7 +29,7 @@ class AuthCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * return void
+     * @return void
      */
     public function testConfigure()
     {
@@ -40,7 +40,7 @@ class AuthCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * return void
+     * @return void
      */
     public function testExecute()
     {

@@ -48,8 +48,8 @@ abstract class AbstractCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input   An InputInterface instance
-     * @param OutputInterface $output  Output of the command
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output Output of the command
      *
      * @return void
      */
@@ -79,6 +79,7 @@ abstract class AbstractCommand extends Command
         if (empty($this->message)) {
             throw new \LogicException('The console message must not be empty!');
         }
+
         return $this->message;
     }
 
@@ -108,6 +109,7 @@ abstract class AbstractCommand extends Command
         if (empty($this->steps)) {
             throw new \LogicException('The command step must not be empty!');
         }
+
         return $this->steps;
     }
 

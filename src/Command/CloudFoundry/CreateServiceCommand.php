@@ -6,14 +6,12 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
-use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -58,15 +56,10 @@ final class CreateServiceCommand extends AbstractCommand
         $applicationName = $input->getArgument('applicationname');
         $serviceName = $input->getArgument('servicename');
 
-        $output->writeln('Creating ' . $serviceName . ' service ...');
-
-        $deployment = new Deployment(new ProcessBuilder());
-        $deployment
-            ->add(new StepLogin($this->configuration))
-            ->add(new StepCreateService($this->configuration, $applicationName, $serviceName))
-            ->add(new StepLogout($this->configuration))
-        ->deploy();
-
-        $output->writeln('... done');
+        $this->addStep(new StepLogin($this->configuration))
+            ->addStep(new StepCreateService($this->configuration, $applicationName, $serviceName))
+            ->addStep(new StepLogout($this->configuration));
+        $this->setStartMessage('Creating ' . $serviceName . ' service ...');
+        parent::execute($input, $output);
     }
 }

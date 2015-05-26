@@ -5,7 +5,7 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
-use Graviton\Deployment\Command\AbstractSingleStepCommand;
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class LoginCommand extends AbstractSingleStepCommand
+final class LoginCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -24,7 +24,9 @@ final class LoginCommand extends AbstractSingleStepCommand
      */
     protected function configure()
     {
-        parent::configure('graviton:deployment:cf:login', 'Authorises a user to a CF instance.');
+        parent::configure();
+        $this->setName('graviton:deployment:cf:login');
+        $this->setDescription('Authorises a user to a CF instance.');
     }
 
     /**
@@ -37,8 +39,8 @@ final class LoginCommand extends AbstractSingleStepCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $step = new StepLogin($this->configuration);
-        $message = 'Authorising user. Stated messages:';
-        parent::execute($step, $message, $output);
+        $this->addStep(new StepLogin($this->configuration));
+        $this->setStartMessage('Authorising user. Stated messages:');
+        parent::execute($input, $output);
     }
 }

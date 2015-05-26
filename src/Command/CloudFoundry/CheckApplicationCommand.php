@@ -6,14 +6,12 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
-use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -54,18 +52,13 @@ final class CheckApplicationCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
+        $applicationName = $input->getArgument('name');
         $slice = $input->getArgument('slice');
 
-        $output->writeln('Deployment running. Stated messages:');
-
-        $deployment = new Deployment(new ProcessBuilder());
-        $deployment
-            ->add(new StepLogin($this->configuration))
-            ->add(new StepApp($this->configuration, $name, $slice))
-            ->add(new StepLogout($this->configuration))
-            ->deploy();
-
-        $output->writeln('... done');
+        $this->addStep(new StepLogin($this->configuration))
+            ->addStep(new StepApp($this->configuration, $applicationName, $slice))
+            ->addStep(new StepLogout($this->configuration));
+        $this->setStartMessage('Deployment running. Stated messages:');
+        parent::execute($input, $output);
     }
 }

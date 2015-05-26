@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
@@ -55,13 +55,8 @@ final class PushCommand extends AbstractCommand
         $applicationName = $input->getArgument('name');
         $slice = $input->getArgument('slice');
 
-        $output->writeln('Pushing application to a Cloudfounrdy instance. Stated messages:');
-
-        $deployment = new Deployment(new ProcessBuilder());
-        $deployment
-            ->add(new StepPush($this->configuration, $applicationName, $slice))
-            ->deploy();
-
-        $output->writeln('... done');
+        $this->addStep(new StepPush($this->configuration, $applicationName, $slice));
+        $this->setStartMessage('Pushing application to a Cloud Foundry instance. Stated messages:');
+        parent::execute($input, $output);
     }
 }

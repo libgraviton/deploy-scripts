@@ -58,6 +58,10 @@ class Deployment
      */
     public function deploy()
     {
+        if (empty($this->steps)) {
+            print 'No steps registered! Aborting.';
+        }
+
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
             $process = $this->processBuilder

@@ -5,7 +5,7 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
-use Graviton\Deployment\Command\AbstractSingleStepCommand;
+use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class LogoutCommand extends AbstractSingleStepCommand
+final class LogoutCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -24,7 +24,9 @@ final class LogoutCommand extends AbstractSingleStepCommand
      */
     protected function configure()
     {
-        parent::configure('graviton:deployment:cf:logout', 'Closes a user session to a CF instance');
+        parent::configure();
+        $this->setName('graviton:deployment:cf:logout');
+        $this->setDescription('Closes a user session to a CF instance.');
     }
 
     /**
@@ -37,8 +39,8 @@ final class LogoutCommand extends AbstractSingleStepCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $step = new StepLogout($this->configuration);
-        $message = 'Closing user session. Stated messages:';
-        parent::execute($step, $message, $output);
+        $this->addStep(new StepLogout($this->configuration));
+        $this->setStartMessage('Closing user session. Stated messages:');
+        parent::execute($input, $output);
     }
 }

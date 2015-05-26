@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Loads the current configuration.
      *
-     * @return array|string
+     * @return array
      */
     public function load()
     {

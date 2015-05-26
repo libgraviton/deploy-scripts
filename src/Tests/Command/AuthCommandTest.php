@@ -11,7 +11,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */

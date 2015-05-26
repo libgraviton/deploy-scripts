@@ -54,7 +54,7 @@ class Deployment
     /**
      * Adds a whole bunch of steps at once.
      *
-     * @param array $steps
+     * @param array $steps List of steps to be added to the deployment.
      *
      * @return $this
      */

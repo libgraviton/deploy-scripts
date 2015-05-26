@@ -6,6 +6,7 @@ namespace Graviton\Deployment;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
@@ -27,6 +28,12 @@ class Configuration implements ConfigurationInterface
         $locator = new FileLocator(__DIR__ . '/../app/config');
         $yamlFiles = $locator->locate('config.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
+
+        if (empty($configuration)) {
+            throw new InvalidConfigurationException(
+                'Unable to parse the provided configuration file (' . $yamlFiles[0] .')'
+            );
+        }
 
         $processor = new Processor();
 

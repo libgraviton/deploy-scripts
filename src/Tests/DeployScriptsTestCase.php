@@ -32,6 +32,11 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
         return $configuration;
     }
 
+    /**
+     * Determines, if app/config/config.yml exists.
+     *
+     * @return void
+     */
     public function configYamlExists()
     {
         if (!file_exists(__DIR__ .'/../../app/config/config.yml')) {

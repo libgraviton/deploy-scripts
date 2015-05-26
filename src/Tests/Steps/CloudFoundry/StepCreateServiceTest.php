@@ -6,14 +6,15 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepCreateMongoTest extends \PHPUnit_Framework_TestCase
+class StepCreateServiceTest extends DeployScriptsTestCase
 {
 
     /**
@@ -23,9 +24,7 @@ class StepCreateMongoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $configuration['cf']['services']['mongodb']['type'] = 'mongotype';
-
+        $configuration = $this->getConfigurationSet();
         $step = new StepCreateService($configuration, 'my_application', 'mongodb');
 
         $this->assertEquals(

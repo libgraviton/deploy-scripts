@@ -5,14 +5,15 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepLogoutTest extends \PHPUnit_Framework_TestCase
+class StepLogoutTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -21,8 +22,7 @@ class StepLogoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $configuration = array();
-        $configuration['cf']['command'] = '/usr/bin/cf';
+        $configuration = $this->getConfigurationSet();
         $step = new StepLogout($configuration);
 
         $this->assertEquals(

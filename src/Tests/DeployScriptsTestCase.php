@@ -31,4 +31,11 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
 
         return $configuration;
     }
+
+    public function configYamlExists()
+    {
+        if (!file_exists(__DIR__ .'/../../app/config/config.yml')) {
+            $this->markTestSkipped('Configuration file (app/config/config.yml) missing.');
+        }
+    }
 }

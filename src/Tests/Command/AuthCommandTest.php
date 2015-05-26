@@ -7,6 +7,7 @@ namespace Graviton\Deployment\Tests\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\CloudFoundry\AuthCommand;
 use Graviton\Deployment\Configuration;
+use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -15,7 +16,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class AuthCommandTest extends \PHPUnit_Framework_TestCase
+class AuthCommandTest extends DeployScriptsTestCase
 {
     /** @var \Graviton\Deployment\Configuration */
     private static $configuration;
@@ -33,6 +34,7 @@ class AuthCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfigure()
     {
+        $this->configYamlExists();
         $cmd = new AuthCommand(self::$configuration);
 
         $this->assertAttributeEquals('graviton:deployment:cf:auth', 'name', $cmd);
@@ -44,6 +46,7 @@ class AuthCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
+        $this->configYamlExists();
         $application = new Application();
         $application->add(new AuthCommand(self::$configuration));
 

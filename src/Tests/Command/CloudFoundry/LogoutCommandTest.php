@@ -1,6 +1,6 @@
 <?php
 /**
- * Validates command to authorize to a Cloud Foundry.
+ * Validates command to close session in a Cloud Foundry.
  */
 
 namespace Graviton\Deployment\Tests\Command\CloudFoundry;
@@ -47,19 +47,9 @@ class LogoutCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
-        $this->configYamlExists();
-        $application = new Application();
-        $application->add(new LogoutCommand(self::$configuration));
-
+        $application = $this->getSetUpApplication(new LogoutCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:logout');
 
-        $commandTester = new CommandTester($command);
-
-        // prevent  command from writing to stdout
-        ob_start();
-        $commandTester->execute(array('command' => $command->getName()));
-        $output = ob_get_clean();
-
-        $this->assertContains("Logging out...\nOK", $output);
+        $this->assertContains("Logging out...\nOK", $this->getOutputFromCommand($command));
     }
 }

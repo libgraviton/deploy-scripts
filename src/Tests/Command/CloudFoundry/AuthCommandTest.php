@@ -47,19 +47,9 @@ class AuthCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
-        $this->configYamlExists();
-        $application = new Application();
-        $application->add(new AuthCommand(self::$configuration));
-
+        $application = $this->getSetUpApplication(new AuthCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:auth');
 
-        $commandTester = new CommandTester($command);
-
-        // prevent  command from writing to stdout
-        ob_start();
-        $commandTester->execute(array('command' => $command->getName()));
-        $output = ob_get_clean();
-
-        $this->assertContains("Authenticating...\nOK", $output);
+        $this->assertContains("Authenticating...\nOK", $this->getOutputFromCommand($command));
     }
 }

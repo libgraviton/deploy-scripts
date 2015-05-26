@@ -5,6 +5,10 @@
 
 namespace Graviton\Deployment;
 
+use Graviton\Deployment\Command\AbstractCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -27,7 +31,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
         $configuration['cf']['credentials']['space'] = 'DEV';
         $configuration['cf']['credentials']['api_url'] = 'API_URL';
         $configuration['cf']['credentials']['domain'] = 'DOMAIN';
-        $configuration['cf']['services']['mongodb']['type'] = 'mongotype';
+        $configuration['cf']['services']['mongodb'] = 'mongotype';
 
         return $configuration;
     }
@@ -57,5 +61,36 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods($methods)
             ->getMock();
+    }
+
+
+    /**
+     * @param AbstractCommand $command
+     *
+     * @return Application
+     */
+    public function getSetUpApplication(AbstractCommand $command)
+    {
+        $this->configYamlExists();
+        $application = new Application();
+        $application->add($command);
+
+        return $application;
+    }
+
+    /**
+     * @param AbstractCommand $command
+     *
+     * @return string
+     */
+    public function getOutputFromCommand(AbstractCommand $command)
+    {
+        $commandTester = new CommandTester($command);
+
+        // prevent  command from writing to stdout
+        ob_start();
+        $commandTester->execute(array('command' => $command->getName()));
+
+        return ob_get_clean();
     }
 }

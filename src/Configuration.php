@@ -18,6 +18,17 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Configuration implements ConfigurationInterface
 {
+    /** @var Processor  */
+    private $processor;
+
+    /**
+     * @param Processor $processor Configuration processor.
+     */
+    public function __construct(Processor $processor)
+    {
+        $this->processor = $processor;
+    }
+
     /**
      * Loads the current configuration.
      *
@@ -34,9 +45,7 @@ class Configuration implements ConfigurationInterface
             'Unable to parse the provided configuration file (' . $yamlFiles[0] . ').'
         );
 
-        $processor = new Processor();
-
-        $configuration = $processor->processConfiguration($this, $config);
+        $configuration = $this->processor->processConfiguration($this, $config);
 
         $this->validateParsedConfiguration(
             $configuration,

@@ -8,6 +8,7 @@ namespace Graviton\Deployment\Tests\Command\CloudFoundry;
 use Graviton\Deployment\Command\CloudFoundry\AuthCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -26,7 +27,7 @@ class AuthCommandTest extends DeployScriptsTestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$configuration = new Configuration();
+        self::$configuration = new Configuration(new Processor());
     }
 
     /**

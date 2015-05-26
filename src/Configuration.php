@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Loads the current configuration.
      *
-     * @return array
+     * @return array|string
      */
     public function load()
     {
@@ -29,15 +29,23 @@ class Configuration implements ConfigurationInterface
         $yamlFiles = $locator->locate('config.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
 
-        if (empty($config)) {
-            throw new InvalidConfigurationException(
-                'Unable to parse the provided configuration file (' . $yamlFiles[0] .')'
-            );
-        }
+        $this->validateParsedConfiguration(
+            $config,
+            'Unable to parse the provided configuration file (' . $yamlFiles[0] . ').'
+        );
 
         $processor = new Processor();
 
-        return $processor->processConfiguration($this, $config);
+        $configuration = $processor->processConfiguration($this, $config);
+
+        $this->validateParsedConfiguration(
+            $configuration,
+            'Parsing the provided configuration file (' . $yamlFiles[0] . ') did not convert into an array.' .
+            PHP_EOL .
+            'Please check the setup of »\Symfony\Component\Config\Definition\BaseNode::$finalValidationClosures«.'
+        );
+
+        return $configuration;
     }
 
     /**
@@ -52,29 +60,46 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('cf')
-                    ->children()
-                        ->scalarNode('command')->cannotBeEmpty()->isRequired()->end()
-                        ->arrayNode('credentials')
-                            ->children()
-                                ->scalarNode('username')->cannotBeEmpty()->isRequired()->end()
-                                ->scalarNode('password')->cannotBeEmpty()->isRequired()->end()
-                                ->scalarNode('org')->cannotBeEmpty()->isRequired()->end()
-                                ->scalarNode('space')->cannotBeEmpty()->isRequired()->end()
-                                ->scalarNode('api_url')->cannotBeEmpty()->isRequired()->end()
-                                ->scalarNode('domain')->cannotBeEmpty()->isRequired()->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('services')
-                            ->children()
-                                ->scalarNode('mongodb')->end()
-                                ->scalarNode('atmoss3')->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
+            ->arrayNode('cf')
+            ->children()
+            ->scalarNode('command')->cannotBeEmpty()->isRequired()->end()
+            ->arrayNode('credentials')
+            ->children()
+            ->scalarNode('username')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('password')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('org')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('space')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('api_url')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('domain')->cannotBeEmpty()->isRequired()->end()
+            ->end()
+            ->end()
+            ->arrayNode('services')
+            ->children()
+            ->scalarNode('mongodb')->end()
+            ->scalarNode('atmoss3')->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
             ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * Determines the parsed or processed configuration is valid.
+     *
+     * @param array  $configuration Configuration to be validated
+     * @param string $message       Error message to be passed to thrown exception.
+     *
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     *
+     * @return void
+     */
+    protected function validateParsedConfiguration(array $configuration, $message = '')
+    {
+        if (!is_array($configuration) || empty($configuration)) {
+            throw new InvalidConfigurationException($message);
+        }
     }
 }

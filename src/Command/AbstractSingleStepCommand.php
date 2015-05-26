@@ -7,7 +7,6 @@ namespace Graviton\Deployment\Command;
 
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\StepInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
 

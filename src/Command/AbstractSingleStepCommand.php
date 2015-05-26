@@ -21,6 +21,9 @@ class AbstractSingleStepCommand extends AbstractCommand
     /**
      * Configures the current command.
      *
+     * @param string $command     Command to be executed.
+     * @param string $description Description of the command.
+     *
      * @return void
      */
     protected function configure($command, $description)

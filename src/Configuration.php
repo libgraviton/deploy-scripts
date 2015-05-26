@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
         $yamlFiles = $locator->locate('config.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
 
-        if (empty($configuration)) {
+        if (empty($config)) {
             throw new InvalidConfigurationException(
                 'Unable to parse the provided configuration file (' . $yamlFiles[0] .')'
             );

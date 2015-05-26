@@ -105,6 +105,21 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Validates registerSteps
+     *
+     * @return void
+     */
+    public function testRegisterSteps()
+    {
+        $deployment = new Deployment($this->getProcessBuilderDouble());
+        $steps = array($this->getStepDouble(), $this->getStepDouble());
+
+        $this->assertInstanceOf('Graviton\Deployment\Deployment', $deployment->registerSteps($steps));
+        $this->assertAttributeCount(2, 'steps', $deployment);
+    }
+
+
+    /**
      * Provides an instance of the \Symfony\Component\Process\Process
      *
      * @param array $methods Set of methods to be stubbed.

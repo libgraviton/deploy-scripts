@@ -52,6 +52,22 @@ class Deployment
     }
 
     /**
+     * Adds a whole bunch of steps at once.
+     *
+     * @param array $steps
+     *
+     * @return $this
+     */
+    public function registerSteps(array $steps)
+    {
+        foreach ($steps as $step) {
+            $this->add($step);
+        }
+
+        return $this;
+    }
+
+    /**
      * deploys the steps
      *
      * @return void

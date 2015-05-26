@@ -58,10 +58,7 @@ abstract class AbstractCommand extends Command
         $output->writeln($this->getStartMessage());
 
         $deployment = new Deployment(new ProcessBuilder());
-
-        foreach ($this->steps as $step) {
-            $deployment->add($step);
-        }
+        $deployment->registerSteps($this->steps);
 
         $deployment->deploy();
         $output->writeln('... done');

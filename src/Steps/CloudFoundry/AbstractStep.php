@@ -8,17 +8,21 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
 use Graviton\Deployment\Steps\StepInterface;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
 abstract class AbstractStep implements StepInterface
 {
+    /** @var array Current application configuration.*/
+    protected $configuration;
+
+
     /**
-     * @return string
+     * @param array $configuration Current application configuration.
      */
-    public function cfCommand()
+    public function __construct(array $configuration)
     {
-        return $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'];
+        $this->configuration = $configuration;
     }
 }

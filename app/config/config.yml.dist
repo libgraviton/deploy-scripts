@@ -1,0 +1,12 @@
+# this file contains the main configuration for the library
+deploy-scripts:
+  cf:
+    command: cf
+    credentials:
+      username: ~
+      password: ~
+      org: ~
+      space: ~
+      cf_api_url: 'https://api.appcloud-nova.swisscom.com'
+      domain: ~
+    services: {}

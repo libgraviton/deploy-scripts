@@ -19,29 +19,16 @@ composer require graviton/deploy-scripts
 ```
 
 ## Configuration
-### Environment variables
-
-- **SYMFONY__DEPLOYMENT__CF_COMMAND**
-  Shell command to call Cloud foundry (e.g. ```/usr/bin/cf```).
-- **SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME**
-  Cloud Foundry login username.  
-- **SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD**
-  Cloud Foundry login password.
-- **SYMFONY__DEPLOYMENT__CF_ORGANISATION**
-  Cloud Foundry ORG to be used.
-- **SYMFONY__DEPLOYMENT__CF_SPACE**
-  Cloud Foundry SPACE to be used.
-- **SYMFONY__DEPLOYMENT__CF_API_ENDPOINT**
-  Cloud Foundry API-URL to be used.
-- **SYMFONY__DEPLOYMENT__CF_{{Service}}_TYPE**
-  Cloud Foundry service Type to be used.
+The configuration is to be done in app/config/paramerters.yml and app/config/config.yml.
+If you installed the incenteev/composer-parameter-handler you will be asked to setup the 
+application by answering simple questions.
 
 ## Usage
 ### Console command
 To get an overview about every available command run:
 
 ```bash
-$>./bin/console
+$>./bin/deploy
 ```
 
 ### In code

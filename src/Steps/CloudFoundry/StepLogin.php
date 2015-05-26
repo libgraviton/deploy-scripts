@@ -6,13 +6,12 @@
 namespace Graviton\Deployment\Steps\CloudFoundry;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
 final class StepLogin extends AbstractStep
 {
-
     /**
      * returns the command
      *
@@ -21,13 +20,13 @@ final class StepLogin extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->cfCommand(),
+            $this->configuration['cf']['command'],
             'login',
-            '-u', $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME'],
-            '-p' , $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'] ,
-            '-o' , $_SERVER['SYMFONY__DEPLOYMENT__CF_ORGANISATION'] ,
-            '-s' , $_SERVER['SYMFONY__DEPLOYMENT__CF_SPACE'] ,
-            '-a' , $_SERVER['SYMFONY__DEPLOYMENT__CF_API_ENDPOINT'],
+            '-u',  $this->configuration['cf']['credentials']['username'],
+            '-p' , $this->configuration['cf']['credentials']['password'],
+            '-o' , $this->configuration['cf']['credentials']['org'],
+            '-s' , $this->configuration['cf']['credentials']['space'],
+            '-a' , $this->configuration['cf']['credentials']['api_url']
         );
     }
 }

@@ -6,26 +6,30 @@
 namespace Graviton\Deployment\Steps\CloudFoundry;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
 final class StepApp extends AbstractStep
 {
-    /** @var string  */
+    /** @var string */
     private $slice;
 
-    /** @var string  */
+    /** @var string */
     private $applicationName;
 
     /**
+     *
+     * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
      * @param string $slice           deployment location in blue/green deployment.
      *
      * @link http://martinfowler.com/bliki/BlueGreenDeployment.html
      */
-    public function __construct($applicationName, $slice)
+    public function __construct(array $configuration, $applicationName, $slice)
     {
+        parent::__construct($configuration);
+
         $this->slice = $slice;
         $this->applicationName = $applicationName;
     }
@@ -38,7 +42,7 @@ final class StepApp extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->cfCommand(),
+            $this->configuration['cf']['command'],
             'app',
             $this->applicationName . '-' . $this->slice
         );

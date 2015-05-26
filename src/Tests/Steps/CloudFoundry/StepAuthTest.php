@@ -5,27 +5,16 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
+ * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepAuthTest extends \PHPUnit_Framework_TestCase
+class StepAuthTest extends DeployScriptsTestCase
 {
-    /**
-     * Will be called before the SUT is instantiated
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass()
-    {
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_COMMAND'] = '/usr/bin/cf';
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_USERNAME'] = 'Jon';
-        $_SERVER['SYMFONY__DEPLOYMENT__CF_LOGIN_PASSWORD'] = 'mySecret';
-    }
-
     /**
      * Validate getCommand
      *
@@ -33,7 +22,8 @@ class StepAuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $step = new StepAuth();
+        $configuration = $this->getConfigurationSet();
+        $step = new StepAuth($configuration);
 
         $this->assertEquals(
             array('/usr/bin/cf' , 'auth' , 'Jon', 'mySecret'),

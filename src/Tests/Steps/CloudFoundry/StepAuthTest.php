@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
+use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
 
 /**
@@ -12,7 +13,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepAuthTest extends \PHPUnit_Framework_TestCase
+class StepAuthTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -21,10 +22,7 @@ class StepAuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommand()
     {
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $configuration['cf']['credentials']['username'] = 'Jon';
-        $configuration['cf']['credentials']['password'] = 'mySecret';
-
+        $configuration = $this->getConfigurationSet();
         $step = new StepAuth($configuration);
 
         $this->assertEquals(

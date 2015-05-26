@@ -5,13 +5,10 @@
 
 namespace Graviton\Deployment\Command\CloudFoundry;
 
-use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Command\AbstractSingleStepCommand;
-use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/graviton/graphs/contributors>
@@ -42,6 +39,6 @@ final class AuthCommand extends AbstractSingleStepCommand
     {
         $step = new StepAuth($this->configuration);
         $message = 'Authorising user. Stated messages:';
-        parent::execute($step, $message, $input, $output);
+        parent::execute($step, $message, $output);
     }
 }

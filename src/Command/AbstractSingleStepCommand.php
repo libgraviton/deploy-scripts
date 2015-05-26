@@ -37,13 +37,12 @@ class AbstractSingleStepCommand extends AbstractCommand
      * Executes the current command.
      *
      * @param StepInterface   $step    Step to be executed
-     * @param OutputInterface $message Start message.
-     * @param InputInterface  $input   User input on console
+     * @param string          $message Start message.
      * @param OutputInterface $output  Output of the command
      *
      * @return void
      */
-    protected function execute(StepInterface $step, $message, InputInterface $input, OutputInterface $output)
+    protected function execute(StepInterface $step, $message, OutputInterface $output)
     {
         $output->writeln($message);
 

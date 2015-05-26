@@ -39,6 +39,6 @@ final class LoginCommand extends AbstractSingleStepCommand
     {
         $step = new StepLogin($this->configuration);
         $message = 'Authorising user. Stated messages:';
-        parent::execute($step, $message, $input, $output);
+        parent::execute($step, $message, $output);
     }
 }

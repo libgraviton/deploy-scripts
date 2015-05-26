@@ -39,6 +39,6 @@ final class LogoutCommand extends AbstractSingleStepCommand
     {
         $step = new StepLogout($this->configuration);
         $message = 'Closing user session. Stated messages:';
-        parent::execute($step, $message, $input, $output);
+        parent::execute($step, $message, $output);
     }
 }

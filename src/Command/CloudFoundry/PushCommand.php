@@ -6,14 +6,12 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
-use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>

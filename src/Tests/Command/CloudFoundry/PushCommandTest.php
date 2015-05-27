@@ -48,9 +48,7 @@ class PushCommandTest extends DeployScriptsTestCase
     public function testExecute()
     {
         $this->configYamlExists();
-        $application = new Application();
-        $application->add(new PushCommand(self::$configuration));
-
+        $application = $this->getSetUpApplication(new PushCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:push');
 
         $commandTester = new CommandTester($command);

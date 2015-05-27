@@ -73,7 +73,6 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      */
     public function getSetUpApplication(AbstractCommand $command)
     {
-        $this->configYamlExists();
         $application = new Application();
         $application->add($command);
 

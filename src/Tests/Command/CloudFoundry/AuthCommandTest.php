@@ -47,6 +47,7 @@ class AuthCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
+        $this->configYamlExists();
         $application = $this->getSetUpApplication(new AuthCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:auth');
 

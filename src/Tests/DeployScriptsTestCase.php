@@ -86,13 +86,15 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    public function getOutputFromCommand(AbstractCommand $command)
+    public function getOutputFromCommand(AbstractCommand $command, array $inputArgs = array())
     {
         $commandTester = new CommandTester($command);
 
+        $input = array_merge(array('command' => $command->getName()), $inputArgs);
+
         // prevent  command from writing to stdout
         ob_start();
-        $commandTester->execute(array('command' => $command->getName()));
+        $commandTester->execute($input);
 
         return ob_get_clean();
     }

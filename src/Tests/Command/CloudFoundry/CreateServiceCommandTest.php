@@ -52,22 +52,12 @@ class CreateServiceCommandTest extends DeployScriptsTestCase
         $this->configYamlExists();
         $application = new Application();
         $application->add(new CreateServiceCommand(self::$configuration));
-
         $command = $application->find('graviton:deployment:cf:createService');
-
-        $commandTester = new CommandTester($command);
-
-        // prevent  command from writing to stdout
-        ob_start();
-        $commandTester->execute(
-            array(
-                'command' => $command->getName(),
-                'applicationname' => 'my_application',
+        $inputArgs = array(
+                'applicationname' => 'graviton-develop',
                 'servicename' => 'mongodb'
-            )
         );
-        $output = ob_get_clean();
 
-        $this->assertContains("Creating mongodb service ...", $output);
+        $this->assertContains("Creating mongodb service ...", $this->getOutputFromCommand($command, $inputArgs));
     }
 }

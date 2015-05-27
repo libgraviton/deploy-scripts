@@ -65,7 +65,9 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @param AbstractCommand $command
+     * Provides a symfony application with the provided command setup
+     *
+     * @param AbstractCommand $command Instance of a command
      *
      * @return Application
      */
@@ -79,7 +81,9 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param AbstractCommand $command
+     * Provides the output sent to stderr|stdout of a specific command.
+     *
+     * @param AbstractCommand $command Instance of a command
      *
      * @return string
      */

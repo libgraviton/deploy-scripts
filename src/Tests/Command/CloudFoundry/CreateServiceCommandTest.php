@@ -47,6 +47,8 @@ class CreateServiceCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
+        $this->markTestSkipped('This shall be reactivated, if a system user is available!');
+
         $this->configYamlExists();
         $application = new Application();
         $application->add(new CreateServiceCommand(self::$configuration));

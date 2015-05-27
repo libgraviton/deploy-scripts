@@ -47,6 +47,8 @@ class PushCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
+        $this->markTestSkipped('This shall be reactivated, if a system user is available!');
+
         $this->configYamlExists();
         $application = $this->getSetUpApplication(new PushCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:push');

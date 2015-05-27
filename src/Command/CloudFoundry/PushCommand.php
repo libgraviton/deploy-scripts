@@ -7,6 +7,8 @@ namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
+use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,7 +57,9 @@ final class PushCommand extends AbstractCommand
         $applicationName = $input->getArgument('name');
         $slice = $input->getArgument('slice');
 
-        $this->addStep(new StepPush($this->configuration, $applicationName, $slice));
+        $this->addStep(new StepLogin($this->configuration))
+            ->addStep(new StepPush($this->configuration, $applicationName, $slice))
+            ->addStep(new StepLogout($this->configuration));
         $this->setStartMessage('Pushing application to a Cloud Foundry instance. Stated messages:');
         parent::execute($input, $output);
     }

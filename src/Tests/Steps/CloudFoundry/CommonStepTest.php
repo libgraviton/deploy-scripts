@@ -6,8 +6,6 @@
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
 use Graviton\Deployment\DeployScriptsTestCase;
-use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
-use Graviton\Deployment\Steps\CloudFoundry\StepRoute;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -21,14 +19,16 @@ class CommonStepTest extends DeployScriptsTestCase
      *
      * @dataProvider stepCredentialsProvider
      *
-     * @param \Graviton\Deployment\Steps\CloudFoundry\AbstractStep $step     Step to be tested
-     * @param array                                                $expected Expected data set to be passed
-     *                                                                       to a ProcessBuilder.
+     * @param string $cmd      Name of the step.
+     * @param array  $args     List of argumetns to be used to initialize the step.
+     * @param array  $expected Expected data set to be passed
+     *                         to a ProcessBuilder.
      *
      * @return void
      */
-    public function testGetCommand($step, $expected)
+    public function testGetCommand($cmd, array $args, $expected)
     {
+        $step = new $cmd($args[0], $args[1], $args[2]);
         $this->assertEquals($expected, $step->getCommand());
     }
 
@@ -41,11 +41,13 @@ class CommonStepTest extends DeployScriptsTestCase
 
         return array(
             'step route' => array(
-                new StepRoute($configuration, 'target', 'map'),
+                '\Graviton\Deployment\Steps\CloudFoundry\StepRoute',
+                array($configuration, 'target', 'map'),
                 array('/usr/bin/cf', 'map-route', 'target', 'DOMAIN', '-n', 'API_URL')
             ),
             'step ' => array(
-                new StepCreateService($configuration, 'my_application', 'mongodb'),
+                '\Graviton\Deployment\Steps\CloudFoundry\StepCreateService',
+                array($configuration, 'my_application', 'mongodb'),
                 array('/usr/bin/cf', 'cs', 'mongodb', 'mongotype', 'my_application-mongodb')
             ),
         );

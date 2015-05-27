@@ -5,11 +5,6 @@
 
 namespace Graviton\Deployment\Tests\Command\CloudFoundry;
 
-use Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand;
-use Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand;
-use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
-use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
-use Graviton\Deployment\Command\CloudFoundry\PushCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Config\Definition\Processor;
@@ -26,15 +21,18 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
      * @dataProvider configureCommandProvider
      *
      *
-     * @param \Graviton\Deployment\Command\AbstractCommand $command            Command to be tested.
-     * @param string                                       $commandName        Name of the command.
-     * @param string                                       $commandDescription Input arguments for the command.
+     * @param string $cmd                Command to be tested.
+     * @param array  $commandArgs        List of argumenst to instantiate the command.
+     * @param string $commandName        Name of the command.
+     * @param string $commandDescription Input arguments for the command.
      *
      *
      * @return void
      */
-    public function testConfigure($command, $commandName, $commandDescription)
+    public function testConfigure($cmd, array $commandArgs, $commandName, $commandDescription)
     {
+        $command = new $cmd($commandArgs[0]);
+
         $this->assertAttributeEquals($commandName, 'name', $command);
         $this->assertAttributeEquals($commandDescription, 'description', $command);
     }
@@ -49,27 +47,32 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
 
         return array(
             'push command' => array(
-                new PushCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\PushCommand',
+                array($configuration),
                 'graviton:deployment:cf:push',
                 'Pushes an application to a CF instance.'
             ),
             'createService command' => array(
-                new CreateServiceCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand',
+                array($configuration),
                 'graviton:deployment:cf:createService',
                 'Create a Cloud Foundry service.'
             ),
             'check application command' => array(
-                new CheckApplicationCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand',
+                array($configuration),
                 'graviton:deployment:cf:checkApplication',
                 'Determines, if a special CF application is alive.'
             ),
             'login command' => array(
-                new LoginCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\LoginCommand',
+                array($configuration),
                 'graviton:deployment:cf:login',
                 'Authorises a user to a CF instance.'
             ),
             'logout command' => array(
-                new LogoutCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\LogoutCommand',
+                array($configuration),
                 'graviton:deployment:cf:logout',
                 'Closes a user session to a CF instance.'
             ),
@@ -79,21 +82,24 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
     /**
      * @dataProvider executeCommandProvider
      *
-     * @param \Graviton\Deployment\Command\AbstractCommand $commandObj  Command to be tested.
-     * @param string                                       $commandName Name of the command.
-     * @param array                                        $inputArgs   Input arguments for the command.
+     * @param string $cmd         Command to be tested.
+     * @param array  $commandArgs List of argumenst to instantiate the command.
+     * @param string $commandName Name of the command.
+     * @param array  $inputArgs   Input arguments for the command.
+     * @param string $expected    Console output.
      *
      * @return void
      */
-    public function testExecute($commandObj, $commandName, array $inputArgs)
+    public function testExecute($cmd, array $commandArgs, $commandName, array $inputArgs, $expected)
     {
         $this->markTestSkipped('This shall be reactivated, if a system user is available!');
 
         $this->configYamlExists();
-        $application = $this->getSetUpApplication($commandObj);
+
+        $application = $this->getSetUpApplication(new $cmd($commandArgs[0]));
         $command = $application->find($commandName);
 
-        $this->assertContains("Pushing application to", $this->getOutputFromCommand($command, $inputArgs));
+        $this->assertContains($expected, $this->getOutputFromCommand($command, $inputArgs));
     }
 
     /**
@@ -106,38 +112,48 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
 
         return array(
             'push command' => array(
-                new PushCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\PushCommand',
+                array($configuration),
                 'graviton:deployment:cf:push',
                 array(
                     'applicationName' => 'graviton-develop',
                     'slice' => 'blue'
-                )
+                ),
+                'Pushing application to a Cloud Foundry instance. Stated messages:'
             ),
             'createService command' => array(
-                new CreateServiceCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand',
+                array($configuration),
                 'graviton:deployment:cf:createService',
                 array(
                     'applicationName' => 'graviton-develop',
-                    'slice' => 'blue'
-                )
+                    'serviceName' => 'mongodb'
+                ),
+                'Creating mongodb service ...'
             ),
             'check application command' => array(
-                new CheckApplicationCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand',
+                array($configuration),
                 'graviton:deployment:cf:checkApplication',
                 array(
                     'applicationName' => 'graviton-develop',
                     'slice' => 'blue'
-                )
+                ),
+                'Application health check. Stated messages:'
             ),
             'login command' => array(
-                new LoginCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\LoginCommand',
+                array($configuration),
                 'graviton:deployment:cf:login',
-                array()
+                array(),
+                "Logging in...\nOK"
             ),
             'logout command' => array(
-                new LogoutCommand($configuration),
+                '\Graviton\Deployment\Command\CloudFoundry\LogoutCommand',
+                array($configuration),
                 'graviton:deployment:cf:logout',
-                array()
+                array(),
+                "Logging out...\nOK"
             ),
         );
     }

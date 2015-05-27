@@ -58,7 +58,7 @@ final class CheckApplicationCommand extends AbstractCommand
         $this->addStep(new StepLogin($this->configuration))
             ->addStep(new StepApp($this->configuration, $applicationName, $slice))
             ->addStep(new StepLogout($this->configuration));
-        $this->setStartMessage('Deployment running. Stated messages:');
+        $this->setStartMessage('Application health check. Stated messages:');
         parent::execute($input, $output);
     }
 }

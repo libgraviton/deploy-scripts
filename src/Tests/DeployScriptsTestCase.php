@@ -43,7 +43,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      */
     public function configYamlExists()
     {
-        if (!file_exists(__DIR__ .'/../../app/config/config.yml')) {
+        if (!file_exists(__DIR__ . '/../../app/config/config.yml')) {
             $this->markTestSkipped('Configuration file (app/config/config.yml) missing.');
         }
     }
@@ -82,8 +82,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Provides the output sent to stderr|stdout of a specific command.
      *
-     * @param AbstractCommand $command Instance of a command
-     *
+     * @param AbstractCommand $command   Instance of a command
      * @param array           $inputArgs Arguments to be passed tot he command via $input.
      *
      * @return string

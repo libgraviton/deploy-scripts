@@ -5,6 +5,7 @@
 
 namespace Graviton\Deployment\Tests\Command\CloudFoundry;
 
+use Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand;
 use Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand;
 use Graviton\Deployment\Command\CloudFoundry\PushCommand;
 use Graviton\Deployment\Configuration;
@@ -32,8 +33,6 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
      */
     public function testConfigure($command, $commandName, $commandDescription)
     {
-        $this->configYamlExists();
-
         $this->assertAttributeEquals($commandName, 'name', $command);
         $this->assertAttributeEquals($commandDescription, 'description', $command);
     }
@@ -56,6 +55,11 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 new CreateServiceCommand($configuration),
                 'graviton:deployment:cf:createService',
                 'Create a Cloud Foundry service.'
+            ),
+            'check application command' => array(
+                new CheckApplicationCommand($configuration),
+                'graviton:deployment:cf:checkApplication',
+                'Determines, if a special CF application is alive.'
             ),
         );
     }
@@ -100,6 +104,14 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
             'createService command' => array(
                 new CreateServiceCommand($configuration),
                 'graviton:deployment:cf:createService',
+                array(
+                    'applicationName' => 'graviton-develop',
+                    'slice' => 'blue'
+                )
+            ),
+            'check application command' => array(
+                new CheckApplicationCommand($configuration),
+                'graviton:deployment:cf:checkApplication',
                 array(
                     'applicationName' => 'graviton-develop',
                     'slice' => 'blue'

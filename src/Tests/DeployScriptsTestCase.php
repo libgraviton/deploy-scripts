@@ -21,7 +21,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function getConfigurationSet()
+    public static function getConfigurationSet()
     {
         $configuration = [];
         $configuration['cf']['command'] = '/usr/bin/cf';

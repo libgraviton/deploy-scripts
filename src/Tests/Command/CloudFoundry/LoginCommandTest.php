@@ -35,7 +35,6 @@ class LoginCommandTest extends DeployScriptsTestCase
      */
     public function testConfigure()
     {
-        $this->configYamlExists();
         $cmd = new LoginCommand(self::$configuration);
 
         $this->assertAttributeEquals('graviton:deployment:cf:login', 'name', $cmd);

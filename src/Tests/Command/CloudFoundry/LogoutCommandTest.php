@@ -35,7 +35,6 @@ class LogoutCommandTest extends DeployScriptsTestCase
      */
     public function testConfigure()
     {
-        $this->configYamlExists();
         $cmd = new LogoutCommand(self::$configuration);
 
         $this->assertAttributeEquals('graviton:deployment:cf:logout', 'name', $cmd);
@@ -47,7 +46,6 @@ class LogoutCommandTest extends DeployScriptsTestCase
      */
     public function testExecute()
     {
-        $this->configYamlExists();
         $application = $this->getSetUpApplication(new LogoutCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:logout');
 

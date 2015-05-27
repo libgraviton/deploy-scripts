@@ -33,7 +33,7 @@ final class PushCommand extends AbstractCommand
             ->setName('graviton:deployment:cf:push')
             ->setDescription('Pushes an application to a CF instance.')
             ->addArgument(
-                'name',
+                'applicationName',
                 InputArgument::REQUIRED,
                 'Which application shall be pushed?'
             )
@@ -54,7 +54,7 @@ final class PushCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $applicationName = $input->getArgument('name');
+        $applicationName = $input->getArgument('applicationName');
         $slice = $input->getArgument('slice');
 
         $this->addStep(new StepLogin($this->configuration))

@@ -10,7 +10,6 @@ use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -54,8 +53,8 @@ class CreateServiceCommandTest extends DeployScriptsTestCase
         $application->add(new CreateServiceCommand(self::$configuration));
         $command = $application->find('graviton:deployment:cf:createService');
         $inputArgs = array(
-                'applicationname' => 'graviton-develop',
-                'servicename' => 'mongodb'
+                'applicationName' => 'graviton-develop',
+                'serviceName' => 'mongodb'
         );
 
         $this->assertContains("Creating mongodb service ...", $this->getOutputFromCommand($command, $inputArgs));

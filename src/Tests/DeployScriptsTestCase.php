@@ -53,7 +53,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param array $methods List of methods to be stubbed
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Config\Definition\Processor
+     * @return \Symfony\Component\Config\Definition\Processor
      */
     public function getConfigurationProcessorDouble(array $methods = array())
     {
@@ -62,7 +62,6 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
             ->setMethods($methods)
             ->getMock();
     }
-
 
     /**
      * Provides a symfony application with the provided command setup

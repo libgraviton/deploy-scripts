@@ -50,7 +50,7 @@ class CheckApplicationCommandTest extends DeployScriptsTestCase
         $command = $application->find('graviton:deployment:cf:checkApplication');
 
         $inputArgs = array(
-            'name' => 'graviton-develop',
+            'applicationName' => 'graviton-develop',
             'slice' => 'blue'
         );
         $output = $this->getOutputFromCommand($command, $inputArgs);

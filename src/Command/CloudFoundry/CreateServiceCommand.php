@@ -32,12 +32,12 @@ final class CreateServiceCommand extends AbstractCommand
             ->setName('graviton:deployment:cf:createService')
             ->setDescription('Create a Cloud Foundry service.')
             ->addArgument(
-                'applicationname',
+                'applicationName',
                 InputArgument::REQUIRED,
                 'Which application shall contain the new service?'
             )
             ->addArgument(
-                'servicename',
+                'serviceName',
                 InputArgument::REQUIRED,
                 'Which service shall be created?'
             );
@@ -53,8 +53,8 @@ final class CreateServiceCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $applicationName = $input->getArgument('applicationname');
-        $serviceName = $input->getArgument('servicename');
+        $applicationName = $input->getArgument('applicationName');
+        $serviceName = $input->getArgument('serviceName');
 
         $this->addStep(new StepLogin($this->configuration))
             ->addStep(new StepCreateService($this->configuration, $applicationName, $serviceName))

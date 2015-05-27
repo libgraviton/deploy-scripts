@@ -9,8 +9,6 @@ use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>

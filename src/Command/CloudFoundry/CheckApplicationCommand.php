@@ -31,7 +31,7 @@ final class CheckApplicationCommand extends AbstractCommand
             ->setName('graviton:deployment:cf:checkApplication')
             ->setDescription('Determines, if a special CF application is alive.')
             ->addArgument(
-                'name',
+                'applicationName',
                 InputArgument::REQUIRED,
                 'Which application shall be checked?'
             )
@@ -52,7 +52,7 @@ final class CheckApplicationCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $applicationName = $input->getArgument('name');
+        $applicationName = $input->getArgument('applicationName');
         $slice = $input->getArgument('slice');
 
         $this->addStep(new StepLogin($this->configuration))

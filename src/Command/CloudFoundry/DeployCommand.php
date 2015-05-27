@@ -43,7 +43,7 @@ final class DeployCommand extends AbstractCommand
             ->setName('graviton:deployment:cf:deploy')
             ->setDescription('Deploys an application to a CF instance.')
             ->addArgument(
-                'name',
+                'applicationName',
                 InputArgument::REQUIRED,
                 'Which application shall be deployed?'
             );
@@ -59,17 +59,17 @@ final class DeployCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
+        $applicationName = $input->getArgument('applicationName');
 
-        $output->writeln('Deploying application (' . $name . ') to a Cloudfounrdy instance.');
+        $output->writeln('Deploying application (' . $applicationName . ') to a Cloudfounrdy instance.');
 
         // prepare cf instance
         $output->write('Creating services for MongoDB and AtmosS3');
         $prepare = new Deployment(new ProcessBuilder());
         $prepare
             ->add(new StepLogin($this->configuration))
-            ->add(new StepCreateService($this->configuration, $name, 'mongodb'))
-            ->add(new StepCreateService($this->configuration, $name, 'atmoss3'))
+            ->add(new StepCreateService($this->configuration, $applicationName, 'mongodb'))
+            ->add(new StepCreateService($this->configuration, $applicationName, 'atmoss3'))
             ->deploy();
         $output->writeln('... done');
 
@@ -78,7 +78,7 @@ final class DeployCommand extends AbstractCommand
         $determineSlice = new Deployment(new ProcessBuilder());
         try {
             $determineSlice
-                ->add(new StepApp($this->configuration, $name, $this->slices[0])) // check for 'blue' first
+                ->add(new StepApp($this->configuration, $applicationName, $this->slices[0])) // check for 'blue' first
                 ->deploy();
             $slice = $this->slices[0];
             $oldSlice = $this->slices[1];
@@ -90,30 +90,30 @@ final class DeployCommand extends AbstractCommand
         // check, if there is an »old« application as well
         $checkSlice = new Deployment(new ProcessBuilder());
         $checkSlice
-            ->add(new StepApp($this->configuration, $name, $oldSlice))
+            ->add(new StepApp($this->configuration, $applicationName, $oldSlice))
             ->deploy();
 
         $output->writeln('... done');
 
         // deploy application
-        $target = $name . '-' . $slice;
+        $target = $applicationName . '-' . $slice;
         $output->writeln('Will deploy application: ' . $target);
         $output->write('Pushing ' . $target . ' to Cloud Foundry.');
         $deploy = new Deployment(new ProcessBuilder());
         $deploy
-            ->add(new StepPush($this->configuration, $name, $slice))
+            ->add(new StepPush($this->configuration, $applicationName, $slice))
             ->add(new StepRoute($this->configuration, $target, 'map'))
             ->deploy();
         $output->writeln('... done');
 
         // cleanup old application
-        $oldTarget = $name . '-' . $oldSlice;
+        $oldTarget = $applicationName . '-' . $oldSlice;
         $output->write('Removing ' . $oldTarget . ' from Cloud Foundry.');
         $cleanUp = new Deployment(new ProcessBuilder());
         $cleanUp
             ->add(new StepRoute($this->configuration, $oldTarget, 'unmap'))
-            ->add(new StepStop($this->configuration, $name, $oldSlice))
-            ->add(new StepDelete($this->configuration, $name, $oldSlice, true))
+            ->add(new StepStop($this->configuration, $applicationName, $oldSlice))
+            ->add(new StepDelete($this->configuration, $applicationName, $oldSlice, true))
             ->deploy();
         $output->writeln('... done');
     }

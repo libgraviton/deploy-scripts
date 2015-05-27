@@ -5,8 +5,6 @@
 
 namespace Graviton\Deployment;
 
-use Graviton\Deployment\Steps\StepInterface;
-
 /**
  * @author  List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -142,7 +140,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $methods Set of methods to be stubbed.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Process\Process
+     * @return \Symfony\Component\Process\Process
      */
     protected function getProcessDouble(array $methods = array())
     {
@@ -157,7 +155,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * get a step double
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|StepInterface
+     * @return \Graviton\Deployment\Steps\StepInterface
      */
     private function getStepDouble()
     {
@@ -167,7 +165,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * get a process factory double
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Process\ProcessBuilder
+     * @return \Symfony\Component\Process\ProcessBuilder
      */
     private function getProcessBuilderDouble()
     {

@@ -52,18 +52,6 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 'graviton:deployment:cf:checkApplication',
                 'Determines, if a special CF application is alive.'
             ),
-            'login command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\LoginCommand',
-                array($configuration),
-                'graviton:deployment:cf:login',
-                'Authorises a user to a CF instance.'
-            ),
-            'logout command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\LogoutCommand',
-                array($configuration),
-                'graviton:deployment:cf:logout',
-                'Closes a user session to a CF instance.'
-            ),
         );
     }
 
@@ -108,20 +96,6 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                     'slice' => 'blue'
                 ),
                 'Application health check. Stated messages:'
-            ),
-            'login command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\LoginCommand',
-                array($configuration),
-                'graviton:deployment:cf:login',
-                array(),
-                "Logging in...\nOK"
-            ),
-            'logout command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\LogoutCommand',
-                array($configuration),
-                'graviton:deployment:cf:logout',
-                array(),
-                "Logging out...\nOK"
             ),
         );
     }

@@ -17,6 +17,4 @@ $configuration = new Configuration(new Processor(), new FileLocator(__DIR__ . '/
 
 $application = new Application();
 $application->add(new CheckApplicationCommand($configuration));
-$application->add(new LoginCommand($configuration));
-$application->add(new LogoutCommand($configuration));
 $application->run();

@@ -1,0 +1,13 @@
+# this file contains the main configuration for the library
+deploy-scripts:
+  cf:
+    command: cf
+    credentials:
+      username: Jon Doe
+      password: my_secret
+      org: ORG
+      space: SPACE
+      api_url: API_URL
+      domain: DOMAIN
+    services:
+        mongodb: free

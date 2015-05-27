@@ -24,7 +24,6 @@ final class LoginCommand extends AbstractCommand
      */
     protected function configure()
     {
-        parent::configure();
         $this->setName('graviton:deployment:cf:login');
         $this->setDescription('Authorises a user to a CF instance.');
     }

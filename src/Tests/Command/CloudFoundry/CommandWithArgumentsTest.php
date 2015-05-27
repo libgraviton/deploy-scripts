@@ -10,6 +10,7 @@ use Graviton\Deployment\Command\CloudFoundry\PushCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -42,7 +43,8 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
      */
     public function configureCommandProvider()
     {
-        $configuration = new Configuration(new Processor());
+        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
+        $configuration = new Configuration(new Processor(), $locator);
 
         return array(
             'push command' => array(
@@ -83,7 +85,8 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
      */
     public function executeCommandProvider()
     {
-        $configuration = new Configuration(new Processor());
+        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
+        $configuration = new Configuration(new Processor(), $locator);
 
         return array(
             'push command' => array(

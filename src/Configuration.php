@@ -21,12 +21,17 @@ class Configuration implements ConfigurationInterface
     /** @var Processor  */
     private $processor;
 
+    /** @var FileLocator  */
+    private $fileLocator;
+
     /**
-     * @param Processor $processor Configuration processor.
+     * @param Processor   $processor   Configuration processor.
+     * @param FileLocator $fileLocator Helper class to find files.
      */
-    public function __construct(Processor $processor)
+    public function __construct(Processor $processor, FileLocator $fileLocator)
     {
         $this->processor = $processor;
+        $this->fileLocator = $fileLocator;
     }
 
     /**
@@ -36,8 +41,7 @@ class Configuration implements ConfigurationInterface
      */
     public function load()
     {
-        $locator = new FileLocator(__DIR__ . '/../app/config');
-        $yamlFiles = $locator->locate('config.yml', null, false);
+        $yamlFiles = $this->fileLocator->locate('config.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
 
         $this->validateParsedConfiguration(

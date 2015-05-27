@@ -9,6 +9,7 @@ use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -25,7 +26,8 @@ class LoginCommandTest extends DeployScriptsTestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$configuration = new Configuration(new Processor());
+        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
+        self::$configuration = new Configuration(new Processor(), $locator);
     }
 
     /**

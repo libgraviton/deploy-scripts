@@ -24,7 +24,6 @@ final class LogoutCommand extends AbstractCommand
      */
     protected function configure()
     {
-        parent::configure();
         $this->setName('graviton:deployment:cf:logout');
         $this->setDescription('Closes a user session to a CF instance.');
     }

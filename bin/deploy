@@ -10,14 +10,13 @@ use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
 use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
 use Graviton\Deployment\Configuration;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
 
-$configuration = new Configuration(new Processor());
+$configuration = new Configuration(new Processor(), new FileLocator(__DIR__ . '/../app/config'));
 
 $application = new Application();
 $application->add(new CheckApplicationCommand($configuration));
 $application->add(new LoginCommand($configuration));
 $application->add(new LogoutCommand($configuration));
-$application->add(new AuthCommand($configuration));
-$application->add(new CreateServiceCommand($configuration));
 $application->run();

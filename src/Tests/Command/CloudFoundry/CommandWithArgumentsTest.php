@@ -46,18 +46,6 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
         $configuration = new Configuration(new Processor(), $locator);
 
         return array(
-            'push command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\PushCommand',
-                array($configuration),
-                'graviton:deployment:cf:push',
-                'Pushes an application to a CF instance.'
-            ),
-            'createService command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand',
-                array($configuration),
-                'graviton:deployment:cf:createService',
-                'Create a Cloud Foundry service.'
-            ),
             'check application command' => array(
                 '\Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand',
                 array($configuration),
@@ -111,26 +99,6 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
         $configuration = new Configuration(new Processor(), $locator);
 
         return array(
-            'push command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\PushCommand',
-                array($configuration),
-                'graviton:deployment:cf:push',
-                array(
-                    'applicationName' => 'graviton-develop',
-                    'slice' => 'blue'
-                ),
-                'Pushing application to a Cloud Foundry instance. Stated messages:'
-            ),
-            'createService command' => array(
-                '\Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand',
-                array($configuration),
-                'graviton:deployment:cf:createService',
-                array(
-                    'applicationName' => 'graviton-develop',
-                    'serviceName' => 'mongodb'
-                ),
-                'Creating mongodb service ...'
-            ),
             'check application command' => array(
                 '\Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand',
                 array($configuration),

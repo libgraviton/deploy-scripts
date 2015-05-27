@@ -7,6 +7,8 @@ namespace Graviton\Deployment\Tests\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand;
 use Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand;
+use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
+use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
 use Graviton\Deployment\Command\CloudFoundry\PushCommand;
 use Graviton\Deployment\Configuration;
 use Graviton\Deployment\DeployScriptsTestCase;
@@ -60,6 +62,16 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 new CheckApplicationCommand($configuration),
                 'graviton:deployment:cf:checkApplication',
                 'Determines, if a special CF application is alive.'
+            ),
+            'login command' => array(
+                new LoginCommand($configuration),
+                'graviton:deployment:cf:login',
+                'Authorises a user to a CF instance.'
+            ),
+            'logout command' => array(
+                new LogoutCommand($configuration),
+                'graviton:deployment:cf:logout',
+                'Closes a user session to a CF instance.'
             ),
         );
     }
@@ -116,6 +128,16 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                     'applicationName' => 'graviton-develop',
                     'slice' => 'blue'
                 )
+            ),
+            'login command' => array(
+                new LoginCommand($configuration),
+                'graviton:deployment:cf:login',
+                array()
+            ),
+            'logout command' => array(
+                new LogoutCommand($configuration),
+                'graviton:deployment:cf:logout',
+                array()
             ),
         );
     }

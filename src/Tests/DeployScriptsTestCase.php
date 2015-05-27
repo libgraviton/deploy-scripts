@@ -84,6 +84,8 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param AbstractCommand $command Instance of a command
      *
+     * @param array           $inputArgs Arguments to be passed tot he command via $input.
+     *
      * @return string
      */
     public function getOutputFromCommand(AbstractCommand $command, array $inputArgs = array())

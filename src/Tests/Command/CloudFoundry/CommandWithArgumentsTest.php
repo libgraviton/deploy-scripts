@@ -21,6 +21,12 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
     /**
      * @dataProvider configureCommandProvider
      *
+     *
+     * @param \Graviton\Deployment\Command\AbstractCommand $command            Command to be tested.
+     * @param string                                       $commandName        Name of the command.
+     * @param string                                       $commandDescription Input arguments for the command.
+     *
+     *
      * @return void
      */
     public function testConfigure($command, $commandName, $commandDescription)
@@ -55,6 +61,10 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
     /**
      * @dataProvider executeCommandProvider
      *
+     * @param \Graviton\Deployment\Command\AbstractCommand $commandObj  Command to be tested.
+     * @param string                                       $commandName Name of the command.
+     * @param array                                        $inputArgs   Input arguments for the command.
+     *
      * @return void
      */
     public function testExecute($commandObj, $commandName, array $inputArgs)
@@ -68,6 +78,9 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
         $this->assertContains("Pushing application to", $this->getOutputFromCommand($command, $inputArgs));
     }
 
+    /**
+     * @return array
+     */
     public function executeCommandProvider()
     {
         $configuration = new Configuration(new Processor());

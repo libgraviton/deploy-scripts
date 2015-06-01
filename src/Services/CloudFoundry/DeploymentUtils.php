@@ -190,6 +190,8 @@ final class DeploymentUtils
      * @param StepInterface[] $steps    Process step to be executed.
      * @param string          $startMsg Message to  be shown on start.
      * @param string          $endMsg   Message to be shown on end.
+     *
+     * @return void
      */
     private static function deploySteps(
         Deployment $deploy,

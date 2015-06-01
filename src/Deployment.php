@@ -61,13 +61,11 @@ class Deployment
     public function registerSteps(array $steps)
     {
         foreach ($steps as $step) {
-
             if (!$step instanceof StepInterface) {
                 throw new \InvalidArgumentException(
                     'Provided step is not an instance of \Graviton\Deployment\Steps\StepInterface.'
                 );
             }
-
             $this->add($step);
         }
 

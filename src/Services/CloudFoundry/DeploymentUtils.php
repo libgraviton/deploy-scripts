@@ -14,6 +14,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Graviton\Deployment\Steps\CloudFoundry\StepRoute;
 use Graviton\Deployment\Steps\CloudFoundry\StepStop;
+use Graviton\Deployment\Steps\StepInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -70,13 +71,15 @@ final class DeploymentUtils
     ) {
         // blue/green deployment
         $output->write('Determining which application slice to be deployed');
-        $deploy->resetSteps();
         $slices = ['blue', 'green'];
 
         try {
-            $deploy
-                ->add(new StepApp($configuration, $applicationName, $slices[0]))// check for 'blue' first
-                ->deploy();
+            self::deploySteps(
+                $deploy,
+                $output,
+                array(new StepApp($configuration, $applicationName, $slices[0])),
+                'Determining which application slice to be deployed'
+            );
             $slice = $slices[0];
             $oldSlice = $slices[1];
         } catch (ProcessFailedException $e) {
@@ -85,12 +88,12 @@ final class DeploymentUtils
         }
 
         // check, if there is an »old« application as well
-        $deploy->resetSteps();
-        $deploy
-            ->add(new StepApp($configuration, $applicationName, $oldSlice))
-            ->deploy();
-
-        $output->writeln('... done');
+        self::deploySteps(
+            $deploy,
+            $output,
+            array(new StepApp($configuration, $applicationName, $oldSlice)),
+            'Trying to find deployment slice (' . $oldSlice . ')'
+        );
 
         return array($slice, $oldSlice);
     }
@@ -106,12 +109,7 @@ final class DeploymentUtils
      */
     public static function login(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        $output->write('Trying to login');
-        $deploy->resetSteps();
-        $deploy
-            ->add(new StepLogin($configuration))
-            ->deploy();
-        $output->writeln('... done');
+        self::deploySteps($deploy, $output, array(new StepLogin($configuration)), 'Trying to login');
     }
 
     /**
@@ -125,12 +123,7 @@ final class DeploymentUtils
      */
     public static function logout(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        $output->write('Logging out');
-        $deploy->resetSteps();
-        $deploy
-            ->add(new StepLogout($configuration))
-            ->deploy();
-        $output->writeln('... bye.');
+        self::deploySteps($deploy, $output, array(new StepLogout($configuration)), 'Logging out', '... bye.');
     }
 
     /**
@@ -152,15 +145,13 @@ final class DeploymentUtils
         $oldSlice
     ) {
         $oldTarget = $applicationName . '-' . $oldSlice;
-        $output->write('Removing ' . $oldTarget . ' from Cloud Foundry.');
+        $steps = array(
+            new StepRoute($configuration, $oldTarget, 'unmap'),
+            new StepStop($configuration, $applicationName, $oldSlice),
+            new StepDelete($configuration, $applicationName, $oldSlice, true)
+        );
 
-        $deploy->resetSteps();
-        $deploy
-            ->add(new StepRoute($configuration, $oldTarget, 'unmap'))
-            ->add(new StepStop($configuration, $applicationName, $oldSlice))
-            ->add(new StepDelete($configuration, $applicationName, $oldSlice, true))
-            ->deploy();
-        $output->writeln('... done');
+        self::deploySteps($deploy, $output, $steps, 'Removing ' . $oldTarget . ' from Cloud Foundry.');
     }
 
     /**
@@ -183,13 +174,34 @@ final class DeploymentUtils
     ) {
         $target = $applicationName . '-' . $slice;
         $output->writeln('Will deploy application: ' . $target);
-        $output->write('Pushing ' . $target . ' to Cloud Foundry.');
+        $steps = array(
+            new StepPush($configuration, $applicationName, $slice),
+            new StepRoute($configuration, $target, 'map')
+        );
 
-        $deploy->resetSteps();
-        $deploy
-            ->add(new StepPush($configuration, $applicationName, $slice))
-            ->add(new StepRoute($configuration, $target, 'map'))
+        self::deploySteps($deploy, $output, $steps, 'Pushing ' . $target . ' to Cloud Foundry.');
+    }
+
+    /**
+     * Initializes a single
+     *
+     * @param Deployment      $deploy   Command handler.
+     * @param OutputInterface $output   Output of the command
+     * @param StepInterface[] $steps    Process step to be executed.
+     * @param string          $startMsg Message to  be shown on start.
+     * @param string          $endMsg   Message to be shown on end.
+     */
+    private static function deploySteps(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $steps,
+        $startMsg,
+        $endMsg = '... done'
+    ) {
+        $output->write($startMsg);
+        $deploy->resetSteps()
+            ->registerSteps($steps)
             ->deploy();
-        $output->writeln('... done');
+        $output->writeln($endMsg);
     }
 }

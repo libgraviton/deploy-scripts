@@ -31,9 +31,15 @@ final class DeploymentUtils
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from config.yml)
      * @param string          $applicationName Application to be used
+     *
+     * @return void
      */
-    public static function createServices(Deployment $deploy, OutputInterface $output, array $configuration, $applicationName)
-    {
+    public static function createServices(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName
+    ) {
         $services = ['mongodb', 'atmoss3'];
 
         $output->write('Creating mandatory services');
@@ -69,7 +75,7 @@ final class DeploymentUtils
 
         try {
             $deploy
-                ->add(new StepApp($configuration, $applicationName, $slices[0])) // check for 'blue' first
+                ->add(new StepApp($configuration, $applicationName, $slices[0]))// check for 'blue' first
                 ->deploy();
             $slice = $slices[0];
             $oldSlice = $slices[1];
@@ -92,9 +98,11 @@ final class DeploymentUtils
     /**
      * Logs in to CF.
      *
-     * @param Deployment      $deploy          Command handler.
-     * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml).
+     * @param Deployment      $deploy        Command handler.
+     * @param OutputInterface $output        Output of the command
+     * @param array           $configuration Application configuration (read from config.yml).
+     *
+     * @return void
      */
     public static function login(Deployment $deploy, OutputInterface $output, array $configuration)
     {
@@ -109,9 +117,11 @@ final class DeploymentUtils
     /**
      * Logs off from CF.
      *
-     * @param Deployment      $deploy          Command handler.
-     * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml).
+     * @param Deployment      $deploy        Command handler.
+     * @param OutputInterface $output        Output of the command
+     * @param array           $configuration Application configuration (read from config.yml).
+     *
+     * @return void
      */
     public static function logout(Deployment $deploy, OutputInterface $output, array $configuration)
     {
@@ -131,9 +141,16 @@ final class DeploymentUtils
      * @param array           $configuration   Application configuration (read from config.yml).
      * @param string          $applicationName Application to be cleaned up
      * @param string          $oldSlice        Slice to be removed.
+     *
+     * @return void
      */
-    public static function cleanUp(Deployment $deploy, OutputInterface $output, array $configuration, $applicationName, $oldSlice)
-    {
+    public static function cleanUp(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $oldSlice
+    ) {
         $oldTarget = $applicationName . '-' . $oldSlice;
         $output->write('Removing ' . $oldTarget . ' from Cloud Foundry.');
 
@@ -154,9 +171,16 @@ final class DeploymentUtils
      * @param array           $configuration   Application configuration (read from config.yml).
      * @param string          $applicationName Application to be cleaned up
      * @param string          $slice           Slice to be deployed.
+     *
+     * @return void
      */
-    public static  function deploy(Deployment $deploy, OutputInterface $output, array $configuration, $applicationName, $slice)
-    {
+    public static function deploy(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $slice
+    ) {
         $target = $applicationName . '-' . $slice;
         $output->writeln('Will deploy application: ' . $target);
         $output->write('Pushing ' . $target . ' to Cloud Foundry.');

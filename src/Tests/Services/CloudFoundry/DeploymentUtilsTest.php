@@ -16,6 +16,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 {
     /**
      * validates creation of mandatory services
+     *
+     * @return void
      */
     public function testCreateServices()
     {
@@ -31,6 +33,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
     /**
      * validates determinations for blue/green deployment.
+     *
+     * @return void
      */
     public function testDetermineDeploymentSlice()
     {
@@ -46,6 +50,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
     /**
      * validates a login attempt.
+     *
+     * @return void
      */
     public function testLogin()
     {
@@ -61,6 +67,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
     /**
      * validates a login attempt.
+     *
+     * @return void
      */
     public function testLogout()
     {
@@ -76,6 +84,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
     /**
      * validates a login attempt.
+     *
+     * @return void
      */
     public function testCleanUp()
     {
@@ -92,6 +102,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
     /**
      * validates a login attempt.
+     *
+     * @return void
      */
     public function testDeploy()
     {
@@ -109,8 +121,8 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
     /**
      * Provides an instance of the Deployment class.
      *
-     * @param \Symfony\Component\Process\ProcessBuilder $processDouble
-     * @param array                                     $methodCounts
+     * @param \Symfony\Component\Process\ProcessBuilder $processDouble Stub to be able to test.
+     * @param array                                     $methodCounts  What methods shall be called how often?
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */

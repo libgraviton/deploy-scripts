@@ -143,6 +143,20 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeCount(0, 'steps', $deployment);
     }
 
+    /**
+     * return void
+     */
+    public function testReset()
+    {
+        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
+        $deployment->add($this->getMock('Graviton\Deployment\Steps\StepInterface'));
+
+        $this->assertAttributeCount(1, 'steps', $deployment);
+
+        $deployment->resetSteps();
+        $this->assertAttributeCount(0, 'steps', $deployment);
+    }
+
 
     /**
      * Provides an instance of the \Symfony\Component\Process\Process

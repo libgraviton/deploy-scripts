@@ -87,4 +87,14 @@ class Deployment
             print $process->getOutput();
         }
     }
+
+    /**
+     * Rests this the current instance.
+     *
+     * @return void
+     */
+    public function resetSteps()
+    {
+        $this->steps = array();
+    }
 }

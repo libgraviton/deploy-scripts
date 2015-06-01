@@ -12,23 +12,6 @@ namespace Graviton\Deployment;
  */
 class DeploymentTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * testAdd
-     *
-     * @return void
-     */
-    public function testAdd()
-    {
-        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
-
-        $this->assertInstanceOf(
-            'Graviton\Deployment\Deployment',
-            $deployment->add($this->getMock('Graviton\Deployment\Steps\StepInterface'))
-        );
-        $this->assertAttributeCount(1, 'steps', $deployment);
-    }
-
     /**
      * testDeployWithOneStep
      *
@@ -62,7 +45,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
 
         $deployment = new Deployment($processBuilder);
         $deployment
-            ->add($step)
+            ->registerSteps([$step])
             ->deploy();
     }
 
@@ -99,8 +82,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
 
         $deployment = new Deployment($processBuilder);
         $deployment
-            ->add($step)
-            ->add($step)
+            ->registerSteps([$step, $step])
             ->deploy();
     }
 
@@ -149,7 +131,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     public function testReset()
     {
         $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
-        $deployment->add($this->getMock('Graviton\Deployment\Steps\StepInterface'));
+        $deployment->registerSteps([$this->getMock('Graviton\Deployment\Steps\StepInterface')]);
 
         $this->assertAttributeCount(1, 'steps', $deployment);
 

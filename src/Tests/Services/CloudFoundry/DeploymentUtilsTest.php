@@ -24,7 +24,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::createServices(
-            $this->getDeploymentDouble($processDouble, array('add' => 2, 'deploy' => 1)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 2, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop'
@@ -41,7 +41,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::determineDeploymentSlice(
-            $this->getDeploymentDouble($processDouble, array('add' => 2, 'deploy' => 2)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 2, 'deploy' => 2)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop'
@@ -58,7 +58,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::login(
-            $this->getDeploymentDouble($processDouble, array('add' => 1, 'deploy' => 1)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop'
@@ -75,7 +75,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::logout(
-            $this->getDeploymentDouble($processDouble, array('add' => 1, 'deploy' => 1)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop'
@@ -92,7 +92,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::cleanUp(
-            $this->getDeploymentDouble($processDouble, array('add' => 3, 'deploy' => 1)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop',
@@ -110,7 +110,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
         DeploymentUtils::deploy(
-            $this->getDeploymentDouble($processDouble, array('add' => 2, 'deploy' => 1)),
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop',
@@ -130,12 +130,12 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
     {
         $deployDouble = $this->getMockBuilder('\Graviton\Deployment\Deployment')
             ->setConstructorArgs(array($processDouble))
-            ->setMethods(array('add', 'deploy'))
+            ->setMethods(array('registerSteps', 'deploy'))
             ->getMock();
         $deployDouble
-            ->expects($this->exactly($methodCounts['add']))
-            ->method('add')
-            ->with($this->isInstanceOf('\Graviton\Deployment\Steps\StepInterface'))
+            ->expects($this->exactly($methodCounts['registerSteps']))
+            ->method('registerSteps')
+            ->with($this->isType('array'))
             ->willReturn($deployDouble);
         $deployDouble
             ->expects($this->exactly($methodCounts['deploy']))

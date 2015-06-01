@@ -38,20 +38,6 @@ class Deployment
     }
 
     /**
-     * Add new step
-     *
-     * @param StepInterface $step step to add
-     *
-     * @return Deployment
-     */
-    public function add(StepInterface $step)
-    {
-        $this->steps[] = $step;
-
-        return $this;
-    }
-
-    /**
      * Adds a whole bunch of steps at once.
      *
      * @param array $steps List of steps to be added to the deployment.
@@ -66,7 +52,7 @@ class Deployment
                     'Provided step is not an instance of \Graviton\Deployment\Steps\StepInterface.'
                 );
             }
-            $this->add($step);
+            $this->steps[] = $step;
         }
 
         return $this;

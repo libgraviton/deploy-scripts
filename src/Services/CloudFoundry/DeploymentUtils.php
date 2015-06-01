@@ -47,7 +47,7 @@ final class DeploymentUtils
         $deploy->resetSteps();
 
         foreach ($services as $service) {
-            $deploy->add(new StepCreateService($configuration, $applicationName, $service));
+            $deploy->registerSteps([new StepCreateService($configuration, $applicationName, $service)]);
         }
         $deploy->deploy();
         $output->writeln('... done');

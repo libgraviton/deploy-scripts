@@ -122,6 +122,16 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeCount(0, 'steps', $deployment);
     }
 
+    /**
+     * @return void
+     */
+    public function testRegisterInvalidTest()
+    {
+        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
+
+        $this->setExpectedException('\InvalidArgumentException');
+        $deployment->registerSteps(['invalid step type']);
+    }
 
     /**
      * Provides an instance of the \Symfony\Component\Process\Process

@@ -37,6 +37,9 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function methodsAndCountsProvider()
     {
         return array(

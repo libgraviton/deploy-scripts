@@ -5,6 +5,8 @@
 
 namespace Graviton\Deployment;
 
+use Symfony\Component\Process\ProcessBuilder;
+
 /**
  * @author  List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -80,10 +82,8 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
             ->method('getProcess')
             ->willReturn($process);
 
-        $deployment = new Deployment($processBuilder);
-        $deployment
-            ->registerSteps([$step, $step])
-            ->deploy();
+        $deployment = $this->getDeploymentObject($processBuilder, [$step, $step]);
+        $deployment->deploy();
     }
 
     /**
@@ -93,14 +93,14 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterSteps()
     {
-        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
+        $deployment = $this->getDeploymentObject($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
 
         $this->assertInstanceOf(
             'Graviton\Deployment\Deployment',
             $deployment->registerSteps(
                 array(
                     $this->getMock('Graviton\Deployment\Steps\StepInterface'),
-                    $this->getMock('Graviton\Deployment\Steps\StepInterface')
+                    $this->getMock('Graviton\Deployment\Steps\StepInterface'),
                 )
             )
         );
@@ -128,14 +128,18 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testReset()
+    public function testResetSteps()
     {
-        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
-        $deployment->registerSteps([$this->getMock('Graviton\Deployment\Steps\StepInterface')]);
+        $deployment = $this->getDeploymentObject(
+            $this->getMock('\Symfony\Component\Process\ProcessBuilder'),
+            [$this->getMock('Graviton\Deployment\Steps\StepInterface')]
+        );
 
         $this->assertAttributeCount(1, 'steps', $deployment);
-
-        $deployment->resetSteps();
+        $this->assertInstanceOf(
+            'Graviton\Deployment\Deployment',
+            $deployment->resetSteps()
+        );
         $this->assertAttributeCount(0, 'steps', $deployment);
     }
 
@@ -155,5 +159,19 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         return $process;
+    }
+
+    /**
+     * @param ProcessBuilder $processBuilder Test double of the SF2 ProcessBuilder
+     * @param array          $steps          List of steps to be registered.
+     *
+     * @return Deployment
+     */
+    private function getDeploymentObject(ProcessBuilder $processBuilder, array $steps = array())
+    {
+        $deployment = new Deployment($processBuilder);
+        $deployment->registerSteps($steps);
+
+        return $deployment;
     }
 }

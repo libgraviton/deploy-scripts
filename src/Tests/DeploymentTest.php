@@ -91,27 +91,6 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testRegisterSteps()
-    {
-        $deployment = $this->getDeploymentObject($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
-
-        $this->assertInstanceOf(
-            'Graviton\Deployment\Deployment',
-            $deployment->registerSteps(
-                array(
-                    $this->getMock('Graviton\Deployment\Steps\StepInterface'),
-                    $this->getMock('Graviton\Deployment\Steps\StepInterface'),
-                )
-            )
-        );
-        $this->assertAttributeCount(2, 'steps', $deployment);
-    }
-
-    /**
-     * Validates registerSteps
-     *
-     * @return void
-     */
     public function testNoStepsRegistered()
     {
         $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));

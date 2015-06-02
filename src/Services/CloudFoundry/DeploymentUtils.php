@@ -41,16 +41,17 @@ final class DeploymentUtils
         array $configuration,
         $applicationName
     ) {
-        $services = ['mongodb', 'atmoss3'];
+        $steps = [
+            new StepCreateService($configuration, $applicationName, 'mongodb'),
+            new StepCreateService($configuration, $applicationName, 'atmoss3'),
+        ];
 
-        $output->write('Creating mandatory services');
-        $deploy->resetSteps();
-
-        foreach ($services as $service) {
-            $deploy->registerSteps([new StepCreateService($configuration, $applicationName, $service)]);
-        }
-        $deploy->deploy();
-        $output->writeln('... done');
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Creating mandatory services'
+        );
     }
 
     /**

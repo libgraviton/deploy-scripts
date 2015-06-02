@@ -7,7 +7,7 @@ namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
 use Graviton\Deployment\Deployment;
-use Graviton\Deployment\src\Services\CloudFoundry\DeploymentUtils;
+use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +23,10 @@ final class DeployCommand extends AbstractCommand
     /**
      * @var array
      */
-    protected $slices = array('blue', 'green');
+    private $slices = array('blue', 'green');
+
+    /** @var Deployment */
+    private $deployCmd;
 
     /**
      * Constructor of the class

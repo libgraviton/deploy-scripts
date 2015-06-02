@@ -15,84 +15,21 @@ use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
 class DeploymentUtilsTest extends DeployScriptsTestCase
 {
     /**
-     * validates creation of mandatory services
+     * validates a deploy command.
+     *
+     * @dataProvider methodsAndCountsProvider
+     *
+     * @param string $command      Command to be run
+     * @param array  $methodCounts amount of calls by method
      *
      * @return void
      */
-    public function testCreateServices()
+    public function testDeploySteps($command, array $methodCounts)
     {
         $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
-        DeploymentUtils::createServices(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 2, 'deploy' => 1)),
-            $this->getOutputDouble(),
-            $this->getConfigurationSet(),
-            'graviton-develop'
-        );
-    }
-
-    /**
-     * validates determinations for blue/green deployment.
-     *
-     * @return void
-     */
-    public function testDetermineDeploymentSlice()
-    {
-        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
-
-        DeploymentUtils::determineDeploymentSlice(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 2, 'deploy' => 2)),
-            $this->getOutputDouble(),
-            $this->getConfigurationSet(),
-            'graviton-develop'
-        );
-    }
-
-    /**
-     * validates a login attempt.
-     *
-     * @return void
-     */
-    public function testLogin()
-    {
-        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
-
-        DeploymentUtils::login(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
-            $this->getOutputDouble(),
-            $this->getConfigurationSet(),
-            'graviton-develop'
-        );
-    }
-
-    /**
-     * validates a login attempt.
-     *
-     * @return void
-     */
-    public function testLogout()
-    {
-        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
-
-        DeploymentUtils::logout(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
-            $this->getOutputDouble(),
-            $this->getConfigurationSet(),
-            'graviton-develop'
-        );
-    }
-
-    /**
-     * validates a login attempt.
-     *
-     * @return void
-     */
-    public function testCleanUp()
-    {
-        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
-
-        DeploymentUtils::cleanUp(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
+        DeploymentUtils::$command(
+            $this->getDeploymentDouble($processDouble, $methodCounts),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'graviton-develop',
@@ -100,21 +37,15 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
         );
     }
 
-    /**
-     * validates a login attempt.
-     *
-     * @return void
-     */
-    public function testDeploy()
+    public function methodsAndCountsProvider()
     {
-        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
-
-        DeploymentUtils::deploy(
-            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
-            $this->getOutputDouble(),
-            $this->getConfigurationSet(),
-            'graviton-develop',
-            'green'
+        return array(
+            'login' => array('login', array('registerSteps' => 1, 'deploy' => 1)),
+            'logout' => array('logout', array('registerSteps' => 1, 'deploy' => 1)),
+            'cleanUp' => array('cleanUp', array('registerSteps' => 1, 'deploy' => 1)),
+            'deploy' => array('deploy', array('registerSteps' => 1, 'deploy' => 1)),
+            'determineDeploymentSlice' => array('determineDeploymentSlice', array('registerSteps' => 2, 'deploy' => 2)),
+            'createServices' => array('createServices', array('registerSteps' => 1, 'deploy' => 1)),
         );
     }
 

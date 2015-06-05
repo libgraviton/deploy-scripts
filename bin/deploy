@@ -6,6 +6,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Graviton\Deployment\Command\CloudFoundry\AuthCommand;
 use Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand;
 use Graviton\Deployment\Command\CloudFoundry\CreateServiceCommand;
+use Graviton\Deployment\Command\CloudFoundry\DeployCommand;
 use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
 use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
 use Graviton\Deployment\Configuration;
@@ -17,4 +18,5 @@ $configuration = new Configuration(new Processor(), new FileLocator(__DIR__ . '/
 
 $application = new Application();
 $application->add(new CheckApplicationCommand($configuration));
+$application->add(new DeployCommand($configuration));
 $application->run();

@@ -52,6 +52,12 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 'graviton:deployment:cf:checkApplication',
                 'Determines, if a special CF application is alive.'
             ),
+            'deploy command' => array(
+                '\Graviton\Deployment\Command\CloudFoundry\DeployCommand',
+                array($configuration),
+                'graviton:deployment:cf:deploy',
+                'Deploys an application to a CF instance.'
+            ),
         );
     }
 
@@ -96,6 +102,12 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                     'slice' => 'blue'
                 ),
                 'Application health check. Stated messages:'
+            ),
+            'deploy command' => array(
+                '\Graviton\Deployment\Command\CloudFoundry\DeployCommand',
+                array($configuration),
+                'graviton:deployment:cf:deploy',
+                'Deploys an application to a CF instance.'
             ),
         );
     }

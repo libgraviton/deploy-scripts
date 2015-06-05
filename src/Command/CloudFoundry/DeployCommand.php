@@ -20,21 +20,8 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 final class DeployCommand extends AbstractCommand
 {
-    /**
-     * @var array
-     */
-    private $slices = array('blue', 'green');
-
     /** @var Deployment */
     private $deployCmd;
-
-    /**
-     * Constructor of the class
-     */
-    public function __construct()
-    {
-        $this->deployCmd = new Deployment(new ProcessBuilder());
-    }
 
     /**
      * Configures the current command.
@@ -43,6 +30,7 @@ final class DeployCommand extends AbstractCommand
      */
     protected function configure()
     {
+        $this->deployCmd = new Deployment(new ProcessBuilder());
         $this
             ->setName('graviton:deployment:cf:deploy')
             ->setDescription('Deploys an application to a CF instance.')

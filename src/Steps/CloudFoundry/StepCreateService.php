@@ -49,7 +49,7 @@ final class StepCreateService extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             'cs',
             $this->serviceName,
             $this->serviceType,

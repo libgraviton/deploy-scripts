@@ -20,13 +20,13 @@ final class StepLogin extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             'login',
-            '-u',  $this->configuration['cf']['credentials']['username'],
-            '-p' , $this->configuration['cf']['credentials']['password'],
-            '-o' , $this->configuration['cf']['credentials']['org'],
-            '-s' , $this->configuration['cf']['credentials']['space'],
-            '-a' , $this->configuration['cf']['api_url']
+            '-u',  $this->configuration['cf_username'],
+            '-p' , $this->configuration['cf_password'],
+            '-o' , $this->configuration['cf_org'],
+            '-s' , $this->configuration['cf_space'],
+            '-a' , $this->configuration['cf_api_url']
         );
     }
 }

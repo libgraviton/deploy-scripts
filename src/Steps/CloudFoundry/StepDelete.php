@@ -57,7 +57,7 @@ final class StepDelete extends AbstractStep
     public function getCommand()
     {
         $command = array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             'delete',
             $this->applicationName . '-' . $this->slice
         );

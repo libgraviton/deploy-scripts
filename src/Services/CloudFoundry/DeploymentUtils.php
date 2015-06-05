@@ -97,7 +97,6 @@ final class DeploymentUtils
                 'Trying to find deployment slice (' . $oldSlice . ')'
             );
         } catch (ProcessFailedException $e) {
-
             $slice = $slices[0];
             $oldSlice = $slices[1];
 

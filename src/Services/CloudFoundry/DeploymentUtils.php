@@ -88,13 +88,21 @@ final class DeploymentUtils
             $slice = $slices[1];
         }
 
-        // check, if there is an »old« application as well
-        self::deploySteps(
-            $deploy,
-            $output,
-            array(new StepApp($configuration, $applicationName, $oldSlice)),
-            'Trying to find deployment slice (' . $oldSlice . ')'
-        );
+        try {
+            // check, if there is an »old« application as well
+            self::deploySteps(
+                $deploy,
+                $output,
+                array(new StepApp($configuration, $applicationName, $oldSlice)),
+                'Trying to find deployment slice (' . $oldSlice . ')'
+            );
+        } catch (ProcessFailedException $e) {
+
+            $slice = $slices[0];
+            $oldSlice = $slices[1];
+
+            $output->writeln('Initial Deploy, remember to set up the DB');
+        }
 
         return array($slice, $oldSlice);
     }

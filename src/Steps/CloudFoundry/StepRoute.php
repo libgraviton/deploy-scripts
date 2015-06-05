@@ -52,10 +52,10 @@ final class StepRoute extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             $this->map . '-route',
             $this->target,
-            $this->configuration['cf']['domain'],
+            $this->configuration['cf_domain'],
             '-n',
             $this->hostname,
         );

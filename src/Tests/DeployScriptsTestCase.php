@@ -24,14 +24,14 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
     public static function getConfigurationSet()
     {
         $configuration = [];
-        $configuration['cf']['command'] = '/usr/bin/cf';
-        $configuration['cf']['credentials']['username'] = 'Jon';
-        $configuration['cf']['credentials']['password'] = 'mySecret';
-        $configuration['cf']['credentials']['org'] = 'ORG';
-        $configuration['cf']['credentials']['space'] = 'DEV';
-        $configuration['cf']['api_url'] = 'API_URL';
-        $configuration['cf']['domain'] = 'DOMAIN';
-        $configuration['cf']['services']['mongodb'] = 'mongotype';
+        $configuration['cf_bin'] = '/usr/bin/cf';
+        $configuration['cf_username'] = 'Jon';
+        $configuration['cf_password'] = 'mySecret';
+        $configuration['cf_org'] = 'ORG';
+        $configuration['cf_space'] = 'DEV';
+        $configuration['cf_api_url'] = 'API_URL';
+        $configuration['cf_domain'] = 'DOMAIN';
+        $configuration['cf_services']['mongodb'] = 'mongotype';
 
         return $configuration;
     }

@@ -20,7 +20,7 @@ final class StepLogout extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             'logout'
         );
     }

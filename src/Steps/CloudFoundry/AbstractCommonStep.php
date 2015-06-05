@@ -48,7 +48,7 @@ abstract class AbstractCommonStep extends AbstractStep
     public function getCommand()
     {
         return array(
-            $this->configuration['cf']['command'],
+            $this->configuration['cf_bin'],
             static::$stepName,
             $this->applicationName . '-' . $this->slice
         );

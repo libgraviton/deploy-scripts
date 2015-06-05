@@ -107,6 +107,9 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 '\Graviton\Deployment\Command\CloudFoundry\DeployCommand',
                 array($configuration),
                 'graviton:deployment:cf:deploy',
+                array(
+                    'applicationName' => 'graviton-develop'
+                ),
                 'Deploys an application to a CF instance.'
             ),
         );

@@ -154,7 +154,7 @@ final class DeploymentUtils
     ) {
         $oldTarget = $applicationName . '-' . $oldSlice;
         $steps = array(
-            new StepRoute($configuration, $oldTarget, 'unmap'),
+            new StepRoute($configuration, $applicationName, $oldSlice, $oldTarget, 'unmap'),
             new StepStop($configuration, $applicationName, $oldSlice),
             new StepDelete($configuration, $applicationName, $oldSlice, true)
         );
@@ -184,7 +184,7 @@ final class DeploymentUtils
         $output->writeln('Will deploy application: ' . $target);
         $steps = array(
             new StepPush($configuration, $applicationName, $slice),
-            new StepRoute($configuration, $target, 'map')
+            new StepRoute($configuration, $applicationName, $slice, $target, 'map')
         );
 
         self::deploySteps($deploy, $output, $steps, 'Pushing ' . $target . ' to Cloud Foundry.');

@@ -28,7 +28,8 @@ class CommonStepTest extends DeployScriptsTestCase
      */
     public function testGetCommand($cmd, array $args, $expected)
     {
-        $step = new $cmd($args[0], $args[1], $args[2]);
+        $reflector = new \ReflectionClass($cmd);
+        $step = $reflector->newInstanceArgs($args);
         $this->assertEquals($expected, $step->getCommand());
     }
 
@@ -42,8 +43,8 @@ class CommonStepTest extends DeployScriptsTestCase
         return array(
             'step route' => array(
                 '\Graviton\Deployment\Steps\CloudFoundry\StepRoute',
-                array($configuration, 'target', 'map'),
-                array('/usr/bin/cf', 'map-route', 'target', 'DOMAIN', '-n', 'API_URL')
+                array($configuration, 'APP_NAME', 'blue', 'target', 'map'),
+                array('/usr/bin/cf', 'map-route', 'target', 'DOMAIN', '-n', 'APP_NAME')
             ),
             'step ' => array(
                 '\Graviton\Deployment\Steps\CloudFoundry\StepCreateService',

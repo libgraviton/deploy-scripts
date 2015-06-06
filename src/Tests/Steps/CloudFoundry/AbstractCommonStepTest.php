@@ -1,19 +1,19 @@
 <?php
 /**
- * Test suite for the Auth step.
+ * Test suite for the CheckApp step.
  */
 
 namespace Graviton\Deployment\Tests\Steps\CloudFoundry;
 
 use Graviton\Deployment\DeployScriptsTestCase;
-use Graviton\Deployment\Steps\CloudFoundry\StepAuth;
+use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-class StepAuthTest extends DeployScriptsTestCase
+class AbstractCommonStepTest extends DeployScriptsTestCase
 {
     /**
      * Validate getCommand
@@ -23,10 +23,13 @@ class StepAuthTest extends DeployScriptsTestCase
     public function testGetCommand()
     {
         $configuration = $this->getConfigurationSet();
-        $step = new StepAuth($configuration);
+
+        $step = $this->getMockBuilder('\Graviton\Deployment\Steps\CloudFoundry\AbstractCommonStep')
+            ->setConstructorArgs(array($configuration, 'my_application', 'blue'))
+            ->getMockForAbstractClass();
 
         $this->assertEquals(
-            array('/usr/bin/cf' , 'auth' , 'Jon', 'mySecret'),
+            array('/usr/bin/cf' , null , 'my_application-blue'),
             $step->getCommand()
         );
     }

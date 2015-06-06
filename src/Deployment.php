@@ -38,15 +38,22 @@ class Deployment
     }
 
     /**
-     * Add new step
+     * Adds a whole bunch of steps at once.
      *
-     * @param StepInterface $step step to add
+     * @param array $steps List of steps to be added to the deployment.
      *
-     * @return Deployment
+     * @return $this
      */
-    public function add(StepInterface $step)
+    public function registerSteps(array $steps)
     {
-        $this->steps[] = $step;
+        foreach ($steps as $step) {
+            if (!$step instanceof StepInterface) {
+                throw new \InvalidArgumentException(
+                    'Provided step is not an instance of \Graviton\Deployment\Steps\StepInterface.'
+                );
+            }
+            $this->steps[] = $step;
+        }
 
         return $this;
     }
@@ -54,17 +61,37 @@ class Deployment
     /**
      * deploys the steps
      *
-     * @return void
+     * @return string
      */
     public function deploy()
     {
+        if (empty($this->steps)) {
+            return 'No steps registered! Aborting.';
+        }
+
+        $output = '';
+
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
             $process = $this->processBuilder
                 ->setArguments($command)
                 ->getProcess();
             $process->mustRun();
-            print $process->getOutput();
+            $output = $process->getOutput();
         }
+
+        return $output;
+    }
+
+    /**
+     * Rests this the current instance.
+     *
+     * @return $this
+     */
+    public function resetSteps()
+    {
+        $this->steps = array();
+
+        return $this;
     }
 }

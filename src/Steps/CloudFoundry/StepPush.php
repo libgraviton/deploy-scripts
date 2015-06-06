@@ -1,6 +1,6 @@
 <?php
 /**
- * Step to verify the existence of an application in a Cloud Foundry instance.
+ * Step to push application into a Cloud Foundry instance.
  */
 
 namespace Graviton\Deployment\Steps\CloudFoundry;
@@ -10,10 +10,10 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class StepApp extends AbstractCommonStep
+final class StepPush extends AbstractCommonStep
 {
     /**
      * @var string Name of the step to be registered.
      */
-    protected static $stepName = 'app';
+    protected static $stepName = 'push';
 }

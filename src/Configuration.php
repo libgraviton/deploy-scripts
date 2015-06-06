@@ -18,15 +18,30 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Configuration implements ConfigurationInterface
 {
+    /** @var Processor  */
+    private $processor;
+
+    /** @var FileLocator  */
+    private $fileLocator;
+
+    /**
+     * @param Processor   $processor   Configuration processor.
+     * @param FileLocator $fileLocator Helper class to find files.
+     */
+    public function __construct(Processor $processor, FileLocator $fileLocator)
+    {
+        $this->processor = $processor;
+        $this->fileLocator = $fileLocator;
+    }
+
     /**
      * Loads the current configuration.
      *
-     * @return array|string
+     * @return array
      */
     public function load()
     {
-        $locator = new FileLocator(__DIR__ . '/../app/config');
-        $yamlFiles = $locator->locate('config.yml', null, false);
+        $yamlFiles = $this->fileLocator->locate('config.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
 
         $this->validateParsedConfiguration(
@@ -34,9 +49,7 @@ class Configuration implements ConfigurationInterface
             'Unable to parse the provided configuration file (' . $yamlFiles[0] . ').'
         );
 
-        $processor = new Processor();
-
-        $configuration = $processor->processConfiguration($this, $config);
+        $configuration = $this->processor->processConfiguration($this, $config);
 
         $this->validateParsedConfiguration(
             $configuration,
@@ -60,27 +73,27 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-            ->arrayNode('cf')
-            ->children()
-            ->scalarNode('command')->cannotBeEmpty()->isRequired()->end()
-            ->arrayNode('credentials')
-            ->children()
-            ->scalarNode('username')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('password')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('org')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('space')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('api_url')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('domain')->cannotBeEmpty()->isRequired()->end()
-            ->end()
-            ->end()
-            ->arrayNode('services')
-            ->children()
-            ->scalarNode('mongodb')->end()
-            ->scalarNode('atmoss3')->end()
-            ->end()
-            ->end()
-            ->end()
-            ->end()
+                ->arrayNode('cf')
+                    ->children()
+                        ->scalarNode('command')->cannotBeEmpty()->isRequired()->end()
+                        ->arrayNode('credentials')
+                            ->children()
+                                ->scalarNode('username')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('password')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('org')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('space')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('api_url')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('domain')->cannotBeEmpty()->isRequired()->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('services')
+                            ->children()
+                                ->scalarNode('mongodb')->end()
+                                ->scalarNode('atmoss3')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

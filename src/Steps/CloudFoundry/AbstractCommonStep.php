@@ -1,42 +1,43 @@
 <?php
 /**
- * Step to log off a Cloud Foundry instance.
+ *  Common step for cf commands with no arguments
  */
 
 namespace Graviton\Deployment\Steps\CloudFoundry;
+
+use Graviton\Deployment\Steps\StepInterface;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class StepRoute extends AbstractStep
+abstract class AbstractCommonStep extends AbstractStep
 {
-    /** @var string */
-    private $target;
 
     /** @var string */
-    private $map;
+    private $slice;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $applicationName;
+
+    /** @var string Name of the step to be registered. */
+    protected static $stepName;
 
     /**
      *
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
-     * @param string $targetName      Name of the target (deploy or old)
-     * @param string $map             Art of the map (map or unmap)
+     * @param string $slice           deployment location in blue/green deployment.
+     *
+     * @link http://martinfowler.com/bliki/BlueGreenDeployment.html
      */
-    public function __construct(array $configuration, $applicationName, $targetName, $map)
+    public function __construct(array $configuration, $applicationName, $slice)
     {
         parent::__construct($configuration);
 
+        $this->slice = $slice;
         $this->applicationName = $applicationName;
-        $this->target = $targetName;
-        $this->map = $map;
     }
 
     /**
@@ -48,11 +49,8 @@ final class StepRoute extends AbstractStep
     {
         return array(
             $this->configuration['cf']['command'],
-            $this->map . '-route',
-            $this->target,
-            $this->configuration['cf']['credentials']['domain'],
-            '-n',
-            $this->applicationName,
+            static::$stepName,
+            $this->applicationName . '-' . $this->slice
         );
     }
 }

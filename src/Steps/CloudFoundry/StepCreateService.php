@@ -44,7 +44,7 @@ final class StepCreateService extends AbstractStep
             $this->configuration['cf']['command'],
             'cs',
             $this->serviceName,
-            $this->configuration['cf']['services'][$this->serviceName]['type'],
+            $this->configuration['cf']['services'][$this->serviceName],
             $this->applicationName . '-' . $this->serviceName
         );
     }

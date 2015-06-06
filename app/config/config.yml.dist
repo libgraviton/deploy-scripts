@@ -7,6 +7,6 @@ deploy-scripts:
       password: ~
       org: ~
       space: ~
-      cf_api_url: 'https://api.appcloud-nova.swisscom.com'
+      api_url: 'https://api.appcloud-nova.swisscom.com'
       domain: ~
     services: {}

@@ -55,7 +55,7 @@ final class DeployCommand extends AbstractCommand
 
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 
-        DeploymentUtils::login($this->deployCmd, $output, $this->configuration, $applicationName);
+        DeploymentUtils::login($this->deployCmd, $output, $this->configuration);
         DeploymentUtils::createServices($this->deployCmd, $output, $this->configuration, $applicationName);
         list($slice, $oldSlice) = DeploymentUtils::determineDeploymentSlice(
             $this->deployCmd,

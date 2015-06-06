@@ -10,7 +10,7 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link     http://swisscom.ch
  */
-final class StepRoute extends AbstractCommonStep
+final class StepRoute extends AbstractStep
 {
     /** @var string */
     private $target;
@@ -19,17 +19,22 @@ final class StepRoute extends AbstractCommonStep
     private $map;
 
     /**
+     * @var string
+     */
+    private $applicationName;
+
+    /**
      *
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
-     * @param string $slice           deployment location in blue/green deployment.
      * @param string $targetName      Name of the target (deploy or old)
      * @param string $map             Art of the map (map or unmap)
      */
-    public function __construct(array $configuration, $applicationName, $slice, $targetName, $map)
+    public function __construct(array $configuration, $applicationName, $targetName, $map)
     {
-        parent::__construct($configuration, $applicationName, $slice);
+        parent::__construct($configuration);
 
+        $this->applicationName = $applicationName;
         $this->target = $targetName;
         $this->map = $map;
     }

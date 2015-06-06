@@ -19,7 +19,7 @@ abstract class AbstractCommonStep extends AbstractStep
     private $slice;
 
     /** @var string */
-    protected $applicationName;
+    private $applicationName;
 
     /** @var string Name of the step to be registered. */
     protected static $stepName;

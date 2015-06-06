@@ -65,7 +65,7 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
      * @dataProvider executeCommandProvider
      *
      * @param string $cmd         Command to be tested.
-     * @param array  $commandArgs List of argumenst to instantiate the command.
+     * @param array  $commandArgs List of arguments to instantiate the command.
      * @param string $commandName Name of the command.
      * @param array  $inputArgs   Input arguments for the command.
      * @param string $expected    Console output.

@@ -93,12 +93,12 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoStepsRegistered()
     {
-        $deployment = new Deployment($this->getMock('\Symfony\Component\Process\ProcessBuilder'));
+        $processBuilder = new \Symfony\Component\Process\ProcessBuilder;
+
+        $deployment = new Deployment($processBuilder);
         $deployment->registerSteps(array());
 
-        ob_start();
-        $deployment->deploy();
-        $output = ob_get_clean();
+        $output = $deployment->deploy();
 
         $this->assertSame('No steps registered! Aborting.', $output);
         $this->assertAttributeCount(0, 'steps', $deployment);

@@ -61,13 +61,15 @@ class Deployment
     /**
      * deploys the steps
      *
-     * @return void
+     * @return string
      */
     public function deploy()
     {
         if (empty($this->steps)) {
-            print 'No steps registered! Aborting.';
+            return 'No steps registered! Aborting.';
         }
+
+        $output = '';
 
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
@@ -75,8 +77,10 @@ class Deployment
                 ->setArguments($command)
                 ->getProcess();
             $process->mustRun();
-            print $process->getOutput();
+            $output = $process->getOutput();
         }
+
+        return $output;
     }
 
     /**

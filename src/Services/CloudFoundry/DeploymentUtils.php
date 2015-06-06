@@ -71,7 +71,6 @@ final class DeploymentUtils
         $applicationName
     ) {
         // blue/green deployment
-        $output->write('Determining which application slice to be deployed');
         $slices = ['blue', 'green'];
 
         try {
@@ -79,13 +78,15 @@ final class DeploymentUtils
                 $deploy,
                 $output,
                 array(new StepApp($configuration, $applicationName, $slices[0])),
-                'Determining which application slice to be deployed'
+                'Determining which application slice to be deployed',
+                '... done',
+                false
             );
-            $slice = $slices[0];
-            $oldSlice = $slices[1];
-        } catch (ProcessFailedException $e) {
             $oldSlice = $slices[0];
             $slice = $slices[1];
+        } catch (ProcessFailedException $e) {
+            $slice = $slices[0];
+            $oldSlice = $slices[1];
         }
 
         try {
@@ -94,7 +95,9 @@ final class DeploymentUtils
                 $deploy,
                 $output,
                 array(new StepApp($configuration, $applicationName, $oldSlice)),
-                'Trying to find deployment slice (' . $oldSlice . ')'
+                'Trying to find deployment slice (' . $oldSlice . ')',
+                '... done',
+                false
             );
         } catch (ProcessFailedException $e) {
             $slice = $slices[0];
@@ -117,7 +120,7 @@ final class DeploymentUtils
      */
     public static function login(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        self::deploySteps($deploy, $output, array(new StepLogin($configuration)), 'Trying to login');
+        self::deploySteps($deploy, $output, array(new StepLogin($configuration)), 'Trying to login', '... done', false);
     }
 
     /**
@@ -131,7 +134,7 @@ final class DeploymentUtils
      */
     public static function logout(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        self::deploySteps($deploy, $output, array(new StepLogout($configuration)), 'Logging out', '... bye.');
+        self::deploySteps($deploy, $output, array(new StepLogout($configuration)), 'Logging out', '... bye.', false);
     }
 
     /**
@@ -164,7 +167,10 @@ final class DeploymentUtils
             // remove 'old' deployment
             self::deploySteps($deploy, $output, $steps, 'Removing ' . $oldTarget . ' from Cloud Foundry.');
         } catch (ProcessFailedException $e) {
-            $output->writeln('Unable to cleanUp old instances: ' . PHP_EOL . $e->getMessage());
+            $output->writeln(
+                PHP_EOL .
+                '<error>Unable to cleanUp old instances: ' . PHP_EOL . $e->getProcess()->getOutput() . '</error>'
+            );
         }
     }
 
@@ -199,11 +205,12 @@ final class DeploymentUtils
     /**
      * Initializes a single
      *
-     * @param Deployment      $deploy   Command handler.
-     * @param OutputInterface $output   Output of the command
-     * @param StepInterface[] $steps    Process step to be executed.
-     * @param string          $startMsg Message to  be shown on start.
-     * @param string          $endMsg   Message to be shown on end.
+     * @param Deployment      $deploy               Command handler.
+     * @param OutputInterface $output               Output of the command
+     * @param StepInterface[] $steps                Process step to be executed.
+     * @param string          $startMsg             Message to  be shown on start.
+     * @param string          $endMsg               Message to be shown on end.
+     * @param bool            $returnProcessMessage Include message from process in output..
      *
      * @return void
      */
@@ -212,12 +219,17 @@ final class DeploymentUtils
         OutputInterface $output,
         array $steps,
         $startMsg,
-        $endMsg = '... done'
+        $endMsg = '... done',
+        $returnProcessMessage = true
     ) {
         $output->write($startMsg);
-        $deploy->resetSteps()
+        $msg = $deploy->resetSteps()
             ->registerSteps($steps)
             ->deploy();
         $output->writeln($endMsg);
+
+        if (true === $returnProcessMessage) {
+            $output->writeln('<info>' . $msg . '</info>');
+        }
     }
 }

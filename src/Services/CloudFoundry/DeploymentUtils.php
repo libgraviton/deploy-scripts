@@ -159,7 +159,13 @@ final class DeploymentUtils
             new StepDelete($configuration, $applicationName, $oldSlice, true)
         );
 
-        self::deploySteps($deploy, $output, $steps, 'Removing ' . $oldTarget . ' from Cloud Foundry.');
+
+        try {
+            // remove 'old' deployment
+            self::deploySteps($deploy, $output, $steps, 'Removing ' . $oldTarget . ' from Cloud Foundry.');
+        } catch (ProcessFailedException $e) {
+            $output->writeln('Unable to cleanUp old instances: ' . PHP_EOL . $e->getMessage());
+        }
     }
 
     /**

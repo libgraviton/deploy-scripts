@@ -29,8 +29,8 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
         $configuration['cf']['credentials']['password'] = 'mySecret';
         $configuration['cf']['credentials']['org'] = 'ORG';
         $configuration['cf']['credentials']['space'] = 'DEV';
-        $configuration['cf']['credentials']['api_url'] = 'API_URL';
-        $configuration['cf']['credentials']['domain'] = 'DOMAIN';
+        $configuration['cf']['api_url'] = 'API_URL';
+        $configuration['cf']['domain'] = 'DOMAIN';
         $configuration['cf']['services']['mongodb'] = 'mongotype';
 
         return $configuration;

@@ -19,18 +19,26 @@ final class StepCreateService extends AbstractStep
     /** @var string  */
     private $applicationName;
 
+    /** @var string  */
+    private $serviceType;
+
     /**
+     *
+     * Note:
+     * use »cf m« to find supported services anf types.
      *
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
      * @param string $serviceName     Name of the CF service to create
+     * @param string $serviceType     Name of the CF service type to create
      */
-    public function __construct(array $configuration, $applicationName, $serviceName)
+    public function __construct(array $configuration, $applicationName, $serviceName, $serviceType)
     {
         parent::__construct($configuration);
 
         $this->applicationName = $applicationName;
         $this->serviceName = $serviceName;
+        $this->serviceType = $serviceType;
     }
 
     /**
@@ -44,7 +52,7 @@ final class StepCreateService extends AbstractStep
             $this->configuration['cf']['command'],
             'cs',
             $this->serviceName,
-            $this->configuration['cf']['services'][$this->serviceName],
+            $this->serviceType,
             $this->applicationName . '-' . $this->serviceName
         );
     }

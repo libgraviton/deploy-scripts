@@ -7,7 +7,7 @@ deploy-scripts:
       password: my_secret
       org: ORG
       space: SPACE
-      api_url: API_URL
-      domain: DOMAIN
+    api_url: API_URL
+    domain: DOMAIN
     services:
         mongodb: free

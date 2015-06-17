@@ -26,7 +26,7 @@ final class StepLogin extends AbstractStep
             '-p' , $this->configuration['cf']['credentials']['password'],
             '-o' , $this->configuration['cf']['credentials']['org'],
             '-s' , $this->configuration['cf']['credentials']['space'],
-            '-a' , $this->configuration['cf']['credentials']['api_url']
+            '-a' , $this->configuration['cf']['api_url']
         );
     }
 }

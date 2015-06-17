@@ -50,7 +50,7 @@ final class StepRoute extends AbstractStep
             $this->configuration['cf']['command'],
             $this->map . '-route',
             $this->target,
-            $this->configuration['cf']['credentials']['domain'],
+            $this->configuration['cf']['domain'],
             '-n',
             $this->applicationName,
         );

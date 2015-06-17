@@ -41,10 +41,14 @@ final class DeploymentUtils
         array $configuration,
         $applicationName
     ) {
-        $steps = [
-            new StepCreateService($configuration, $applicationName, 'mongodb'),
-            new StepCreateService($configuration, $applicationName, 'atmoss3'),
-        ];
+        if (empty($configuration['cf']['services'])) {
+            return;
+        }
+
+        $steps = [];
+        foreach ($configuration['cf']['services'] as $service => $type) {
+            $steps[] = new StepCreateService($configuration, $applicationName, $service, $type);
+        }
 
         self::deploySteps(
             $deploy,

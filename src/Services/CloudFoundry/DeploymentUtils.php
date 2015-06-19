@@ -125,7 +125,13 @@ final class DeploymentUtils
             $slice = self::$slices[0];
             $oldSlice = self::$slices[1];
 
-            $output->writeln('... not found. Using slice »' . $applicationName . '-' .$slice . '« as deployment target.');
+            $output->writeln(
+                '... not found. Using slice »' .
+                $applicationName .
+                '-' .
+                $slice .
+                '« as deployment target.'
+            );
             $output->writeln('Initial Deploy, remember to set up the DB');
             self::$isInitial = true;
         }
@@ -266,5 +272,4 @@ final class DeploymentUtils
     {
         return self::$isInitial;
     }
-
 }

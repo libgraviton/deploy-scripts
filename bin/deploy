@@ -10,13 +10,16 @@ use Graviton\Deployment\Command\CloudFoundry\DeployCommand;
 use Graviton\Deployment\Command\CloudFoundry\LoginCommand;
 use Graviton\Deployment\Command\CloudFoundry\LogoutCommand;
 use Graviton\Deployment\Configuration;
+use Graviton\Deployment\Deployment;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Process\ProcessBuilder;
 
 $configuration = new Configuration(new Processor(), new FileLocator(__DIR__ . '/../app/config'));
+$deploymentHandler = new Deployment(new ProcessBuilder());
 
 $application = new Application();
 $application->add(new CheckApplicationCommand($configuration));
-$application->add(new DeployCommand($configuration));
+$application->add(new DeployCommand($deploymentHandler, $configuration));
 $application->run();

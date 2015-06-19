@@ -1,7 +1,7 @@
 # this file contains the main configuration for the library
 deploy-scripts:
   cf:
-    command: cf
+    command: echo
     credentials:
       username: Jon Doe
       password: my_secret

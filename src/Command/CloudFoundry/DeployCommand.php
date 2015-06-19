@@ -6,6 +6,7 @@
 namespace Graviton\Deployment\Command\CloudFoundry;
 
 use Graviton\Deployment\Command\AbstractCommand;
+use Graviton\Deployment\Configuration;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,7 +22,18 @@ use Symfony\Component\Process\ProcessBuilder;
 final class DeployCommand extends AbstractCommand
 {
     /** @var Deployment */
-    private $deployCmd;
+    private $deployHandler;
+
+    /**
+     * @param Deployment    $deploymentHandler Managing the actual deployment
+     * @param Configuration $configuration     Set of configuration options to influence the current command.
+     * @param string|null   $name              Name of the command
+     */
+    public function __construct(Deployment $deploymentHandler, Configuration $configuration, $name = null)
+    {
+        parent::__construct($configuration, $name);
+        $this->deployHandler = $deploymentHandler;
+    }
 
     /**
      * Configures the current command.
@@ -30,7 +42,6 @@ final class DeployCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->deployCmd = new Deployment(new ProcessBuilder());
         $this
             ->setName('graviton:deployment:cf:deploy')
             ->setDescription('Deploys an application to a CF instance.')
@@ -55,16 +66,16 @@ final class DeployCommand extends AbstractCommand
 
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 
-        DeploymentUtils::login($this->deployCmd, $output, $this->configuration);
-        DeploymentUtils::createServices($this->deployCmd, $output, $this->configuration, $applicationName);
+        DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
+        DeploymentUtils::createServices($this->deployHandler, $output, $this->configuration, $applicationName);
         list($slice, $oldSlice) = DeploymentUtils::determineDeploymentSlice(
-            $this->deployCmd,
+            $this->deployHandler,
             $output,
             $this->configuration,
             $applicationName
         );
-        DeploymentUtils::deploy($this->deployCmd, $output, $this->configuration, $applicationName, $slice);
-        DeploymentUtils::cleanUp($this->deployCmd, $output, $this->configuration, $applicationName, $oldSlice);
-        DeploymentUtils::logout($this->deployCmd, $output, $this->configuration);
+        DeploymentUtils::deploy($this->deployHandler, $output, $this->configuration, $applicationName, $slice);
+        DeploymentUtils::cleanUp($this->deployHandler, $output, $this->configuration, $applicationName, $oldSlice);
+        DeploymentUtils::logout($this->deployHandler, $output, $this->configuration);
     }
 }

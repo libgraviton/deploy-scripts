@@ -48,6 +48,7 @@ final class DeploymentUtils
         $applicationName
     ) {
         if (empty($configuration['cf']['services'])) {
+            $output->writeln('No services define in configuration. Skipping.');
             return;
         }
 

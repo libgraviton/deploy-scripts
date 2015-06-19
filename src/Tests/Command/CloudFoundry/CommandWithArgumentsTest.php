@@ -116,7 +116,7 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 array(
                     'applicationName' => 'graviton-develop'
                 ),
-                'Deploys an application to a CF instance.'
+                'Deploying application (graviton-develop) to a Cloud Foundry instance.'
             ),
         );
     }

@@ -25,6 +25,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 final class DeploymentUtils
 {
+    /** @var array slices for "Blue/Green-Deployment" mechanism */
+    private static $slices = ['blue', 'green'];
+
+    /** @var bool Indicator to signal an initial deployment */
+    private static $isInitial = false;
+
     /**
      * Creates mandatory services on CF.
      *
@@ -61,6 +67,17 @@ final class DeploymentUtils
     /**
      * Determines what slice to be used on blue/green deployment.
      *
+     * **NOTICE**
+     * Behavior on different szenarios
+     *
+     * trail    | blue  | green | deployed
+     * ===================================
+     * 1st      | n/a   | n/a   |  blue
+     * 2nd      | avail | n/a   | green (blue is dropped)
+     * 3rd      | n/a   | avail | blue (green is dropped)
+     * manually | avail | avail | green (blue will be dropped)
+     * altered  |       |       |
+     *
      * @param Deployment      $deploy          Command handler.
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from config.yml).
@@ -74,23 +91,20 @@ final class DeploymentUtils
         array $configuration,
         $applicationName
     ) {
-        // blue/green deployment
-        $slices = ['blue', 'green'];
-
         try {
             self::deploySteps(
                 $deploy,
                 $output,
-                array(new StepApp($configuration, $applicationName, $slices[0])),
+                array(new StepApp($configuration, $applicationName, self::$slices[0])),
                 'Determining which application slice to be deployed',
                 '... done',
                 false
             );
-            $oldSlice = $slices[0];
-            $slice = $slices[1];
+            $slice = self::$slices[1];
+            $oldSlice = self::$slices[0];
         } catch (ProcessFailedException $e) {
-            $slice = $slices[0];
-            $oldSlice = $slices[1];
+            $slice = self::$slices[0];
+            $oldSlice = self::$slices[1];
         }
 
         try {
@@ -100,14 +114,17 @@ final class DeploymentUtils
                 $output,
                 array(new StepApp($configuration, $applicationName, $oldSlice)),
                 'Trying to find deployment slice (' . $oldSlice . ')',
-                '... done',
+                '... found. Using slice »' . $applicationName . '-' . $oldSlice . '« as deployment target.',
                 false
             );
+            self::$isInitial = false;
         } catch (ProcessFailedException $e) {
-            $slice = $slices[0];
-            $oldSlice = $slices[1];
+            $slice = self::$slices[0];
+            $oldSlice = self::$slices[1];
 
+            $output->writeln('... not found. Using slice »' . $applicationName . '-' .$slice . '« as deployment target.');
             $output->writeln('Initial Deploy, remember to set up the DB');
+            self::$isInitial = true;
         }
 
         return array($slice, $oldSlice);
@@ -169,7 +186,7 @@ final class DeploymentUtils
 
         try {
             // remove 'old' deployment
-            self::deploySteps($deploy, $output, $steps, 'Removing ' . $oldTarget . ' from Cloud Foundry.');
+            self::deploySteps($deploy, $output, $steps, 'Removing »' . $oldTarget . '« from Cloud Foundry.');
         } catch (ProcessFailedException $e) {
             $output->writeln(
                 PHP_EOL .
@@ -236,4 +253,15 @@ final class DeploymentUtils
             $output->writeln('<info>' . $msg . '</info>');
         }
     }
+
+    /**
+     * Determine if the slice to be deploy
+     *
+     * @return bool
+     */
+    public static function isInitialDeploy()
+    {
+        return self::$isInitial;
+    }
+
 }

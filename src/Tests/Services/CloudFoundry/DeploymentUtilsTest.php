@@ -6,6 +6,7 @@ namespace Graviton\Deployment\Tests\Services\CloudFoundry;
 
 use Graviton\Deployment\DeployScriptsTestCase;
 use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -32,7 +33,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
             $this->getDeploymentDouble($processDouble, $methodCounts),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
-            'graviton-develop',
+            'test-test',
             'blue'
         );
     }
@@ -88,5 +89,38 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
             ->getMockForAbstractClass();
 
         return $outputDouble;
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsInitialDeploy()
+    {
+        $processDouble = $this->getMockBuilder('\Symfony\Component\Process\Process')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $processBuilderDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
+        $deploymentDouble = $this->getMockBuilder('\Graviton\Deployment\Deployment')
+            ->setConstructorArgs(array($processBuilderDouble))
+            ->setMethods(array('registerSteps', 'deploy'))
+            ->getMock();
+        $deploymentDouble
+            ->expects($this->exactly(2))
+            ->method('registerSteps')
+            ->with($this->isType('array'))
+            ->willReturn($deploymentDouble);
+        $deploymentDouble
+            ->expects($this->exactly(2))
+            ->method('deploy')
+            ->willThrowException(new ProcessFailedException($processDouble));
+
+        DeploymentUtils::determineDeploymentSlice(
+            $deploymentDouble,
+            $this->getOutputDouble(),
+            $this->getConfigurationSet(),
+            'test-test'
+        );
+
+        $this->assertTrue(DeploymentUtils::isInitialDeploy());
     }
 }

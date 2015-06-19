@@ -77,7 +77,7 @@ class Deployment
                 ->setArguments($command)
                 ->getProcess();
             $process->mustRun();
-            $output = $process->getOutput();
+            $output .= $process->getOutput();
         }
 
         return $output;

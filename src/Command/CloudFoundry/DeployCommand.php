@@ -75,7 +75,9 @@ final class DeployCommand extends AbstractCommand
             $applicationName
         );
         DeploymentUtils::deploy($this->deployHandler, $output, $this->configuration, $applicationName, $slice);
-        DeploymentUtils::cleanUp($this->deployHandler, $output, $this->configuration, $applicationName, $oldSlice);
+        if (! DeploymentUtils::isInitialDeploy()) {
+            DeploymentUtils::cleanUp($this->deployHandler, $output, $this->configuration, $applicationName, $oldSlice);
+        }
         DeploymentUtils::logout($this->deployHandler, $output, $this->configuration);
     }
 }

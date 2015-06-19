@@ -26,25 +26,25 @@ class DeployCommandTest extends DeployScriptsTestCase
     public function testDeploy()
     {
         $this->configYamlExists();
+        $this->suppressOutput();
 
         $expected = <<<"EOD"
-Deploying application (graviton-develop) to a Cloud Foundry instance.
+Deploying application (graviton-develop-unstable) to a Cloud Foundry instance.
 Trying to login... done
 Creating mandatory services... done
-cs mongodb free graviton-develop-mongodb
+cs mongodb free graviton-develop-unstable-mongodb
 
 Determining which application slice to be deployed
 ... done.
-Trying to find deployment slice (blue)... found. Using slice »graviton-develop-blue« as deployment target.
-Will deploy application: »graviton-develop-green«.
-Pushing graviton-develop-green to Cloud Foundry.... done
-push graviton-develop-green
-map-route graviton-develop-green DOMAIN -n graviton-develop
+Trying to find deployment slice (blue)... found. Using slice »graviton-develop-unstable-blue« as deployment target.
+Will deploy application: »graviton-develop-unstable-green«.
+Pushing graviton-develop-unstable-green to Cloud Foundry.
+... done.
 
-Removing »graviton-develop-blue« from Cloud Foundry.... done
-unmap-route graviton-develop-blue DOMAIN -n graviton-develop
-stop graviton-develop-blue
-delete graviton-develop-blue -f
+Removing »graviton-develop-unstable-blue« from Cloud Foundry.... done
+unmap-route graviton-develop-unstable-blue DOMAIN -n graviton-develop-unstable
+stop graviton-develop-unstable-blue
+delete graviton-develop-unstable-blue -f
 
 Logging out... bye.
 

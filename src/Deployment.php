@@ -6,6 +6,7 @@
 namespace Graviton\Deployment;
 
 use Graviton\Deployment\Steps\StepInterface;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -61,23 +62,43 @@ class Deployment
     /**
      * deploys the steps
      *
+     * @param bool $immediateOutput Forces the Process to dump every output immediately.
+     *
      * @return string
      */
-    public function deploy()
+    public function deploy($immediateOutput = false)
     {
+        $callback = null;
+        $output = '';
+
         if (empty($this->steps)) {
             return 'No steps registered! Aborting.';
         }
 
-        $output = '';
+        /**
+         * @link http://symfony.com/doc/current/components/process.html#getting-real-time-process-output
+         */
+        if (true === $immediateOutput) {
+            $callback = function ($type, $buffer) {
+                if (Process::ERR === $type) {
+                    echo 'ERR > '.$buffer;
+                } else {
+                    echo 'OUT > '.$buffer;
+                }
+            };
+        }
 
         foreach ($this->steps as $step) {
             $command = $step->getCommand();
             $process = $this->processBuilder
                 ->setArguments($command)
                 ->getProcess();
-            $process->mustRun();
-            $output .= $process->getOutput();
+            $process->mustRun($callback);
+
+            // do not add the already printed output to the consolidated output to be printed later.
+            if (false === $immediateOutput) {
+                $output .= $process->getOutput();
+            }
         }
 
         return $output;

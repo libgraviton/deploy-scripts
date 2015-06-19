@@ -12,7 +12,6 @@ use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
@@ -49,6 +48,12 @@ final class DeployCommand extends AbstractCommand
                 'applicationName',
                 InputArgument::REQUIRED,
                 'Which application shall be deployed?'
+            )
+            ->addArgument(
+                'versionName',
+                InputArgument::OPTIONAL,
+                'Which application shall be deployed?',
+                'unstable'
             );
     }
 
@@ -62,7 +67,8 @@ final class DeployCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $applicationName = $input->getArgument('applicationName');
+        // e.g. graviton-develop
+        $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
 
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 
@@ -74,9 +80,21 @@ final class DeployCommand extends AbstractCommand
             $this->configuration,
             $applicationName
         );
-        DeploymentUtils::deploy($this->deployHandler, $output, $this->configuration, $applicationName, $slice);
-        if (! DeploymentUtils::isInitialDeploy()) {
-            DeploymentUtils::cleanUp($this->deployHandler, $output, $this->configuration, $applicationName, $oldSlice);
+        DeploymentUtils::deploy(
+            $this->deployHandler,
+            $output,
+            $this->configuration,
+            $applicationName,
+            $slice
+        );
+        if (!DeploymentUtils::isInitialDeploy()) {
+            DeploymentUtils::cleanUp(
+                $this->deployHandler,
+                $output,
+                $this->configuration,
+                $applicationName,
+                $oldSlice
+            );
         }
         DeploymentUtils::logout($this->deployHandler, $output, $this->configuration);
     }

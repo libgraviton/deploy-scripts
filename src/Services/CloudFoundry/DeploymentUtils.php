@@ -109,6 +109,9 @@ final class DeploymentUtils
         }
 
         $output->writeln('... done.');
+        $startMsg = '... found. Using slice »' .
+            self::renderTargetName($applicationName, $oldSlice) .
+            '« as deployment target.';
 
         try {
             // check, if there is an »old« application as well
@@ -117,7 +120,7 @@ final class DeploymentUtils
                 $output,
                 array(new StepApp($configuration, $applicationName, $oldSlice)),
                 'Trying to find deployment slice (' . $oldSlice . ')',
-                '... found. Using slice »' . $applicationName . '-' . $oldSlice . '« as deployment target.',
+                $startMsg,
                 false
             );
             self::$isInitial = false;
@@ -127,9 +130,7 @@ final class DeploymentUtils
 
             $output->writeln(
                 '... not found. Using slice »' .
-                $applicationName .
-                '-' .
-                $slice .
+                self::renderTargetName($applicationName, $slice) .
                 '« as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
@@ -174,7 +175,7 @@ final class DeploymentUtils
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from config.yml).
      * @param string          $applicationName Application to be cleaned up
-     * @param string          $oldSlice        Slice to be removed.
+     * @param string          $slice           Slice to be removed.
      *
      * @return void
      */
@@ -183,19 +184,19 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $applicationName,
-        $oldSlice
+        $slice
     ) {
-        $oldTarget = $applicationName . '-' . $oldSlice;
+        $target = self::renderTargetName($applicationName, $slice);
         $steps = array(
-            new StepRoute($configuration, $applicationName, $oldTarget, 'unmap'),
-            new StepStop($configuration, $applicationName, $oldSlice),
-            new StepDelete($configuration, $applicationName, $oldSlice, true)
+            new StepRoute($configuration, $applicationName, $target, 'unmap'),
+            new StepStop($configuration, $applicationName, $slice),
+            new StepDelete($configuration, $applicationName, $slice, true)
         );
 
 
         try {
             // remove 'old' deployment
-            self::deploySteps($deploy, $output, $steps, 'Removing »' . $oldTarget . '« from Cloud Foundry.');
+            self::deploySteps($deploy, $output, $steps, 'Removing »' . $target . '« from Cloud Foundry.');
         } catch (ProcessFailedException $e) {
             $output->writeln(
                 PHP_EOL .
@@ -222,14 +223,22 @@ final class DeploymentUtils
         $applicationName,
         $slice
     ) {
-        $target = $applicationName . '-' . $slice;
+        $target = self::renderTargetName($applicationName, $slice);
         $output->writeln('Will deploy application: »' . $target . '«.');
         $steps = array(
             new StepPush($configuration, $applicationName, $slice),
             new StepRoute($configuration, $applicationName, $target, 'map')
         );
 
-        self::deploySteps($deploy, $output, $steps, 'Pushing ' . $target . ' to Cloud Foundry.');
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Pushing ' . $target . ' to Cloud Foundry.' . PHP_EOL,
+            '... done.',
+            true,
+            true
+        );
     }
 
     /**
@@ -241,6 +250,7 @@ final class DeploymentUtils
      * @param string          $startMsg             Message to  be shown on start.
      * @param string          $endMsg               Message to be shown on end.
      * @param bool            $returnProcessMessage Include message from process in output..
+     * @param bool            $forceImmediateOutput Forces the process to send every output to stdout immediately.
      *
      * @return void
      */
@@ -250,12 +260,13 @@ final class DeploymentUtils
         array $steps,
         $startMsg,
         $endMsg = '... done',
-        $returnProcessMessage = true
+        $returnProcessMessage = true,
+        $forceImmediateOutput = false
     ) {
         $output->write($startMsg);
         $msg = $deploy->resetSteps()
             ->registerSteps($steps)
-            ->deploy();
+            ->deploy($forceImmediateOutput);
         $output->writeln($endMsg);
 
         if (true === $returnProcessMessage) {
@@ -271,5 +282,18 @@ final class DeploymentUtils
     public static function isInitialDeploy()
     {
         return self::$isInitial;
+    }
+
+    /**
+     * Provides the name of the target to used.
+     *
+     * @param string $application Name of the current application
+     * @param string $slice       Slice to be used (from blue/green deployment)
+     *
+     * @return string
+     */
+    private static function renderTargetName($application, $slice)
+    {
+        return sprintf('%s-%s', $application, $slice);
     }
 }

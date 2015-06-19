@@ -79,6 +79,7 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
     public function testExecute($cmd, array $commandArgs, $commandName, array $inputArgs, $expected)
     {
         $this->configYamlExists();
+        $this->suppressOutput();
 
         $reflection = new \ReflectionClass($cmd);
         $command = $reflection->newInstanceArgs($commandArgs);
@@ -116,7 +117,7 @@ class CommandWithArgumentsTest extends DeployScriptsTestCase
                 array(
                     'applicationName' => 'graviton-develop'
                 ),
-                'Deploying application (graviton-develop) to a Cloud Foundry instance.'
+                'Deploying application (graviton-develop-unstable) to a Cloud Foundry instance.'
             ),
         );
     }

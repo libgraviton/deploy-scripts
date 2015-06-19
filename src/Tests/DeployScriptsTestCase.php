@@ -93,9 +93,8 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
         $input = array_merge(array('command' => $command->getName()), $inputArgs);
 
         // prevent  command from writing to stdout
-        ob_start();
         $commandTester->execute($input);
 
-        return ob_get_clean();
+        return $commandTester->getDisplay();
     }
 }

@@ -48,7 +48,7 @@ final class DeploymentUtils
         $applicationName
     ) {
         if (empty($configuration['cf']['services'])) {
-            $output->writeln('No services define in configuration. Skipping.');
+            $output->writeln('No services define in configuration. Skipping!');
             return;
         }
 
@@ -98,7 +98,7 @@ final class DeploymentUtils
                 $output,
                 array(new StepApp($configuration, $applicationName, self::$slices[0])),
                 'Determining which application slice to be deployed',
-                '... done',
+                '',
                 false
             );
             $slice = self::$slices[1];
@@ -107,6 +107,8 @@ final class DeploymentUtils
             $slice = self::$slices[0];
             $oldSlice = self::$slices[1];
         }
+
+        $output->writeln('... done.');
 
         try {
             // check, if there is an »old« application as well
@@ -215,7 +217,7 @@ final class DeploymentUtils
         $slice
     ) {
         $target = $applicationName . '-' . $slice;
-        $output->writeln('Will deploy application: ' . $target);
+        $output->writeln('Will deploy application: »' . $target . '«.');
         $steps = array(
             new StepPush($configuration, $applicationName, $slice),
             new StepRoute($configuration, $applicationName, $target, 'map')

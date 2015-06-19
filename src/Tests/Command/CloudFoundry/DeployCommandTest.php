@@ -57,6 +57,9 @@ EOD;
         $application = $this->getSetUpApplication(new DeployCommand($deploymentHandler, $configuration));
         $command = $application->find('graviton:deployment:cf:deploy');
 
-        $this->assertEquals($expected, $this->getOutputFromCommand($command, ['applicationName' => 'graviton-develop']));
+        $this->assertEquals(
+            $expected,
+            $this->getOutputFromCommand($command, ['applicationName' => 'graviton-develop'])
+        );
     }
 }

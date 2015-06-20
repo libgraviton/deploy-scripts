@@ -60,10 +60,9 @@ final class DeployCommand extends AbstractCommand
                 'no-logout',
                 null,
                 InputOption::VALUE_NONE,
-                'Will keep the CF session open after deployment. '.
+                'Will keep the CF session open after deployment. ' .
                 '<fg=yellow;options=bold>Keep in mind to close it by yourself!</fg=yellow;options=bold>'
             );
-        ;
     }
 
     /**
@@ -82,6 +81,7 @@ final class DeployCommand extends AbstractCommand
         // read arguments
         // e.g. graviton-develop
         $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
+        $applicationRoute = $input->getArgument('applicationName');
 
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 
@@ -98,6 +98,7 @@ final class DeployCommand extends AbstractCommand
             $output,
             $this->configuration,
             $applicationName,
+            $applicationRoute,
             $slice
         );
         if (!DeploymentUtils::isInitialDeploy()) {
@@ -106,13 +107,14 @@ final class DeployCommand extends AbstractCommand
                 $output,
                 $this->configuration,
                 $applicationName,
+                $applicationRoute,
                 $oldSlice
             );
         }
 
         if (true == $noLogout) {
             $output->writeln(
-                '<bg=yellow;fg=black;options=bold>'.
+                '<bg=yellow;fg=black;options=bold>' .
                 '                                                                           ' . PHP_EOL .
                 '  Cloud Foundry session will not be closed (»no-logout« option was set) !  ' .
                 PHP_EOL . '                                                                           ' .

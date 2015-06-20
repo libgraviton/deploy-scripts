@@ -43,8 +43,8 @@ class CommonStepTest extends DeployScriptsTestCase
         return array(
             'step route' => array(
                 '\Graviton\Deployment\Steps\CloudFoundry\StepRoute',
-                array($configuration, 'APP_NAME', 'target', 'map'),
-                array('/usr/bin/cf', 'map-route', 'target', 'DOMAIN', '-n', 'APP_NAME')
+                array($configuration, 'APP_NAME', 'target', 'ROUTE', 'map'),
+                array('/usr/bin/cf', 'map-route', 'target', 'DOMAIN', '-n', 'ROUTE')
             ),
             'step create service' => array(
                 '\Graviton\Deployment\Steps\CloudFoundry\StepCreateService',

@@ -28,14 +28,16 @@ final class StepRoute extends AbstractStep
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
      * @param string $targetName      Name of the target (deploy or old)
+     * @param string $subdomain       Used a the subdomain for the application route.
      * @param string $map             Art of the map (map or unmap)
      */
-    public function __construct(array $configuration, $applicationName, $targetName, $map)
+    public function __construct(array $configuration, $applicationName, $targetName, $subdomain, $map)
     {
         parent::__construct($configuration);
 
         $this->applicationName = $applicationName;
         $this->target = $targetName;
+        $this->hostname = $subdomain;
         $this->map = $map;
     }
 
@@ -52,7 +54,7 @@ final class StepRoute extends AbstractStep
             $this->target,
             $this->configuration['cf']['domain'],
             '-n',
-            $this->applicationName,
+            $this->hostname,
         );
     }
 }

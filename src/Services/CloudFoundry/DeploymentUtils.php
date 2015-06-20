@@ -190,6 +190,7 @@ final class DeploymentUtils
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from config.yml).
      * @param string          $applicationName Application to be cleaned up
+     * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be removed.
      *
      * @return void
@@ -199,11 +200,12 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $applicationName,
+        $route,
         $slice
     ) {
         $target = self::renderTargetName($applicationName, $slice);
         $steps = array(
-            new StepRoute($configuration, $applicationName, $target, 'unmap'),
+            new StepRoute($configuration, $applicationName, $target, $route, 'unmap'),
             new StepStop($configuration, $applicationName, $slice),
             new StepDelete($configuration, $applicationName, $slice, true)
         );
@@ -232,6 +234,7 @@ final class DeploymentUtils
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from config.yml).
      * @param string          $applicationName Application to be cleaned up
+     * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be deployed.
      *
      * @return void
@@ -241,13 +244,14 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $applicationName,
+        $route,
         $slice
     ) {
         $target = self::renderTargetName($applicationName, $slice);
         $output->writeln('Will deploy application: <fg=cyan>' . $target . '</fg=cyan>.');
         $steps = array(
             new StepPush($configuration, $applicationName, $slice),
-            new StepRoute($configuration, $applicationName, $target, 'map')
+            new StepRoute($configuration, $applicationName, $target, $route, 'map')
         );
 
         self::deploySteps(

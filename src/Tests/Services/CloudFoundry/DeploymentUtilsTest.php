@@ -34,6 +34,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
             'test-test',
+            'graviton',
             'blue'
         );
     }

@@ -29,24 +29,24 @@ class DeployCommandTest extends DeployScriptsTestCase
         $this->suppressOutput();
 
         $expected = <<<"EOD"
-Deploying application (graviton-develop-unstable) to a Cloud Foundry instance.
+Deploying application (graviton-unstable) to a Cloud Foundry instance.
 Trying to login... done
 Creating mandatory services... done
-cs mongodb free graviton-develop-unstable-mongodb
+cs mongodb free graviton-unstable-mongodb
 
 Determining which application slice to be deployed
-... done.
-Trying to find deployment slice (blue)... found. Using slice »graviton-develop-unstable-blue« as deployment target.
-Will deploy application: »graviton-develop-unstable-green«.
-Pushing graviton-develop-unstable-green to Cloud Foundry.
-... done.
+... done
+Trying to find deployment slice (blue)... found. Using slice graviton-unstable-blue as deployment target.
+Will deploy application: graviton-unstable-green.
+Pushing graviton-unstable-green to Cloud Foundry.
+... done
 
-Removing »graviton-develop-unstable-blue« from Cloud Foundry.... done
-unmap-route graviton-develop-unstable-blue DOMAIN -n graviton-develop-unstable
-stop graviton-develop-unstable-blue
-delete graviton-develop-unstable-blue -f
+Removing graviton-unstable-blue from Cloud Foundry.... done
+unmap-route graviton-unstable-blue DOMAIN -n graviton
+stop graviton-unstable-blue
+delete graviton-unstable-blue -f
 
-Logging out... bye.
+Logging out... bye
 
 EOD;
 
@@ -59,7 +59,7 @@ EOD;
 
         $this->assertEquals(
             $expected,
-            $this->getOutputFromCommand($command, ['applicationName' => 'graviton-develop'])
+            $this->getOutputFromCommand($command, ['applicationName' => 'graviton'])
         );
     }
 }

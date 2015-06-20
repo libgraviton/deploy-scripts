@@ -11,6 +11,7 @@ use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Services\CloudFoundry\DeploymentUtils;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -54,7 +55,15 @@ final class DeployCommand extends AbstractCommand
                 InputArgument::OPTIONAL,
                 'Which application shall be deployed?',
                 'unstable'
+            )
+            ->addOption(
+                'no-logout',
+                null,
+                InputOption::VALUE_NONE,
+                'Will keep the CF session open after deployment. '.
+                '<fg=yellow;options=bold>Keep in mind to close it by yourself!</fg=yellow;options=bold>'
             );
+        ;
     }
 
     /**
@@ -67,6 +76,10 @@ final class DeployCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // read options
+        $noLogout = $input->getOption('no-logout');
+
+        // read arguments
         // e.g. graviton-develop
         $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
 
@@ -96,6 +109,19 @@ final class DeployCommand extends AbstractCommand
                 $oldSlice
             );
         }
+
+        if (true == $noLogout) {
+            $output->writeln(
+                '<bg=yellow;fg=black;options=bold>'.
+                '                                                                           ' . PHP_EOL .
+                '  Cloud Foundry session will not be closed (»no-logout« option was set) !  ' .
+                PHP_EOL . '                                                                           ' .
+                '</bg=yellow;fg=black;options=bold>'
+            );
+
+            return;
+        }
+
         DeploymentUtils::logout($this->deployHandler, $output, $this->configuration);
     }
 }

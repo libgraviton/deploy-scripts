@@ -23,6 +23,9 @@ final class StepRoute extends AbstractStep
      */
     private $applicationName;
 
+    /** @var string  */
+    private $hostname;
+
     /**
      *
      * @param array  $configuration   Current application configuration.

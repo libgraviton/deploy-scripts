@@ -49,6 +49,7 @@ final class DeploymentUtils
     ) {
         if (empty($configuration['cf']['services'])) {
             $output->writeln('No services define in configuration. Skipping!');
+
             return;
         }
 
@@ -108,10 +109,10 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
         }
 
-        $output->writeln('... done.');
-        $startMsg = '... found. Using slice »' .
+        $output->writeln('... <fg=yellow>done</fg=yellow>');
+        $startMsg = '... found. Using slice <fg=cyan>' .
             self::renderTargetName($applicationName, $oldSlice) .
-            '« as deployment target.';
+            '</fg=cyan> as deployment target.';
 
         try {
             // check, if there is an »old« application as well
@@ -129,9 +130,9 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
 
             $output->writeln(
-                '... not found. Using slice »' .
+                '... not found. Using slice <fg=cyan>' .
                 self::renderTargetName($applicationName, $slice) .
-                '« as deployment target.'
+                '</fg=cyan> as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
             self::$isInitial = true;
@@ -151,7 +152,14 @@ final class DeploymentUtils
      */
     public static function login(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        self::deploySteps($deploy, $output, array(new StepLogin($configuration)), 'Trying to login', '... done', false);
+        self::deploySteps(
+            $deploy,
+            $output,
+            array(new StepLogin($configuration)),
+            'Trying to login',
+            '... <fg=yellow>done</fg=yellow>',
+            false
+        );
     }
 
     /**
@@ -165,7 +173,14 @@ final class DeploymentUtils
      */
     public static function logout(Deployment $deploy, OutputInterface $output, array $configuration)
     {
-        self::deploySteps($deploy, $output, array(new StepLogout($configuration)), 'Logging out', '... bye.', false);
+        self::deploySteps(
+            $deploy,
+            $output,
+            array(new StepLogout($configuration)),
+            'Logging out',
+            '... <fg=yellow>bye</fg=yellow>',
+            false
+        );
     }
 
     /**
@@ -196,7 +211,12 @@ final class DeploymentUtils
 
         try {
             // remove 'old' deployment
-            self::deploySteps($deploy, $output, $steps, 'Removing »' . $target . '« from Cloud Foundry.');
+            self::deploySteps(
+                $deploy,
+                $output,
+                $steps,
+                'Removing <fg=cyan>' . $target . '</fg=cyan> from Cloud Foundry.'
+            );
         } catch (ProcessFailedException $e) {
             $output->writeln(
                 PHP_EOL .
@@ -224,7 +244,7 @@ final class DeploymentUtils
         $slice
     ) {
         $target = self::renderTargetName($applicationName, $slice);
-        $output->writeln('Will deploy application: »' . $target . '«.');
+        $output->writeln('Will deploy application: <fg=cyan>' . $target . '</fg=cyan>.');
         $steps = array(
             new StepPush($configuration, $applicationName, $slice),
             new StepRoute($configuration, $applicationName, $target, 'map')
@@ -235,7 +255,7 @@ final class DeploymentUtils
             $output,
             $steps,
             'Pushing ' . $target . ' to Cloud Foundry.' . PHP_EOL,
-            '... done.',
+            '... <fg=yellow>done</fg=yellow>',
             true,
             true
         );
@@ -259,7 +279,7 @@ final class DeploymentUtils
         OutputInterface $output,
         array $steps,
         $startMsg,
-        $endMsg = '... done',
+        $endMsg = '... <fg=yellow>done</fg=yellow>',
         $returnProcessMessage = true,
         $forceImmediateOutput = false
     ) {
@@ -270,7 +290,7 @@ final class DeploymentUtils
         $output->writeln($endMsg);
 
         if (true === $returnProcessMessage) {
-            $output->writeln('<info>' . $msg . '</info>');
+            $output->writeln('<fg=white>' . $msg . '</fg=white>');
         }
     }
 

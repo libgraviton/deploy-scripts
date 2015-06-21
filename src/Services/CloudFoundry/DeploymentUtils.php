@@ -47,14 +47,14 @@ final class DeploymentUtils
         array $configuration,
         $applicationName
     ) {
-        if (empty($configuration['cf']['services'])) {
+        if (empty($configuration['cf_services'])) {
             $output->writeln('No services define in configuration. Skipping!');
 
             return;
         }
 
         $steps = [];
-        foreach ($configuration['cf']['services'] as $service => $type) {
+        foreach ($configuration['cf_services'] as $service => $type) {
             $steps[] = new StepCreateService($configuration, $applicationName, $service, $type);
         }
 

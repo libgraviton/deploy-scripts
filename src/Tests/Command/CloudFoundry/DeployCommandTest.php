@@ -25,7 +25,6 @@ class DeployCommandTest extends DeployScriptsTestCase
      */
     public function testDeploy()
     {
-        $this->markTestSkipped();
         $this->configYamlExists();
         $this->suppressOutput();
 

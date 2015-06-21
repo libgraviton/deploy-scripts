@@ -1,7 +1,12 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+if (strpos(__DIR__, 'vendor') === false) {
+    require __DIR__ . '/../vendor/autoload.php';
+} else {
+    // assume vendor to be on include_path if installed
+    require 'vendor/autoload.php';
+}
 
 use Graviton\Deployment\Command\CloudFoundry\AuthCommand;
 use Graviton\Deployment\Command\CloudFoundry\CheckApplicationCommand;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0d074f35ba4bf20ad7f30d4fca0c46ce",
+    "hash": "5658f3b9ab823944f011a6b3d9ea3326",
     "packages": [
         {
             "name": "incenteev/composer-parameter-handler",

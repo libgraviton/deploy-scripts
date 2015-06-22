@@ -81,7 +81,11 @@ final class DeployCommand extends AbstractCommand
         // read arguments
         // e.g. graviton-develop
         $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
-        $applicationRoute = $input->getArgument('applicationName');
+        if ($input->getArgument('versionName') == 'master') {
+            $applicationRoute = $input->getArgument('applicationName');
+        } else {
+            $applicationRoute = $applicationName;
+        }
 
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 

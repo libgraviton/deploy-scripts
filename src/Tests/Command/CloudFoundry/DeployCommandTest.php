@@ -21,14 +21,38 @@ use Symfony\Component\Process\ProcessBuilder;
 class DeployCommandTest extends DeployScriptsTestCase
 {
     /**
+     * @dataProvider deployData
+     *
+     * @param string $appName    name of app
+     * @param string $appVersion version to deploy
+     * @param string $expected   output to expect from cf
+     *
      * @return void
      */
-    public function testDeploy()
+    public function testDeploy($appName, $appVersion, $expected)
     {
         $this->configYamlExists();
         $this->suppressOutput();
 
-        $expected = <<<"EOD"
+        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
+        $configuration = new Configuration(new Processor(), $locator);
+        $deploymentHandler = new Deployment(new ProcessBuilder());
+
+        $application = $this->getSetUpApplication(new DeployCommand($deploymentHandler, $configuration));
+        $command = $application->find('graviton:deployment:cf:deploy');
+
+        $this->assertEquals(
+            $expected,
+            $this->getOutputFromCommand($command, ['applicationName' => $appName, 'versionName' => $appVersion])
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function deployData()
+    {
+        $expectedUnstable = <<<"EOD"
 Deploying application (graviton-unstable) to a Cloud Foundry instance.
 Trying to login... done
 Creating mandatory services... done
@@ -42,24 +66,46 @@ Pushing graviton-unstable-green to Cloud Foundry.
 ... done
 
 Removing graviton-unstable-blue from Cloud Foundry.... done
-unmap-route graviton-unstable-blue DOMAIN -n graviton
+unmap-route graviton-unstable-blue DOMAIN -n graviton-unstable
 stop graviton-unstable-blue
 delete graviton-unstable-blue -f
 
 Logging out... bye
 
 EOD;
+        $expectedMaster = <<<"EOD"
+Deploying application (graviton-master) to a Cloud Foundry instance.
+Trying to login... done
+Creating mandatory services... done
+cs mongodb free graviton-master-mongodb
 
-        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
-        $configuration = new Configuration(new Processor(), $locator);
-        $deploymentHandler = new Deployment(new ProcessBuilder());
+Determining which application slice to be deployed
+... done
+Trying to find deployment slice (blue)... found. Using slice graviton-master-blue as deployment target.
+Will deploy application: graviton-master-green.
+Pushing graviton-master-green to Cloud Foundry.
+... done
 
-        $application = $this->getSetUpApplication(new DeployCommand($deploymentHandler, $configuration));
-        $command = $application->find('graviton:deployment:cf:deploy');
+Removing graviton-master-blue from Cloud Foundry.... done
+unmap-route graviton-master-blue DOMAIN -n graviton
+stop graviton-master-blue
+delete graviton-master-blue -f
 
-        $this->assertEquals(
-            $expected,
-            $this->getOutputFromCommand($command, ['applicationName' => 'graviton'])
-        );
+Logging out... bye
+
+EOD;
+        return [
+            'unstable deploy' => [
+                'graviton',
+                'unstable',
+                $expectedUnstable,
+            ],
+            'master deploy' => [
+                'graviton',
+                'master',
+                $expectedMaster,
+            ]
+        ];
+
     }
 }

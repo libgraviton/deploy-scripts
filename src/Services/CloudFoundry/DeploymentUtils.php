@@ -329,7 +329,7 @@ final class DeploymentUtils
      * @param Deployment      $deploy        Command handler.
      * @param OutputInterface $output        Output of the command
      * @param array           $configuration Application configuration (read from deploy.yml).
-     * @param string          $application   Application to be cleaned up
+     * @param string          $application   Application the env vars to be defined in
      *
      * @return void
      */

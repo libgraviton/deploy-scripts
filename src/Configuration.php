@@ -81,9 +81,8 @@ class Configuration implements ConfigurationInterface
               ->scalarNode('cf_space')->cannotBeEmpty()->isRequired()->end()
               ->scalarNode('cf_domain')->cannotBeEmpty()->isRequired()->end()
               ->arrayNode('cf_services')
-                ->children()
-                  ->scalarNode('mongodb')->end()
-                  ->scalarNode('atmoss3')->end()
+                ->useAttributeAsKey('name')
+                ->prototype('scalar')->end()
                 ->end()
               ->end()
             ->end();

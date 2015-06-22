@@ -43,7 +43,7 @@
     "extra": {
         "incenteev-parameters": {
             "parameter-key": "deploy-scripts",
-            "file": "app/config/config.yml",
+            "file": "app/config/deploy.yml",
             "env-map": {
                 "cf_bin": "CF_BIN",
                 "cf_api_url": "CF_API_UR",

@@ -21,7 +21,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Process\ProcessBuilder;
 
-$configuration = new Configuration(new Processor(), new FileLocator(__DIR__ . '/../app/config'));
+$configuration = new Configuration(new Processor(), new FileLocator(getcwd(). '/app/config'));
 $deploymentHandler = new Deployment(new ProcessBuilder());
 
 $application = new Application();

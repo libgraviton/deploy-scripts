@@ -36,7 +36,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy          Command handler.
      * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml)
+     * @param array           $configuration   Application configuration (read from deploy.yml)
      * @param string          $applicationName Application to be used
      *
      * @return void
@@ -82,7 +82,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy          Command handler.
      * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml).
+     * @param array           $configuration   Application configuration (read from deploy.yml).
      * @param string          $applicationName Application to be cleaned up
      *
      * @return array
@@ -146,7 +146,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy        Command handler.
      * @param OutputInterface $output        Output of the command
-     * @param array           $configuration Application configuration (read from config.yml).
+     * @param array           $configuration Application configuration (read from deploy.yml).
      *
      * @return void
      */
@@ -167,7 +167,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy        Command handler.
      * @param OutputInterface $output        Output of the command
-     * @param array           $configuration Application configuration (read from config.yml).
+     * @param array           $configuration Application configuration (read from deploy.yml).
      *
      * @return void
      */
@@ -188,7 +188,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy          Command handler.
      * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml).
+     * @param array           $configuration   Application configuration (read from deploy.yml).
      * @param string          $applicationName Application to be cleaned up
      * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be removed.
@@ -232,7 +232,7 @@ final class DeploymentUtils
      *
      * @param Deployment      $deploy          Command handler.
      * @param OutputInterface $output          Output of the command
-     * @param array           $configuration   Application configuration (read from config.yml).
+     * @param array           $configuration   Application configuration (read from deploy.yml).
      * @param string          $applicationName Application to be cleaned up
      * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be deployed.

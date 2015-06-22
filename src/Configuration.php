@@ -41,7 +41,7 @@ class Configuration implements ConfigurationInterface
      */
     public function load()
     {
-        $yamlFiles = $this->fileLocator->locate('config.yml', null, false);
+        $yamlFiles = $this->fileLocator->locate('deploy.yml', null, false);
         $config = Yaml::parse(file_get_contents($yamlFiles[0]));
 
         $this->validateParsedConfiguration(

@@ -1,0 +1,59 @@
+{
+    "name": "graviton/deploy-scripts",
+    "description": "low level deploy helpers",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "List of contributors",
+            "homepage": "https://github.com/libgraviton/deploy-scripts/graphs/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Graviton\\Deployment\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": { "Graviton\\Deployment\\": "src/Tests/"}
+    },
+    "require": {
+        "symfony/console": "^2.6",
+        "symfony/process": "^2.6",
+        "symfony/config": "^2.6",
+        "incenteev/composer-parameter-handler": "^2.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.6",
+        "squizlabs/php_codesniffer": "~2.2",
+        "libgraviton/codesniffer": "~1.3"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+         "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "check": [
+            "./vendor/bin/phpcs --config-set installed_paths ../../libgraviton/codesniffer/CodeSniffer/Standards",
+            "./vendor/bin/phpcs --standard=PSR1 --ignore='*.css' --ignore='*.js' src/ src/Tests/",
+            "./vendor/bin/phpcs --standard=PSR2 --ignore='*.css' --ignore='*.js' src/ src/Tests/",
+            "./vendor/bin/phpcs --standard=ENTB --ignore='*.css' --ignore='*.js' src/ src/Tests/"
+        ]
+    },
+    "bin": ["bin/deploy"],
+    "extra": {
+        "incenteev-parameters": {
+            "parameter-key": "deploy-scripts",
+            "file": "app/config/deploy.yml",
+            "env-map": {
+                "cf_bin": "CF_BIN",
+                "cf_api_url": "CF_API_UR",
+                "cf_username": "CF_USERNAME",
+                "cf_password": "CF_PASSWORD",
+                "cf_org": "CF_ORG",
+                "cf_space": "CF_SPACE",
+                "cf_domain": "CF_DOMAIN",
+                "cf_services": "CF_SERVICES"
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+# this file contains the main configuration for the library
+deploy-scripts:
+  cf_bin: echo
+  cf_api_url: API_URL
+  cf_username: Jon Doe
+  cf_password: my_secret
+  cf_org: ORG
+  cf_space: SPACE
+  cf_domain: DOMAIN
+  cf_services:
+    mongodb: free
+  cf_environment_vars:
+    ERRBIT_API_KEY: some_secret_key

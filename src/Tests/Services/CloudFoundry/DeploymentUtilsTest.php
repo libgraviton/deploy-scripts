@@ -136,9 +136,7 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
             $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
             $this->getOutputDouble(),
             $this->getConfigurationSet(),
-            'Test_test-unstable-blue',
-            'ERRBIT_API_KEY',
-            'some_secret_key'
+            'Test_test-unstable-blue'
         );
     }
 }

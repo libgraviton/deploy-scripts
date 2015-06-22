@@ -1,6 +1,7 @@
 # this file contains the main configuration for the library
 deploy-scripts:
   cf_bin: echo
+  cf_process_timeout: 3600
   cf_api_url: API_URL
   cf_username: Jon Doe
   cf_password: my_secret

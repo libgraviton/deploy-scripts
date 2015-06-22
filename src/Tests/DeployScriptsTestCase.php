@@ -25,6 +25,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
     {
         $configuration = [];
         $configuration['cf_bin'] = '/usr/bin/cf';
+        $configuration['cf_process_timeout'] = 60;
         $configuration['cf_username'] = 'Jon';
         $configuration['cf_password'] = 'mySecret';
         $configuration['cf_org'] = 'ORG';

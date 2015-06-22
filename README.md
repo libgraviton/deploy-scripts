@@ -9,9 +9,9 @@ composer require graviton/deploy-scripts
 ```
 
 ## Configuration
-The configuration is to be done in app/config/config.yml.
-In order to configure this library you have to copy the config.yml.dist to a config.yml and modify the latter 
-and replace every value with your personal configuration. 
+The configuration is to be done in ``app/config/deploy.yml``.
+In order to configure this library you have to copy the ``deploy.yml.dist`` to ``deploy.yml`` and modify the latter 
+by replacing every value with your personal configuration. 
 
 ## Usage
 ### Console command

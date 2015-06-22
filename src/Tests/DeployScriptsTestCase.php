@@ -32,6 +32,7 @@ class DeployScriptsTestCase extends \PHPUnit_Framework_TestCase
         $configuration['cf_api_url'] = 'API_URL';
         $configuration['cf_domain'] = 'DOMAIN';
         $configuration['cf_services']['mongodb'] = 'mongotype';
+        $configuration['cf_environment_vars']['ERRBIT_API_KEY'] = 'some_secret_key';
 
         return $configuration;
     }

@@ -86,6 +86,11 @@ class Configuration implements ConfigurationInterface
                   ->scalarNode('atmoss3')->end()
                 ->end()
               ->end()
+              ->arrayNode('cf_environment_vars')
+                ->useAttributeAsKey('name')
+                ->prototype('scalar')->end()
+                ->end()
+              ->end()
             ->end();
 
         return $treeBuilder;

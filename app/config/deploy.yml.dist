@@ -8,3 +8,4 @@ deploy-scripts:
   cf_space: dev
   cf_domain: 'nova.scapp.io'
   cf_services: {}
+  cf_environment_vars: {}

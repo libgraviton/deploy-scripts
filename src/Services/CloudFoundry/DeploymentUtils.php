@@ -13,6 +13,7 @@ use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Graviton\Deployment\Steps\CloudFoundry\StepRoute;
+use Graviton\Deployment\Steps\CloudFoundry\StepSetEnv;
 use Graviton\Deployment\Steps\CloudFoundry\StepStop;
 use Graviton\Deployment\Steps\StepInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,6 +31,7 @@ final class DeploymentUtils
 
     /** @var bool Indicator to signal an initial deployment */
     private static $isInitial = false;
+
 
     /**
      * Creates mandatory services on CF.
@@ -319,5 +321,40 @@ final class DeploymentUtils
     private static function renderTargetName($application, $slice)
     {
         return sprintf('%s-%s', $application, $slice);
+    }
+
+    /**
+     * Injects specific environment vars to the Cloud Foundry setup.
+     *
+     * @param Deployment      $deploy        Command handler.
+     * @param OutputInterface $output        Output of the command
+     * @param array           $configuration Application configuration (read from deploy.yml).
+     * @param string          $application   Application to be cleaned up
+     *
+     * @return void
+     */
+    public static function setEnvironmentVariables(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $application
+    ) {
+        if (empty($configuration['cf_environment_vars'])) {
+            $output->writeln('No environment vars define in configuration. Skipping!');
+
+            return;
+        }
+
+        $steps = [];
+        foreach ($configuration['cf_environment_vars'] as $envName => $envValue) {
+            $steps[] = new StepSetEnv($configuration, $application, $envName, $envValue);
+        }
+
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Defining mandatory environment variables'
+        );
     }
 }

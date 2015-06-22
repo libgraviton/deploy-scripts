@@ -124,4 +124,21 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
         $this->assertTrue(DeploymentUtils::isInitialDeploy());
     }
+
+    /**
+     * @return void
+     */
+    public function testSetEnvironmentVariables()
+    {
+        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
+
+        DeploymentUtils::setEnvironmentVariables(
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
+            $this->getOutputDouble(),
+            $this->getConfigurationSet(),
+            'Test_test-unstable-blue',
+            'ERRBIT_API_KEY',
+            'some_secret_key'
+        );
+    }
 }

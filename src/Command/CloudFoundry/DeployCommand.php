@@ -97,6 +97,12 @@ final class DeployCommand extends AbstractCommand
             $this->configuration,
             $applicationName
         );
+        DeploymentUtils::setEnvironmentVariables(
+            $this->deployHandler,
+            $output,
+            $this->configuration,
+            $applicationName . '-' . $slice
+        );
         DeploymentUtils::deploy(
             $this->deployHandler,
             $output,

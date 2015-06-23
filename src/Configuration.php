@@ -74,6 +74,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
               ->scalarNode('cf_bin')->cannotBeEmpty()->isRequired()->end()
+              ->scalarNode('cf_process_timeout')->cannotBeEmpty()->isRequired()->end()
               ->scalarNode('cf_api_url')->cannotBeEmpty()->isRequired()->end()
               ->scalarNode('cf_username')->cannotBeEmpty()->isRequired()->end()
               ->scalarNode('cf_password')->cannotBeEmpty()->isRequired()->end()

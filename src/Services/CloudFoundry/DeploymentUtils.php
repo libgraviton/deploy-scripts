@@ -238,6 +238,7 @@ final class DeploymentUtils
      * @param string          $applicationName Application to be cleaned up
      * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be deployed.
+     * @param boolean         $start           Start the deploy automagically
      *
      * @return void
      */
@@ -247,14 +248,17 @@ final class DeploymentUtils
         array $configuration,
         $applicationName,
         $route,
-        $slice
+        $slice,
+        $start = true
     ) {
         $target = self::renderTargetName($applicationName, $slice);
         $output->writeln('Will deploy application: <fg=cyan>' . $target . '</fg=cyan>.');
-        $steps = array(
-            new StepPush($configuration, $applicationName, $slice),
-            new StepRoute($configuration, $applicationName, $target, $route, 'map')
-        );
+        $steps = [
+            new StepPush($configuration, $applicationName, $slice, $start),
+        ];
+        if ($start) {
+            $steps[] = new StepRoute($configuration, $applicationName, $target, $route, 'map');
+        }
 
         self::deploySteps(
             $deploy,

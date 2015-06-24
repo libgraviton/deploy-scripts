@@ -90,7 +90,6 @@ final class DeployCommand extends AbstractCommand
         $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
 
         DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
-        DeploymentUtils::createServices($this->deployHandler, $output, $this->configuration, $applicationName);
         list($slice, $oldSlice) = DeploymentUtils::determineDeploymentSlice(
             $this->deployHandler,
             $output,
@@ -106,6 +105,7 @@ final class DeployCommand extends AbstractCommand
             $slice,
             false
         );
+        DeploymentUtils::createServices($this->deployHandler, $output, $this->configuration, $applicationName, $slice);
         DeploymentUtils::setEnvironmentVariables(
             $this->deployHandler,
             $output,

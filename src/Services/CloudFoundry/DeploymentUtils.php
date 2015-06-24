@@ -238,6 +238,7 @@ final class DeploymentUtils
      * @param string          $applicationName Application to be cleaned up
      * @param string          $route           Used a the subdomain for the application route.
      * @param string          $slice           Slice to be deployed.
+     * @param boolean         $start           Start the deploy automagically
      *
      * @return void
      */

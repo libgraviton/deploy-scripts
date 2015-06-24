@@ -61,6 +61,10 @@ cs mongodb free graviton-unstable-mongodb
 Determining which application slice to be deployed
 ... done
 Trying to find deployment slice (blue)... found. Using slice graviton-unstable-blue as deployment target.
+Will deploy application: graviton-unstable-green.
+Pushing graviton-unstable-green to Cloud Foundry.
+... done
+
 Defining mandatory environment variables... done
 set-env graviton-unstable-green ERRBIT_API_KEY some_secret_key
 
@@ -85,6 +89,10 @@ cs mongodb free graviton-master-mongodb
 Determining which application slice to be deployed
 ... done
 Trying to find deployment slice (blue)... found. Using slice graviton-master-blue as deployment target.
+Will deploy application: graviton-master-green.
+Pushing graviton-master-green to Cloud Foundry.
+... done
+
 Defining mandatory environment variables... done
 set-env graviton-master-green ERRBIT_API_KEY some_secret_key
 

@@ -8,6 +8,7 @@ namespace Graviton\Deployment\Services\CloudFoundry;
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepApp;
 use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
+use Graviton\Deployment\Steps\CloudFoundry\StepBindService;
 use Graviton\Deployment\Steps\CloudFoundry\StepDelete;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
@@ -40,6 +41,7 @@ final class DeploymentUtils
      * @param OutputInterface $output          Output of the command
      * @param array           $configuration   Application configuration (read from deploy.yml)
      * @param string          $applicationName Application to be used
+     * @param string          $slice           deployment location in blue/green deployment.
      *
      * @return void
      */
@@ -47,10 +49,11 @@ final class DeploymentUtils
         Deployment $deploy,
         OutputInterface $output,
         array $configuration,
-        $applicationName
+        $applicationName,
+        $slice
     ) {
         if (empty($configuration['cf_services'])) {
-            $output->writeln('No services define in configuration. Skipping!');
+            $output->writeln('No services defined in configuration. Skipping!');
 
             return;
         }
@@ -58,13 +61,14 @@ final class DeploymentUtils
         $steps = [];
         foreach ($configuration['cf_services'] as $service => $type) {
             $steps[] = new StepCreateService($configuration, $applicationName, $service, $type);
+            $steps[] = new StepBindService($configuration, $applicationName, $slice, $service);
         }
 
         self::deploySteps(
             $deploy,
             $output,
             $steps,
-            'Creating mandatory services'
+            'Creating services'
         );
     }
 
@@ -344,7 +348,7 @@ final class DeploymentUtils
         $application
     ) {
         if (empty($configuration['cf_environment_vars'])) {
-            $output->writeln('No environment vars define in configuration. Skipping!');
+            $output->writeln('No environment vars defined in configuration. Skipping!');
 
             return;
         }
@@ -358,7 +362,7 @@ final class DeploymentUtils
             $deploy,
             $output,
             $steps,
-            'Defining mandatory environment variables'
+            'Defining environment variables'
         );
     }
 }

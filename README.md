@@ -35,6 +35,6 @@ We welcome contributions as a pull request on the develop branch.
   Deploys an application to a CF instance.
 
 ## Further ideas
-- evolve a ``GravitonDeployBundle`` from this library.
-- provide the possibility to push to multiple Cloud Foundry instances at once.
-- add incenteev Parameter handler (https://github.com/Incenteev/ParameterHandler) to be able to use env vars for config.
+- ~~evolve a ``GravitonDeployBundle`` from this library.~~
+- provide the possibility to push to multiple Cloud Foundry instances at once by one command.
+- ~~add incenteev Parameter handler (https://github.com/Incenteev/ParameterHandler) to be able to use env vars for config.~~

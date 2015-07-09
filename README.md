@@ -8,6 +8,8 @@ Install it using [composer](https://getcomposer.org/).
 composer require graviton/deploy-scripts
 ```
 
+There is also a PHAR file for your convenience, [located here](https://graviton-deploy-scripts.nova.scapp.io/deploy.phar). ;-)
+
 ## Configuration
 The configuration is to be done in ``app/config/deploy.yml``.
 In order to configure this library you have to copy the ``deploy.yml.dist`` to ``deploy.yml`` and modify the latter 

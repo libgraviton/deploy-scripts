@@ -22,7 +22,7 @@ In order to build a PHAR file, execute
 composer build
 ```
 
-The `deploy.phar` will be created in `build/`. This `build/` cloud can be pushed to the cloud by using `deploy-scripts` on this repo
+The `deploy.phar` will be created in `build/`. This `build/` folder can be pushed to the cloud by using `deploy-scripts` on this repo
 (probably using `deploy.phar` itself *g)
 
 ## Usage

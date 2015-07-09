@@ -1,0 +1,27 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src"
+  ],
+  "files": [
+    "app/config/deploy.yml.dist",
+    "README.md"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "Tests",
+        "tests",
+        "phpunit",
+        "php_codesniffer",
+        "phpdocumentor"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "main": "bin/deploy",
+  "output": "build/deploy.phar",
+  "git-version": "%package_version%",
+  "stub": true
+}

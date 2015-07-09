@@ -1,0 +1,6 @@
+---
+applications:
+- name: graviton-deploy-scripts
+  buildpack: https://github.com/cloudfoundry-community/staticfile-buildpack.git
+  path: build
+  memory: 64M

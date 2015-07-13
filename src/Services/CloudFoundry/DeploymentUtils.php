@@ -59,8 +59,16 @@ final class DeploymentUtils
         }
 
         $steps = [];
-        foreach ($configuration['cf_services'] as $service => $type) {
-            $steps[] = new StepCreateService($configuration, $applicationName, $service, $type);
+        foreach ($configuration['cf_services'] as $service => $plan) {
+            $name = null;
+            $type = $service;
+            if (is_array($plan)) {
+                $name = $service;
+                $type = $plan['service'];
+                $plan = $plan['plan'];
+
+            }
+            $steps[] = new StepCreateService($configuration, $applicationName, $type, $plan, $name);
             $steps[] = new StepBindService($configuration, $applicationName, $slice, $service);
         }
 

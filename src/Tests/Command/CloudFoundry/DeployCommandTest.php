@@ -65,6 +65,8 @@ Pushing graviton-unstable-green to Cloud Foundry.
 Creating services... done
 cs mongodb free graviton-unstable-mongodb
 bind-service graviton-unstable-green graviton-unstable-mongodb
+cs mongodb free graviton-unstable-test
+bind-service graviton-unstable-green graviton-unstable-test
 
 Defining environment variables... done
 set-env graviton-unstable-green ERRBIT_API_KEY some_secret_key
@@ -94,6 +96,8 @@ Pushing graviton-master-green to Cloud Foundry.
 Creating services... done
 cs mongodb free graviton-master-mongodb
 bind-service graviton-master-green graviton-master-mongodb
+cs mongodb free graviton-master-test
+bind-service graviton-master-green graviton-master-test
 
 Defining environment variables... done
 set-env graviton-master-green ERRBIT_API_KEY some_secret_key

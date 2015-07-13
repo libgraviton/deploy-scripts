@@ -52,6 +52,7 @@ final class StepCreateService extends AbstractStep
         $this->applicationName = $applicationName;
         $this->serviceType = $serviceType;
         $this->servicePlan = $servicePlan;
+        $this->serviceName = $serviceName;
         if (is_null($serviceName)) {
             $this->serviceName = $serviceType;
         }

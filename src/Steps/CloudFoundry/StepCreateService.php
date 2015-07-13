@@ -13,14 +13,26 @@ namespace Graviton\Deployment\Steps\CloudFoundry;
  */
 final class StepCreateService extends AbstractStep
 {
-    /** @var string  */
-    private $serviceName;
-
-    /** @var string  */
+    /**
+     * @var string
+     */
     private $applicationName;
 
-    /** @var string  */
+    /**
+     * @var string
+     */
     private $serviceType;
+
+    /*
+     * @var string
+     */
+    private $servicePlan;
+
+    /**
+     * @var string
+     */
+    private $serviceName;
+
 
     /**
      *
@@ -29,16 +41,20 @@ final class StepCreateService extends AbstractStep
      *
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
-     * @param string $serviceName     Name of the CF service to create
-     * @param string $serviceType     Name of the CF service type to create
+     * @param string $serviceType     Type of the CF service to create
+     * @param string $servicePlan     Plan of the CF service to create
+     * @param string $serviceName     Name of the CF service to create, defaults to $serviceType
      */
-    public function __construct(array $configuration, $applicationName, $serviceName, $serviceType)
+    public function __construct(array $configuration, $applicationName, $serviceType, $servicePlan, $serviceName = null)
     {
         parent::__construct($configuration);
 
         $this->applicationName = $applicationName;
-        $this->serviceName = $serviceName;
         $this->serviceType = $serviceType;
+        $this->servicePlan = $servicePlan;
+        if (is_null($serviceName)) {
+            $this->serviceName = $serviceType;
+        }
     }
 
     /**
@@ -51,8 +67,8 @@ final class StepCreateService extends AbstractStep
         return array(
             $this->configuration['cf_bin'],
             'cs',
-            $this->serviceName,
             $this->serviceType,
+            $this->servicePlan,
             $this->applicationName . '-' . $this->serviceName
         );
     }

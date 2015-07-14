@@ -10,5 +10,8 @@ deploy-scripts:
   cf_domain: DOMAIN
   cf_services:
     mongodb: free
+    test:
+        service: mongodb
+        plan: free
   cf_environment_vars:
     ERRBIT_API_KEY: some_secret_key

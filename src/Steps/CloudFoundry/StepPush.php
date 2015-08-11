@@ -44,6 +44,7 @@ final class StepPush extends AbstractCommonStep
      * @param string  $slice           deployment location in blue/green deployment.
      * @param boolean $start           start the app on push or use --no-start flag
      * @param boolean $noRoute         assign a route or use --no-route flag
+     * @param string  $command         command to be executed
      */
     public function __construct(array $configuration, $applicationName, $slice, $start = true, $noRoute = false, $command = null)
     {

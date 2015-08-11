@@ -284,6 +284,33 @@ final class DeploymentUtils
     }
 
     /**
+     * @param Deployment $deploy
+     * @param OutputInterface $output
+     * @param array $configuration
+     * @param $command
+     */
+    public static function runCommand(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $command
+    ) {
+        $id = uniqid();
+        $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . 'graviton-development-' . $id);
+        $steps = [
+            new StepPush($configuration, 'graviton-development', $id, true, true, $command)
+        ];
+
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Executing ' . $command . PHP_EOL,
+            'Finished my friend'
+        );
+    }
+
+    /**
      * Initializes a single
      *
      * @param Deployment      $deploy               Command handler.

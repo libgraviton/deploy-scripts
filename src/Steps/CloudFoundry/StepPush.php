@@ -20,6 +20,13 @@ final class StepPush extends AbstractCommonStep
     protected $start;
 
     /**
+     * indicate if --no-route flag is to be used or not
+     *
+     * @var boolean
+     */
+    protected $noRoute;
+
+    /**
      * @var string Name of the step to be registered.
      */
     protected static $stepName = 'push';
@@ -29,12 +36,14 @@ final class StepPush extends AbstractCommonStep
      * @param string  $applicationName Name of the CF-application to be checked
      * @param string  $slice           deployment location in blue/green deployment.
      * @param boolean $start           start the app on push or use --no-start flag
+     * @param boolean $noRoute         assign a route or use --no-route flag
      */
-    public function __construct(array $configuration, $applicationName, $slice, $start = true)
+    public function __construct(array $configuration, $applicationName, $slice, $start = true, $noRoute = false)
     {
         parent::__construct($configuration, $applicationName, $slice);
 
         $this->start = $start;
+        $this->noRoute = $noRoute;
     }
 
     /**
@@ -48,6 +57,10 @@ final class StepPush extends AbstractCommonStep
 
         if (!$this->start) {
             $command[] = '--no-start';
+        }
+
+        if (!$this->noRoute) {
+            $command[] = '--no-route';
         }
         return $command;
     }

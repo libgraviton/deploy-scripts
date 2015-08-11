@@ -46,8 +46,14 @@ final class StepPush extends AbstractCommonStep
      * @param boolean $noRoute         assign a route or use --no-route flag
      * @param string  $command         command to be executed
      */
-    public function __construct(array $configuration, $applicationName, $slice, $start = true, $noRoute = false, $command = null)
-    {
+    public function __construct(
+        array $configuration,
+        $applicationName,
+        $slice,
+        $start = true,
+        $noRoute = false,
+        $command = null
+    ) {
         parent::__construct($configuration, $applicationName, $slice);
 
         $this->start = $start;
@@ -73,7 +79,8 @@ final class StepPush extends AbstractCommonStep
         }
 
         if ($this->command) {
-            $command[] = '-c ' . $this->command;
+            $command[] = '-c';
+            $command[] = $this->command;
         }
         return $command;
     }

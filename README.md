@@ -39,6 +39,10 @@ see tests ;)
 ## Development
 We welcome contributions as a pull request on the develop branch.
 
+### Add new Command
+Commands need to be registered within bin/deploy
+[see here](http://symfony.com/doc/current/components/console/introduction.html)
+
 ## Available Commands
 ### Cloud Foundry specific
 - **CheckApplicationCommand**

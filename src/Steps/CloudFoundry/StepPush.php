@@ -27,6 +27,13 @@ final class StepPush extends AbstractCommonStep
     protected $noRoute;
 
     /**
+     * defines default startup command
+     *
+     * @var string
+     */
+    protected $command;
+
+    /**
      * @var string Name of the step to be registered.
      */
     protected static $stepName = 'push';
@@ -38,12 +45,13 @@ final class StepPush extends AbstractCommonStep
      * @param boolean $start           start the app on push or use --no-start flag
      * @param boolean $noRoute         assign a route or use --no-route flag
      */
-    public function __construct(array $configuration, $applicationName, $slice, $start = true, $noRoute = false)
+    public function __construct(array $configuration, $applicationName, $slice, $start = true, $noRoute = false, $command = null)
     {
         parent::__construct($configuration, $applicationName, $slice);
 
         $this->start = $start;
         $this->noRoute = $noRoute;
+        $this->command = $command;
     }
 
     /**
@@ -59,8 +67,12 @@ final class StepPush extends AbstractCommonStep
             $command[] = '--no-start';
         }
 
-        if (!$this->noRoute) {
+        if ($this->noRoute) {
             $command[] = '--no-route';
+        }
+
+        if ($this->command) {
+            $command[] = '-c ' . $this->command;
         }
         return $command;
     }

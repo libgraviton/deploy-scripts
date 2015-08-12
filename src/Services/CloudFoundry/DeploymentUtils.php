@@ -297,16 +297,17 @@ final class DeploymentUtils
         $applicationName
     ) {
         $id = uniqid();
+        $applicationName .= '-run';
         $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . $applicationName . '-' . $id);
         $steps = [
-            new StepPush($configuration, $applicationName, $id, true, true, $command,true),
+            new StepPush($configuration, $applicationName, $id, true, true, $command, true),
         ];
 
         foreach($configuration['cf_services'] as $service => $val){
             array_push($steps, new StepBindService($configuration, $applicationName, $id, $service));
         }
 
-        array_push($steps, new StepPush($configuration, $applicationName, $id, true, true, $command,false));
+        array_push($steps, new StepPush($configuration, $applicationName, $id, true, true, $command, false));
 
         self::deploySteps(
             $deploy,

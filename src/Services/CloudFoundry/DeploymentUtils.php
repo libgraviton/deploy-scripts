@@ -293,23 +293,27 @@ final class DeploymentUtils
         Deployment $deploy,
         OutputInterface $output,
         array $configuration,
-        $command
+        $command,
+        $applicationName
     ) {
         $id = uniqid();
-        $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . 'graviton-development-' . $id);
+        $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . $applicationName . '-' . $id);
         $steps = [
-            new StepPush($configuration, 'graviton-development-run', $id, true, true, $command,true),
-            new StepBindService($configuration, 'graviton-development-run', $id, 'mongo', true),
-            new StepBindService($configuration, 'graviton-development-run', $id, 'atmos', true),
-            new StepPush($configuration, 'graviton-development-run', $id, true, true, $command,false)
+            new StepPush($configuration, $applicationName, $id, true, true, $command,true),
         ];
+
+        foreach($configuration['cf_services'] as $service => $val){
+            array_push($steps, new StepBindService($configuration, $applicationName, $id, $service));
+        }
+
+        array_push($steps, new StepPush($configuration, $applicationName, $id, true, true, $command,false));
 
         self::deploySteps(
             $deploy,
             $output,
             $steps,
-            'Executing ' . $command . PHP_EOL,
-            'Command Finished',
+            'Executing <fg=cyan>' . $command .'</fg=cyan>' . PHP_EOL,
+            '<fg=green>Command Finished</fg=green>',
             true,
             true
         );

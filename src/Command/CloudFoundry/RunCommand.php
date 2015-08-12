@@ -46,9 +46,21 @@ final class RunCommand extends AbstractCommand
             ->setName('graviton:deployment:cf:run')
             ->setDescription('Run a command as a one-off')
             ->addArgument(
+                'applicationName',
+                InputArgument::REQUIRED,
+                'Which application shall be deployed?'
+            )
+            ->addArgument(
                 'cmd',
                 InputArgument::REQUIRED,
                 'Command passed as a string example: "console:command -d"'
+
+            )->addArgument(
+                'versionName',
+                InputArgument::OPTIONAL,
+                'Which application shall be deployed?',
+                'unstable'
+
             )->addOption(
                 'no-logout',
                 null,
@@ -69,11 +81,13 @@ final class RunCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
+        $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
         DeploymentUtils::runCommand(
             $this->deployHandler,
             $output,
             $this->configuration,
-            $input->getArgument('cmd')
+            $input->getArgument('cmd'),
+            $applicationName
         );
         $noLogout = $input->getOption('no-logout');
         if (true == $noLogout) {

@@ -53,7 +53,7 @@ final class RunCommand extends AbstractCommand
                 'no-logout',
                 null,
                 InputOption::VALUE_NONE,
-                'Will keep the CF session open after deployment my friend. ' .
+                'Will keep the CF session open after deployment. ' .
                 '<fg=yellow;options=bold>Keep in mind to close it by yourself!</fg=yellow;options=bold>'
             );
     }
@@ -68,7 +68,7 @@ final class RunCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
+        DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
         DeploymentUtils::runCommand(
             $this->deployHandler,
             $output,

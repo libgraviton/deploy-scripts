@@ -34,6 +34,13 @@ final class StepPush extends AbstractCommonStep
     protected $command;
 
     /**
+     * don't start the machine
+     *
+     * @var boolean
+     */
+    protected $noStart;
+
+    /**
      * @var string Name of the step to be registered.
      */
     protected static $stepName = 'push';
@@ -52,13 +59,15 @@ final class StepPush extends AbstractCommonStep
         $slice,
         $start = true,
         $noRoute = false,
-        $command = null
+        $command = '',
+        $noStart = false
     ) {
         parent::__construct($configuration, $applicationName, $slice);
 
         $this->start = $start;
         $this->noRoute = $noRoute;
-        $this->command = $command;
+        $this->command = (string) $command;
+        $this->noStart = $noStart;
     }
 
     /**
@@ -78,10 +87,15 @@ final class StepPush extends AbstractCommonStep
             $command[] = '--no-route';
         }
 
-        if ($this->command) {
+        if (!empty($this->command)) {
             $command[] = '-c';
             $command[] = $this->command;
         }
+
+        if ($this->noStart) {
+            $command[] = '--no-start';;
+        }
+
         return $command;
     }
 }

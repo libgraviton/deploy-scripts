@@ -298,7 +298,10 @@ final class DeploymentUtils
         $id = uniqid();
         $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . 'graviton-development-' . $id);
         $steps = [
-            new StepPush($configuration, 'graviton-development', $id, true, true, $command)
+            new StepPush($configuration, 'graviton-development-run', $id, true, true, $command,true),
+            new StepBindService($configuration, 'graviton-development-run', $id, 'mongo', true),
+            new StepBindService($configuration, 'graviton-development-run', $id, 'atmos', true),
+            new StepPush($configuration, 'graviton-development-run', $id, true, true, $command,false)
         ];
 
         self::deploySteps(
@@ -306,7 +309,9 @@ final class DeploymentUtils
             $output,
             $steps,
             'Executing ' . $command . PHP_EOL,
-            'Finished my friend'
+            'Command Finished',
+            true,
+            true
         );
     }
 

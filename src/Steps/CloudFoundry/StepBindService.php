@@ -25,18 +25,25 @@ final class StepBindService extends AbstractStep
     private $slice;
 
     /**
+     * @var string
+     **/
+    private $customServiceName;
+
+    /**
      * @param array  $configuration   Current application configuration.
      * @param string $applicationName Name of the CF-application to be checked
      * @param string $slice           deployment location in blue/green deployment.
      * @param string $serviceName     Name of the CF service to create
+     * @param string boolean          use a custom service name
      */
-    public function __construct(array $configuration, $applicationName, $slice, $serviceName)
+    public function __construct(array $configuration, $applicationName, $slice, $serviceName, $customServiceName = false)
     {
         parent::__construct($configuration);
 
         $this->applicationName = $applicationName;
         $this->slice = $slice;
         $this->serviceName = $serviceName;
+        $this->customServiceName = $customServiceName;
     }
 
     /**
@@ -46,11 +53,23 @@ final class StepBindService extends AbstractStep
      */
     public function getCommand()
     {
-        return array(
-            $this->configuration['cf_bin'],
-            'bind-service',
-            $this->applicationName . '-' . $this->slice,
-            $this->applicationName . '-' . $this->serviceName,
+        if($this->customServiceName){
+           $command =  array(
+               $this->configuration['cf_bin'],
+               'bind-service',
+               $this->applicationName . '-' . $this->slice,
+               $this->serviceName,
+           );
+        } else {
+            $command = array(
+                $this->configuration['cf_bin'],
+                'bind-service',
+                $this->applicationName . '-' . $this->slice,
+                $this->applicationName . '-' . $this->serviceName,
         );
+
+        }
+        return $command;
     }
 }
+

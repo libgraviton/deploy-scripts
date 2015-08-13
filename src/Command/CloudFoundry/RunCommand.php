@@ -53,8 +53,7 @@ final class RunCommand extends AbstractCommand
             ->addArgument(
                 'cmd',
                 InputArgument::REQUIRED,
-                'Command passed as a string e.g. "./vendor/bin/deploy g:d:c:run appName \'php app/console
-                doctrine:mongodb:fixtures:load\' unstable"'
+                'Command passed as a string e.g. "php app/console doctrine:mongodb:fixtures:load\' unstable"'
             )
             ->addArgument(
                 'versionName',

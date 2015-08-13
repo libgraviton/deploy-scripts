@@ -52,8 +52,7 @@ final class StepPush extends AbstractCommonStep
         $slice,
         $start = true,
         $noRoute = false,
-        $command = '',
-        $noStart = false
+        $command = ''
     ) {
         parent::__construct($configuration, $applicationName, $slice);
 

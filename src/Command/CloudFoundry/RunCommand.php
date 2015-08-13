@@ -55,14 +55,14 @@ final class RunCommand extends AbstractCommand
                 InputArgument::REQUIRED,
                 'Command passed as a string e.g. "./vendor/bin/deploy g:d:c:run appName \'php app/console
                 doctrine:mongodb:fixtures:load\' unstable"'
-
-            )->addArgument(
+            )
+            ->addArgument(
                 'versionName',
                 InputArgument::OPTIONAL,
                 'Which application shall be deployed?',
                 'unstable'
-
-            )->addOption(
+            )
+            ->addOption(
                 'no-logout',
                 null,
                 InputOption::VALUE_NONE,

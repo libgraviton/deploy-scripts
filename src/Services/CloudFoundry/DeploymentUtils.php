@@ -284,11 +284,15 @@ final class DeploymentUtils
     }
 
     /**
-     * @param Deployment $deploy
-     * @param OutputInterface $output
-     * @param array $configuration
-     * @param string $command
-     * @param string $applicationName
+     * Runs a command on a Cloud Foundry instance
+     *
+     * @param Deployment      $deploy          deploy handler
+     * @param OutputInterface $output          output interface
+     * @param array           $configuration   the configuration params
+     * @param string          $command         the command to be executed
+     * @param string          $applicationName the application name
+     *
+     * @return void
      */
     public static function runCommand(
         Deployment $deploy,
@@ -303,7 +307,7 @@ final class DeploymentUtils
             new StepPush($configuration, $applicationName, 'run-' . $id, false, true, $command),
         ];
 
-        foreach($configuration['cf_services'] as $service => $val){
+        foreach ($configuration['cf_services'] as $service => $val) {
             array_push($steps, new StepBindService($configuration, $applicationName, 'run-' . $id, $service));
         }
 

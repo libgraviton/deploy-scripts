@@ -28,7 +28,6 @@ class StepBindServiceTest extends DeployScriptsTestCase
             'my_personal_application-unstable',
             'run-1234',
             'mongodb'
-
         );
 
         $this->assertEquals(

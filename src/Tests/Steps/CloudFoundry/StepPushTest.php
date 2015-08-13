@@ -30,7 +30,6 @@ class StepPushTest extends DeployScriptsTestCase
             true,
             true,
             "php app/console doctrine:mongodb:fixtures:load unstable"
-
         );
 
         $this->assertEquals(
@@ -46,30 +45,34 @@ class StepPushTest extends DeployScriptsTestCase
         );
     }
 
+    /**
+     * Validate getCommand with flag --no-start
+     *
+     * @return void
+     */
     public function testGetCommandStartFalse()
-        {
-            $configuration = $this->getConfigurationSet();
-            $step = new StepPush(
-                $configuration,
-                'my_personal_application-unstable',
-                'blue',
-                false,
-                true,
-                "php app/console doctrine:mongodb:fixtures:load unstable"
+    {
+        $configuration = $this->getConfigurationSet();
+        $step = new StepPush(
+            $configuration,
+            'my_personal_application-unstable',
+            'blue',
+            false,
+            true,
+            "php app/console doctrine:mongodb:fixtures:load unstable"
+        );
 
-            );
-
-            $this->assertEquals(
-                array(
-                    '/usr/bin/cf',
-                    'push',
-                    'my_personal_application-unstable-blue',
-                    '--no-start',
-                    '--no-route',
-                    '-c',
-                    'php app/console doctrine:mongodb:fixtures:load unstable'
-                ),
-                $step->getCommand()
-            );
-        }
+        $this->assertEquals(
+            array(
+                '/usr/bin/cf',
+                'push',
+                'my_personal_application-unstable-blue',
+                '--no-start',
+                '--no-route',
+                '-c',
+                'php app/console doctrine:mongodb:fixtures:load unstable'
+            ),
+            $step->getCommand()
+        );
+    }
 }

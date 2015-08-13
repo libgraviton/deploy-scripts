@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Runs a command on a Cloud Foundry instance
  */
 
 namespace Graviton\Deployment\Command\CloudFoundry;

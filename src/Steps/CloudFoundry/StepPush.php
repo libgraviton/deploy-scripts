@@ -34,13 +34,6 @@ final class StepPush extends AbstractCommonStep
     protected $command;
 
     /**
-     * don't start the machine
-     *
-     * @var boolean
-     */
-    protected $noStart;
-
-    /**
      * @var string Name of the step to be registered.
      */
     protected static $stepName = 'push';
@@ -67,7 +60,6 @@ final class StepPush extends AbstractCommonStep
         $this->start = $start;
         $this->noRoute = $noRoute;
         $this->command = (string) $command;
-        $this->noStart = $noStart;
     }
 
     /**
@@ -88,12 +80,9 @@ final class StepPush extends AbstractCommonStep
         }
 
         if (!empty($this->command)) {
+            // -c flag defines a startup command which runs when the app has started
             $command[] = '-c';
             $command[] = $this->command;
-        }
-
-        if ($this->noStart) {
-            $command[] = '--no-start';;
         }
 
         return $command;

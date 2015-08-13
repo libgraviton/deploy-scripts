@@ -44,7 +44,7 @@ final class RunCommand extends AbstractCommand
     {
         $this
             ->setName('graviton:deployment:cf:run')
-            ->setDescription('Run a command as a one-off')
+            ->setDescription('Run a command as on a Cloud Foundry instance')
             ->addArgument(
                 'applicationName',
                 InputArgument::REQUIRED,
@@ -53,7 +53,8 @@ final class RunCommand extends AbstractCommand
             ->addArgument(
                 'cmd',
                 InputArgument::REQUIRED,
-                'Command passed as a string example: "console:command -d"'
+                'Command passed as a string e.g. "./vendor/bin/deploy g:d:c:run appName \'php app/console
+                doctrine:mongodb:fixtures:load\' unstable"'
 
             )->addArgument(
                 'versionName',

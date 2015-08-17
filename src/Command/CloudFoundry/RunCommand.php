@@ -53,7 +53,7 @@ final class RunCommand extends AbstractCommand
             ->addArgument(
                 'cmd',
                 InputArgument::REQUIRED,
-                'Command passed as a string e.g. "php app/console doctrine:mongodb:fixtures:load\' unstable"'
+                'Command passed as a string e.g. "doctrine:mongodb:fixtures:load unstable"'
             )
             ->addArgument(
                 'versionName',
@@ -86,7 +86,7 @@ final class RunCommand extends AbstractCommand
             $this->deployHandler,
             $output,
             $this->configuration,
-            $input->getArgument('cmd'),
+            'php app/console ' . $input->getArgument('cmd'),
             $applicationName
         );
         $noLogout = $input->getOption('no-logout');

@@ -15,9 +15,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
- * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
- * @link     http://swisscom.ch
+ * @author  List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link    http://swisscom.ch
  */
 final class DeployCommand extends AbstractCommand
 {
@@ -60,7 +60,7 @@ final class DeployCommand extends AbstractCommand
                 'no-logout',
                 null,
                 InputOption::VALUE_NONE,
-                'Will keep the CF session open after deployment. ' .
+                'Will keep the CF session open after deployment. '.
                 '<fg=yellow;options=bold>Keep in mind to close it by yourself!</fg=yellow;options=bold>'
             );
     }
@@ -80,14 +80,14 @@ final class DeployCommand extends AbstractCommand
 
         // read arguments
         // e.g. graviton-develop
-        $applicationName = $input->getArgument('applicationName') . '-' . $input->getArgument('versionName');
+        $applicationName = $input->getArgument('applicationName').'-'.$input->getArgument('versionName');
         if ($input->getArgument('versionName') == 'master') {
             $applicationRoute = $input->getArgument('applicationName');
         } else {
             $applicationRoute = $applicationName;
         }
 
-        $output->writeln('Deploying application (' . $applicationName . ') to a Cloud Foundry instance.');
+        $output->writeln('Deploying application ('.$applicationName.') to a Cloud Foundry instance.');
 
         DeploymentUtils::login($this->deployHandler, $output, $this->configuration);
         list($slice, $oldSlice) = DeploymentUtils::determineDeploymentSlice(
@@ -110,16 +110,26 @@ final class DeployCommand extends AbstractCommand
             $this->deployHandler,
             $output,
             $this->configuration,
-            $applicationName . '-' . $slice
+            $applicationName.'-'.$slice
         );
-        DeploymentUtils::deploy(
+
+        DeploymentUtils::addRoute(
             $this->deployHandler,
             $output,
             $this->configuration,
             $applicationName,
-            $applicationRoute,
+            $slice,
+            $applicationRoute
+        );
+
+        DeploymentUtils::startApplication(
+            $this->deployHandler,
+            $output,
+            $this->configuration,
+            $applicationName,
             $slice
         );
+
         if (!DeploymentUtils::isInitialDeploy()) {
             DeploymentUtils::cleanUp(
                 $this->deployHandler,
@@ -133,10 +143,10 @@ final class DeployCommand extends AbstractCommand
 
         if (true == $noLogout) {
             $output->writeln(
-                '<bg=yellow;fg=black;options=bold>' .
-                '                                                                           ' . PHP_EOL .
-                '  Cloud Foundry session will not be closed (»no-logout« option was set) !  ' .
-                PHP_EOL . '                                                                           ' .
+                '<bg=yellow;fg=black;options=bold>'.
+                '                                                                           '.PHP_EOL.
+                '  Cloud Foundry session will not be closed (»no-logout« option was set) !  '.
+                PHP_EOL.'                                                                           '.
                 '</bg=yellow;fg=black;options=bold>'
             );
 

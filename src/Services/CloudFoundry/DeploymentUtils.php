@@ -22,9 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
- * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
- * @link     http://swisscom.ch
+ * @author  List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link    http://swisscom.ch
  */
 final class DeploymentUtils
 {
@@ -33,7 +33,6 @@ final class DeploymentUtils
 
     /** @var bool Indicator to signal an initial deployment */
     private static $isInitial = false;
-
 
     /**
      * Creates mandatory services on CF.
@@ -112,7 +111,9 @@ final class DeploymentUtils
             self::deploySteps(
                 $deploy,
                 $output,
-                array (new StepApp($configuration, $applicationName, self::$slices[0])),
+                [
+                    new StepApp($configuration, $applicationName, self::$slices[0])
+                ],
                 'Determining which application slice to be deployed',
                 '',
                 false
@@ -135,7 +136,9 @@ final class DeploymentUtils
             self::deploySteps(
                 $deploy,
                 $output,
-                array (new StepApp($configuration, $applicationName, $oldSlice)),
+                [
+                    new StepApp($configuration, $applicationName, $oldSlice),
+                ],
                 'Trying to find deployment slice ('.$oldSlice.')',
                 $startMsg,
                 false
@@ -146,16 +149,15 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
 
             $output->writeln(
-                '... not found. Using slice <fg=cyan>'.self::renderTargetName(
-                    $applicationName,
-                    $slice
-                ).'</fg=cyan> as deployment target.'
+                '... not found. Using slice <fg=cyan>'.
+                self::renderTargetName($applicationName, $slice).
+                '</fg=cyan> as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
             self::$isInitial = true;
         }
 
-        return array ($slice, $oldSlice);
+        return [$slice, $oldSlice];
     }
 
     /**
@@ -172,7 +174,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array (new StepLogin($configuration)),
+            [new StepLogin($configuration)],
             'Trying to login',
             '... <fg=yellow>done</fg=yellow>',
             false
@@ -193,7 +195,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array (new StepLogout($configuration)),
+            [new StepLogout($configuration)],
             'Logging out',
             '... <fg=yellow>bye</fg=yellow>',
             false
@@ -221,11 +223,11 @@ final class DeploymentUtils
         $slice
     ) {
         $target = self::renderTargetName($applicationName, $slice);
-        $steps = array (
+        $steps = [
             new StepRoute($configuration, $applicationName, $target, $route, 'unmap'),
             new StepStop($configuration, $applicationName, $slice),
             new StepDelete($configuration, $applicationName, $slice, true),
-        );
+        ];
 
 
         try {

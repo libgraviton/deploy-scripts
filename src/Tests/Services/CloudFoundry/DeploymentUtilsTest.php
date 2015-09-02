@@ -175,6 +175,4 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
 
         return $outputDouble;
     }
-
-
 }

@@ -52,8 +52,7 @@ final class DeploymentUtils
         array $configuration,
         $applicationName,
         $slice
-    )
-    {
+    ) {
         if (empty($configuration['cf_services'])) {
             $output->writeln('No services defined in configuration. Skipping!');
 
@@ -108,13 +107,12 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $applicationName
-    )
-    {
+    ) {
         try {
             self::deploySteps(
                 $deploy,
                 $output,
-                array(new StepApp($configuration, $applicationName, self::$slices[0])),
+                array (new StepApp($configuration, $applicationName, self::$slices[0])),
                 'Determining which application slice to be deployed',
                 '',
                 false
@@ -127,16 +125,17 @@ final class DeploymentUtils
         }
 
         $output->writeln('... <fg=yellow>done</fg=yellow>');
-        $startMsg = '... found. Using slice <fg=cyan>'.
-            self::renderTargetName($applicationName, $oldSlice).
-            '</fg=cyan> as deployment target.';
+        $startMsg = sprintf(
+            '... found. Using slice <fg=cyan>%s</fg=cyan> as deployment target.',
+            self::renderTargetName($applicationName, $oldSlice)
+        );
 
         try {
             // check, if there is an »old« application as well
             self::deploySteps(
                 $deploy,
                 $output,
-                array(new StepApp($configuration, $applicationName, $oldSlice)),
+                array (new StepApp($configuration, $applicationName, $oldSlice)),
                 'Trying to find deployment slice ('.$oldSlice.')',
                 $startMsg,
                 false
@@ -147,15 +146,16 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
 
             $output->writeln(
-                '... not found. Using slice <fg=cyan>'.
-                self::renderTargetName($applicationName, $slice).
-                '</fg=cyan> as deployment target.'
+                '... not found. Using slice <fg=cyan>'.self::renderTargetName(
+                    $applicationName,
+                    $slice
+                ).'</fg=cyan> as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
             self::$isInitial = true;
         }
 
-        return array($slice, $oldSlice);
+        return array ($slice, $oldSlice);
     }
 
     /**
@@ -172,7 +172,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array(new StepLogin($configuration)),
+            array (new StepLogin($configuration)),
             'Trying to login',
             '... <fg=yellow>done</fg=yellow>',
             false
@@ -193,7 +193,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array(new StepLogout($configuration)),
+            array (new StepLogout($configuration)),
             'Logging out',
             '... <fg=yellow>bye</fg=yellow>',
             false
@@ -219,10 +219,9 @@ final class DeploymentUtils
         $applicationName,
         $route,
         $slice
-    )
-    {
+    ) {
         $target = self::renderTargetName($applicationName, $slice);
-        $steps = array(
+        $steps = array (
             new StepRoute($configuration, $applicationName, $target, $route, 'unmap'),
             new StepStop($configuration, $applicationName, $slice),
             new StepDelete($configuration, $applicationName, $slice, true),
@@ -239,8 +238,7 @@ final class DeploymentUtils
             );
         } catch (ProcessFailedException $e) {
             $output->writeln(
-                PHP_EOL.
-                '<error>Unable to cleanUp old instances: '.PHP_EOL.$e->getProcess()->getOutput().'</error>'
+                PHP_EOL.'<error>Unable to cleanUp old instances: '.PHP_EOL.$e->getProcess()->getOutput().'</error>'
             );
         }
     }
@@ -266,8 +264,7 @@ final class DeploymentUtils
         $route,
         $slice,
         $start = true
-    )
-    {
+    ) {
         $target = self::renderTargetName($applicationName, $slice);
         $output->writeln('Will deploy application: <fg=cyan>'.$target.'</fg=cyan>.');
         $steps = [
@@ -313,8 +310,7 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $application
-    )
-    {
+    ) {
         if (empty($configuration['cf_environment_vars'])) {
             $output->writeln('No environment vars defined in configuration. Skipping!');
 
@@ -343,6 +339,8 @@ final class DeploymentUtils
      * @param string          $applicationName Application to be cleaned up
      * @param string          $slice           Slice to be deployed.
      * @param string          $route           Used a the subdomain for the application route.
+     *
+     * @return void
      */
     public static function addRoute(
         Deployment $deploy,
@@ -351,8 +349,7 @@ final class DeploymentUtils
         $applicationName,
         $slice,
         $route
-    )
-    {
+    ) {
         $targetName = DeploymentUtils::renderTargetName($applicationName, $slice);
         $startMessage = sprintf(
             'Adding route (%s) to application (%s).'.PHP_EOL,
@@ -375,11 +372,13 @@ final class DeploymentUtils
     /**
      * Starts the named slice of the provided application.
      *
-     * @param Deployment      $deploy
-     * @param OutputInterface $output
-     * @param array           $configuration
-     * @param string          $applicationName
-     * @param string          $slice
+     * @param Deployment      $deploy          Command handler.
+     * @param OutputInterface $output          Output of the command
+     * @param array           $configuration   Application configuration (read from deploy.yml).
+     * @param string          $applicationName Application to be cleaned up
+     * @param string          $slice           Slice to be deployed..
+     *
+     * @return void
      */
     public static function startApplication(
         Deployment $deploy,
@@ -387,8 +386,7 @@ final class DeploymentUtils
         array $configuration,
         $applicationName,
         $slice
-    )
-    {
+    ) {
         $startMessage = sprintf(
             'Starting application (%s).'.PHP_EOL,
             $applicationName
@@ -427,12 +425,9 @@ final class DeploymentUtils
         $endMsg = '... <fg=yellow>done</fg=yellow>',
         $returnProcessMessage = true,
         $forceImmediateOutput = false
-    )
-    {
+    ) {
         $output->write($startMsg);
-        $msg = $deploy->resetSteps()
-            ->registerSteps($steps)
-            ->deploy($forceImmediateOutput);
+        $msg = $deploy->resetSteps()->registerSteps($steps)->deploy($forceImmediateOutput);
         $output->writeln($endMsg);
 
         if (true === $returnProcessMessage) {

@@ -7,14 +7,15 @@ namespace Graviton\Deployment\Services\CloudFoundry;
 
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepApp;
-use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 use Graviton\Deployment\Steps\CloudFoundry\StepBindService;
+use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 use Graviton\Deployment\Steps\CloudFoundry\StepDelete;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Graviton\Deployment\Steps\CloudFoundry\StepRoute;
 use Graviton\Deployment\Steps\CloudFoundry\StepSetEnv;
+use Graviton\Deployment\Steps\CloudFoundry\StepStart;
 use Graviton\Deployment\Steps\CloudFoundry\StepStop;
 use Graviton\Deployment\Steps\StepInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,7 +52,8 @@ final class DeploymentUtils
         array $configuration,
         $applicationName,
         $slice
-    ) {
+    )
+    {
         if (empty($configuration['cf_services'])) {
             $output->writeln('No services defined in configuration. Skipping!');
 
@@ -106,7 +108,8 @@ final class DeploymentUtils
         OutputInterface $output,
         array $configuration,
         $applicationName
-    ) {
+    )
+    {
         try {
             self::deploySteps(
                 $deploy,
@@ -124,8 +127,8 @@ final class DeploymentUtils
         }
 
         $output->writeln('... <fg=yellow>done</fg=yellow>');
-        $startMsg = '... found. Using slice <fg=cyan>' .
-            self::renderTargetName($applicationName, $oldSlice) .
+        $startMsg = '... found. Using slice <fg=cyan>'.
+            self::renderTargetName($applicationName, $oldSlice).
             '</fg=cyan> as deployment target.';
 
         try {
@@ -134,7 +137,7 @@ final class DeploymentUtils
                 $deploy,
                 $output,
                 array(new StepApp($configuration, $applicationName, $oldSlice)),
-                'Trying to find deployment slice (' . $oldSlice . ')',
+                'Trying to find deployment slice ('.$oldSlice.')',
                 $startMsg,
                 false
             );
@@ -144,8 +147,8 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
 
             $output->writeln(
-                '... not found. Using slice <fg=cyan>' .
-                self::renderTargetName($applicationName, $slice) .
+                '... not found. Using slice <fg=cyan>'.
+                self::renderTargetName($applicationName, $slice).
                 '</fg=cyan> as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
@@ -216,12 +219,13 @@ final class DeploymentUtils
         $applicationName,
         $route,
         $slice
-    ) {
+    )
+    {
         $target = self::renderTargetName($applicationName, $slice);
         $steps = array(
             new StepRoute($configuration, $applicationName, $target, $route, 'unmap'),
             new StepStop($configuration, $applicationName, $slice),
-            new StepDelete($configuration, $applicationName, $slice, true)
+            new StepDelete($configuration, $applicationName, $slice, true),
         );
 
 
@@ -231,12 +235,12 @@ final class DeploymentUtils
                 $deploy,
                 $output,
                 $steps,
-                'Removing <fg=cyan>' . $target . '</fg=cyan> from Cloud Foundry.'
+                'Removing <fg=cyan>'.$target.'</fg=cyan> from Cloud Foundry.'
             );
         } catch (ProcessFailedException $e) {
             $output->writeln(
-                PHP_EOL .
-                '<error>Unable to cleanUp old instances: ' . PHP_EOL . $e->getProcess()->getOutput() . '</error>'
+                PHP_EOL.
+                '<error>Unable to cleanUp old instances: '.PHP_EOL.$e->getProcess()->getOutput().'</error>'
             );
         }
     }
@@ -262,9 +266,10 @@ final class DeploymentUtils
         $route,
         $slice,
         $start = true
-    ) {
+    )
+    {
         $target = self::renderTargetName($applicationName, $slice);
-        $output->writeln('Will deploy application: <fg=cyan>' . $target . '</fg=cyan>.');
+        $output->writeln('Will deploy application: <fg=cyan>'.$target.'</fg=cyan>.');
         $steps = [
             new StepPush($configuration, $applicationName, $slice, $start),
         ];
@@ -276,7 +281,125 @@ final class DeploymentUtils
             $deploy,
             $output,
             $steps,
-            'Pushing ' . $target . ' to Cloud Foundry.' . PHP_EOL,
+            'Pushing '.$target.' to Cloud Foundry.'.PHP_EOL,
+            '... <fg=yellow>done</fg=yellow>',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Determine if the slice to be deploy
+     *
+     * @return bool
+     */
+    public static function isInitialDeploy()
+    {
+        return self::$isInitial;
+    }
+
+    /**
+     * Injects specific environment vars to the Cloud Foundry setup.
+     *
+     * @param Deployment      $deploy        Command handler.
+     * @param OutputInterface $output        Output of the command
+     * @param array           $configuration Application configuration (read from deploy.yml).
+     * @param string          $application   Application the env vars to be defined in
+     *
+     * @return void
+     */
+    public static function setEnvironmentVariables(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $application
+    )
+    {
+        if (empty($configuration['cf_environment_vars'])) {
+            $output->writeln('No environment vars defined in configuration. Skipping!');
+
+            return;
+        }
+
+        $steps = [];
+        foreach ($configuration['cf_environment_vars'] as $envName => $envValue) {
+            $steps[] = new StepSetEnv($configuration, $application, $envName, $envValue);
+        }
+
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Defining environment variables'
+        );
+    }
+
+    /**
+     * Adds a new route to the named application
+     *
+     * @param Deployment      $deploy          Command handler.
+     * @param OutputInterface $output          Output of the command
+     * @param array           $configuration   Application configuration (read from deploy.yml).
+     * @param string          $applicationName Application to be cleaned up
+     * @param string          $slice           Slice to be deployed.
+     * @param string          $route           Used a the subdomain for the application route.
+     */
+    public static function addRoute(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $slice,
+        $route
+    )
+    {
+        $targetName = DeploymentUtils::renderTargetName($applicationName, $slice);
+        $startMessage = sprintf(
+            'Adding route (%s) to application (%s).'.PHP_EOL,
+            $route,
+            $applicationName
+        );
+        self::deploySteps(
+            $deploy,
+            $output,
+            [
+                new StepRoute($configuration, $applicationName, $targetName, $route, 'map'),
+            ],
+            $startMessage,
+            '... <fg=yellow>done</fg=yellow>',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Starts the named slice of the provided application.
+     *
+     * @param Deployment      $deploy
+     * @param OutputInterface $output
+     * @param array           $configuration
+     * @param string          $applicationName
+     * @param string          $slice
+     */
+    public static function startApplication(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $slice
+    )
+    {
+        $startMessage = sprintf(
+            'Starting application (%s).'.PHP_EOL,
+            $applicationName
+        );
+        self::deploySteps(
+            $deploy,
+            $output,
+            [
+                new StepStart($configuration, $applicationName, $slice),
+            ],
+            $startMessage,
             '... <fg=yellow>done</fg=yellow>',
             true,
             true
@@ -304,7 +427,8 @@ final class DeploymentUtils
         $endMsg = '... <fg=yellow>done</fg=yellow>',
         $returnProcessMessage = true,
         $forceImmediateOutput = false
-    ) {
+    )
+    {
         $output->write($startMsg);
         $msg = $deploy->resetSteps()
             ->registerSteps($steps)
@@ -312,18 +436,8 @@ final class DeploymentUtils
         $output->writeln($endMsg);
 
         if (true === $returnProcessMessage) {
-            $output->writeln('<fg=white>' . $msg . '</fg=white>');
+            $output->writeln('<fg=white>'.$msg.'</fg=white>');
         }
-    }
-
-    /**
-     * Determine if the slice to be deploy
-     *
-     * @return bool
-     */
-    public static function isInitialDeploy()
-    {
-        return self::$isInitial;
     }
 
     /**
@@ -337,40 +451,5 @@ final class DeploymentUtils
     private static function renderTargetName($application, $slice)
     {
         return sprintf('%s-%s', $application, $slice);
-    }
-
-    /**
-     * Injects specific environment vars to the Cloud Foundry setup.
-     *
-     * @param Deployment      $deploy        Command handler.
-     * @param OutputInterface $output        Output of the command
-     * @param array           $configuration Application configuration (read from deploy.yml).
-     * @param string          $application   Application the env vars to be defined in
-     *
-     * @return void
-     */
-    public static function setEnvironmentVariables(
-        Deployment $deploy,
-        OutputInterface $output,
-        array $configuration,
-        $application
-    ) {
-        if (empty($configuration['cf_environment_vars'])) {
-            $output->writeln('No environment vars defined in configuration. Skipping!');
-
-            return;
-        }
-
-        $steps = [];
-        foreach ($configuration['cf_environment_vars'] as $envName => $envValue) {
-            $steps[] = new StepSetEnv($configuration, $application, $envName, $envValue);
-        }
-
-        self::deploySteps(
-            $deploy,
-            $output,
-            $steps,
-            'Defining environment variables'
-        );
     }
 }

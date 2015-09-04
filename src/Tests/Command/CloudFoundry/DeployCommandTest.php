@@ -34,7 +34,7 @@ class DeployCommandTest extends DeployScriptsTestCase
         $this->configYamlExists();
         $this->suppressOutput();
 
-        $locator = new FileLocator(__DIR__ . '/../../Resources/config');
+        $locator = new FileLocator(__DIR__.'/../../Resources/config');
         $configuration = new Configuration(new Processor(), $locator);
         $deploymentHandler = new Deployment(new ProcessBuilder());
 
@@ -71,8 +71,10 @@ bind-service graviton-unstable-green graviton-unstable-test
 Defining environment variables... done
 set-env graviton-unstable-green ERRBIT_API_KEY some_secret_key
 
-Will deploy application: graviton-unstable-green.
-Pushing graviton-unstable-green to Cloud Foundry.
+Adding route (graviton-unstable) to application (graviton-unstable).
+... done
+
+Starting application (graviton-unstable).
 ... done
 
 Removing graviton-unstable-blue from Cloud Foundry.... done
@@ -102,8 +104,10 @@ bind-service graviton-master-green graviton-master-test
 Defining environment variables... done
 set-env graviton-master-green ERRBIT_API_KEY some_secret_key
 
-Will deploy application: graviton-master-green.
-Pushing graviton-master-green to Cloud Foundry.
+Adding route (graviton) to application (graviton-master).
+... done
+
+Starting application (graviton-master).
 ... done
 
 Removing graviton-master-blue from Cloud Foundry.... done
@@ -114,6 +118,7 @@ delete graviton-master-blue -f
 Logging out... bye
 
 EOD;
+
         return [
             'unstable deploy' => [
                 'graviton',
@@ -124,8 +129,7 @@ EOD;
                 'graviton',
                 'master',
                 $expectedMaster,
-            ]
+            ],
         ];
-
     }
 }

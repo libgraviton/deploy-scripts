@@ -1,6 +1,6 @@
 <?php
 /**
- * Step to stops an application in a Cloud Foundry instance.
+ * Step to start an application in a Cloud Foundry instance.
  */
 
 namespace Graviton\Deployment\Steps\CloudFoundry;

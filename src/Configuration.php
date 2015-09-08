@@ -83,7 +83,7 @@ class Configuration implements ConfigurationInterface
               ->scalarNode('cf_domain')->cannotBeEmpty()->isRequired()->end()
               ->arrayNode('cf_services')
                 ->useAttributeAsKey('name')
-                ->prototype('scalar')
+                ->prototype('variable')
                 ->end()
               ->end()
               ->arrayNode('cf_environment_vars')

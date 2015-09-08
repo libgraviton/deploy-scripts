@@ -7,23 +7,24 @@ namespace Graviton\Deployment\Services\CloudFoundry;
 
 use Graviton\Deployment\Deployment;
 use Graviton\Deployment\Steps\CloudFoundry\StepApp;
-use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 use Graviton\Deployment\Steps\CloudFoundry\StepBindService;
+use Graviton\Deployment\Steps\CloudFoundry\StepCreateService;
 use Graviton\Deployment\Steps\CloudFoundry\StepDelete;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogin;
 use Graviton\Deployment\Steps\CloudFoundry\StepLogout;
 use Graviton\Deployment\Steps\CloudFoundry\StepPush;
 use Graviton\Deployment\Steps\CloudFoundry\StepRoute;
 use Graviton\Deployment\Steps\CloudFoundry\StepSetEnv;
+use Graviton\Deployment\Steps\CloudFoundry\StepStart;
 use Graviton\Deployment\Steps\CloudFoundry\StepStop;
 use Graviton\Deployment\Steps\StepInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
- * @author   List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
- * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
- * @link     http://swisscom.ch
+ * @author  List of contributors <https://github.com/libgraviton/deploy-scripts/graphs/contributors>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link    http://swisscom.ch
  */
 final class DeploymentUtils
 {
@@ -32,7 +33,6 @@ final class DeploymentUtils
 
     /** @var bool Indicator to signal an initial deployment */
     private static $isInitial = false;
-
 
     /**
      * Creates mandatory services on CF.
@@ -59,8 +59,16 @@ final class DeploymentUtils
         }
 
         $steps = [];
-        foreach ($configuration['cf_services'] as $service => $type) {
-            $steps[] = new StepCreateService($configuration, $applicationName, $service, $type);
+        foreach ($configuration['cf_services'] as $service => $plan) {
+            $name = null;
+            $type = $service;
+            if (is_array($plan)) {
+                $name = $service;
+                $type = $plan['service'];
+                $plan = $plan['plan'];
+
+            }
+            $steps[] = new StepCreateService($configuration, $applicationName, $type, $plan, $name);
             $steps[] = new StepBindService($configuration, $applicationName, $slice, $service);
         }
 
@@ -103,7 +111,9 @@ final class DeploymentUtils
             self::deploySteps(
                 $deploy,
                 $output,
-                array(new StepApp($configuration, $applicationName, self::$slices[0])),
+                [
+                    new StepApp($configuration, $applicationName, self::$slices[0])
+                ],
                 'Determining which application slice to be deployed',
                 '',
                 false
@@ -116,17 +126,20 @@ final class DeploymentUtils
         }
 
         $output->writeln('... <fg=yellow>done</fg=yellow>');
-        $startMsg = '... found. Using slice <fg=cyan>' .
-            self::renderTargetName($applicationName, $oldSlice) .
-            '</fg=cyan> as deployment target.';
+        $startMsg = sprintf(
+            '... found. Using slice <fg=cyan>%s</fg=cyan> as deployment target.',
+            self::renderTargetName($applicationName, $oldSlice)
+        );
 
         try {
             // check, if there is an »old« application as well
             self::deploySteps(
                 $deploy,
                 $output,
-                array(new StepApp($configuration, $applicationName, $oldSlice)),
-                'Trying to find deployment slice (' . $oldSlice . ')',
+                [
+                    new StepApp($configuration, $applicationName, $oldSlice),
+                ],
+                'Trying to find deployment slice ('.$oldSlice.')',
                 $startMsg,
                 false
             );
@@ -136,15 +149,15 @@ final class DeploymentUtils
             $oldSlice = self::$slices[1];
 
             $output->writeln(
-                '... not found. Using slice <fg=cyan>' .
-                self::renderTargetName($applicationName, $slice) .
+                '... not found. Using slice <fg=cyan>'.
+                self::renderTargetName($applicationName, $slice).
                 '</fg=cyan> as deployment target.'
             );
             $output->writeln('Initial Deploy, remember to set up the DB');
             self::$isInitial = true;
         }
 
-        return array($slice, $oldSlice);
+        return [$slice, $oldSlice];
     }
 
     /**
@@ -161,7 +174,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array(new StepLogin($configuration)),
+            [new StepLogin($configuration)],
             'Trying to login',
             '... <fg=yellow>done</fg=yellow>',
             false
@@ -182,7 +195,7 @@ final class DeploymentUtils
         self::deploySteps(
             $deploy,
             $output,
-            array(new StepLogout($configuration)),
+            [new StepLogout($configuration)],
             'Logging out',
             '... <fg=yellow>bye</fg=yellow>',
             false
@@ -210,11 +223,11 @@ final class DeploymentUtils
         $slice
     ) {
         $target = self::renderTargetName($applicationName, $slice);
-        $steps = array(
+        $steps = [
             new StepRoute($configuration, $applicationName, $target, $route, 'unmap'),
             new StepStop($configuration, $applicationName, $slice),
-            new StepDelete($configuration, $applicationName, $slice, true)
-        );
+            new StepDelete($configuration, $applicationName, $slice, true),
+        ];
 
 
         try {
@@ -223,12 +236,11 @@ final class DeploymentUtils
                 $deploy,
                 $output,
                 $steps,
-                'Removing <fg=cyan>' . $target . '</fg=cyan> from Cloud Foundry.'
+                'Removing <fg=cyan>'.$target.'</fg=cyan> from Cloud Foundry.'
             );
         } catch (ProcessFailedException $e) {
             $output->writeln(
-                PHP_EOL .
-                '<error>Unable to cleanUp old instances: ' . PHP_EOL . $e->getProcess()->getOutput() . '</error>'
+                PHP_EOL.'<error>Unable to cleanUp old instances: '.PHP_EOL.$e->getProcess()->getOutput().'</error>'
             );
         }
     }
@@ -256,7 +268,7 @@ final class DeploymentUtils
         $start = true
     ) {
         $target = self::renderTargetName($applicationName, $slice);
-        $output->writeln('Will deploy application: <fg=cyan>' . $target . '</fg=cyan>.');
+        $output->writeln('Will deploy application: <fg=cyan>'.$target.'</fg=cyan>.');
         $steps = [
             new StepPush($configuration, $applicationName, $slice, $start),
         ];
@@ -268,44 +280,11 @@ final class DeploymentUtils
             $deploy,
             $output,
             $steps,
-            'Pushing ' . $target . ' to Cloud Foundry.' . PHP_EOL,
+            'Pushing '.$target.' to Cloud Foundry.'.PHP_EOL,
             '... <fg=yellow>done</fg=yellow>',
             true,
             true
         );
-    }
-
-    /**
-     * Initializes a single
-     *
-     * @param Deployment      $deploy               Command handler.
-     * @param OutputInterface $output               Output of the command
-     * @param StepInterface[] $steps                Process step to be executed.
-     * @param string          $startMsg             Message to  be shown on start.
-     * @param string          $endMsg               Message to be shown on end.
-     * @param bool            $returnProcessMessage Include message from process in output..
-     * @param bool            $forceImmediateOutput Forces the process to send every output to stdout immediately.
-     *
-     * @return void
-     */
-    private static function deploySteps(
-        Deployment $deploy,
-        OutputInterface $output,
-        array $steps,
-        $startMsg,
-        $endMsg = '... <fg=yellow>done</fg=yellow>',
-        $returnProcessMessage = true,
-        $forceImmediateOutput = false
-    ) {
-        $output->write($startMsg);
-        $msg = $deploy->resetSteps()
-            ->registerSteps($steps)
-            ->deploy($forceImmediateOutput);
-        $output->writeln($endMsg);
-
-        if (true === $returnProcessMessage) {
-            $output->writeln('<fg=white>' . $msg . '</fg=white>');
-        }
     }
 
     /**
@@ -316,19 +295,6 @@ final class DeploymentUtils
     public static function isInitialDeploy()
     {
         return self::$isInitial;
-    }
-
-    /**
-     * Provides the name of the target to used.
-     *
-     * @param string $application Name of the current application
-     * @param string $slice       Slice to be used (from blue/green deployment)
-     *
-     * @return string
-     */
-    private static function renderTargetName($application, $slice)
-    {
-        return sprintf('%s-%s', $application, $slice);
     }
 
     /**
@@ -364,5 +330,123 @@ final class DeploymentUtils
             $steps,
             'Defining environment variables'
         );
+    }
+
+    /**
+     * Adds a new route to the named application
+     *
+     * @param Deployment      $deploy          Command handler.
+     * @param OutputInterface $output          Output of the command
+     * @param array           $configuration   Application configuration (read from deploy.yml).
+     * @param string          $applicationName Application to be cleaned up
+     * @param string          $slice           Slice to be deployed.
+     * @param string          $route           Used a the subdomain for the application route.
+     *
+     * @return void
+     */
+    public static function addRoute(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $slice,
+        $route
+    ) {
+        $targetName = DeploymentUtils::renderTargetName($applicationName, $slice);
+        $startMessage = sprintf(
+            'Adding route (%s) to application (%s).'.PHP_EOL,
+            $route,
+            $applicationName
+        );
+        self::deploySteps(
+            $deploy,
+            $output,
+            [
+                new StepRoute($configuration, $applicationName, $targetName, $route, 'map'),
+            ],
+            $startMessage,
+            '... <fg=yellow>done</fg=yellow>',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Starts the named slice of the provided application.
+     *
+     * @param Deployment      $deploy          Command handler.
+     * @param OutputInterface $output          Output of the command
+     * @param array           $configuration   Application configuration (read from deploy.yml).
+     * @param string          $applicationName Application to be cleaned up
+     * @param string          $slice           Slice to be deployed..
+     *
+     * @return void
+     */
+    public static function startApplication(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $applicationName,
+        $slice
+    ) {
+        $startMessage = sprintf(
+            'Starting application (%s).'.PHP_EOL,
+            $applicationName
+        );
+        self::deploySteps(
+            $deploy,
+            $output,
+            [
+                new StepStart($configuration, $applicationName, $slice),
+            ],
+            $startMessage,
+            '... <fg=yellow>done</fg=yellow>',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Initializes a single
+     *
+     * @param Deployment      $deploy               Command handler.
+     * @param OutputInterface $output               Output of the command
+     * @param StepInterface[] $steps                Process step to be executed.
+     * @param string          $startMsg             Message to  be shown on start.
+     * @param string          $endMsg               Message to be shown on end.
+     * @param bool            $returnProcessMessage Include message from process in output..
+     * @param bool            $forceImmediateOutput Forces the process to send every output to stdout immediately.
+     *
+     * @return void
+     */
+    private static function deploySteps(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $steps,
+        $startMsg,
+        $endMsg = '... <fg=yellow>done</fg=yellow>',
+        $returnProcessMessage = true,
+        $forceImmediateOutput = false
+    ) {
+        $output->write($startMsg);
+        $msg = $deploy->resetSteps()->registerSteps($steps)->deploy($forceImmediateOutput);
+        $output->writeln($endMsg);
+
+        if (true === $returnProcessMessage) {
+            $output->writeln('<fg=white>'.$msg.'</fg=white>');
+        }
+    }
+
+    /**
+     * Provides the name of the target to used.
+     *
+     * @param string $application Name of the current application
+     * @param string $slice       Slice to be used (from blue/green deployment)
+     *
+     * @return string
+     */
+    private static function renderTargetName($application, $slice)
+    {
+        return sprintf('%s-%s', $application, $slice);
     }
 }

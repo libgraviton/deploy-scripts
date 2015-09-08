@@ -8,10 +8,22 @@ Install it using [composer](https://getcomposer.org/).
 composer require graviton/deploy-scripts
 ```
 
+There is also a PHAR file for your convenience, [located here](https://graviton-deploy-scripts.nova.scapp.io/deploy.phar). ;-)
+
 ## Configuration
 The configuration is to be done in ``app/config/deploy.yml``.
 In order to configure this library you have to copy the ``deploy.yml.dist`` to ``deploy.yml`` and modify the latter 
 by replacing every value with your personal configuration. 
+
+## PHAR building
+In order to build a PHAR file, execute
+
+```bash
+composer build
+```
+
+The `deploy.phar` will be created in `build/`. This `build/` folder can be pushed to the cloud by using `deploy-scripts` on this repo
+(probably using `deploy.phar` itself *g)
 
 ## Usage
 ### Console command
@@ -35,6 +47,6 @@ We welcome contributions as a pull request on the develop branch.
   Deploys an application to a CF instance.
 
 ## Further ideas
-- evolve a ``GravitonDeployBundle`` from this library.
-- provide the possibility to push to multiple Cloud Foundry instances at once.
-- add incenteev Parameter handler (https://github.com/Incenteev/ParameterHandler) to be able to use env vars for config.
+- ~~evolve a ``GravitonDeployBundle`` from this library.~~
+- provide the possibility to push to multiple Cloud Foundry instances at once by one command.
+- ~~add incenteev Parameter handler (https://github.com/Incenteev/ParameterHandler) to be able to use env vars for config.~~

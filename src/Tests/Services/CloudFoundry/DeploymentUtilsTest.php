@@ -55,41 +55,22 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
     }
 
     /**
-     * Provides an instance of the Deployment class.
+     * validates the start application command
      *
-     * @param \Symfony\Component\Process\ProcessBuilder $processDouble Stub to be able to test.
-     * @param array                                     $methodCounts  What methods shall be called how often?
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return void
      */
-    private function getDeploymentDouble($processDouble, array $methodCounts)
+    public function testStartApplication()
     {
-        $deployDouble = $this->getMockBuilder('\Graviton\Deployment\Deployment')
-            ->setConstructorArgs(array($processDouble))
-            ->setMethods(array('registerSteps', 'deploy'))
-            ->getMock();
-        $deployDouble
-            ->expects($this->exactly($methodCounts['registerSteps']))
-            ->method('registerSteps')
-            ->with($this->isType('array'))
-            ->willReturn($deployDouble);
-        $deployDouble
-            ->expects($this->exactly($methodCounts['deploy']))
-            ->method('deploy');
+        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
 
-        return $deployDouble;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getOutputDouble()
-    {
-        $outputDouble = $this->getMockBuilder('\Symfony\Component\Console\Output\OutputInterface')
-            ->setMethods(array('write', 'writeln'))
-            ->getMockForAbstractClass();
-
-        return $outputDouble;
+        DeploymentUtils::startApplication(
+            $this->getDeploymentDouble($processDouble, ['registerSteps' => 1, 'deploy' => 1]),
+            $this->getOutputDouble(),
+            $this->getConfigurationSet(),
+            'test-test',
+            'graviton',
+            'blue'
+        );
     }
 
     /**
@@ -138,5 +119,60 @@ class DeploymentUtilsTest extends DeployScriptsTestCase
             $this->getConfigurationSet(),
             'Test_test-unstable-blue'
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddRoute()
+    {
+        $processDouble = $this->getMock('\Symfony\Component\Process\ProcessBuilder');
+
+        DeploymentUtils::addRoute(
+            $this->getDeploymentDouble($processDouble, array('registerSteps' => 1, 'deploy' => 1)),
+            $this->getOutputDouble(),
+            $this->getConfigurationSet(),
+            'Test_test-unstable',
+            'blue',
+            'Test_test-unstable'
+        );
+    }
+
+    /**
+     * Provides an instance of the Deployment class.
+     *
+     * @param \Symfony\Component\Process\ProcessBuilder $processDouble Stub to be able to test.
+     * @param array                                     $methodCounts  What methods shall be called how often?
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getDeploymentDouble($processDouble, array $methodCounts)
+    {
+        $deployDouble = $this->getMockBuilder('\Graviton\Deployment\Deployment')
+            ->setConstructorArgs(array($processDouble))
+            ->setMethods(array('registerSteps', 'deploy'))
+            ->getMock();
+        $deployDouble
+            ->expects($this->exactly($methodCounts['registerSteps']))
+            ->method('registerSteps')
+            ->with($this->isType('array'))
+            ->willReturn($deployDouble);
+        $deployDouble
+            ->expects($this->exactly($methodCounts['deploy']))
+            ->method('deploy');
+
+        return $deployDouble;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getOutputDouble()
+    {
+        $outputDouble = $this->getMockBuilder('\Symfony\Component\Console\Output\OutputInterface')
+            ->setMethods(array('write', 'writeln'))
+            ->getMockForAbstractClass();
+
+        return $outputDouble;
     }
 }

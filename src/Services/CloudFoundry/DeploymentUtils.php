@@ -288,6 +288,80 @@ final class DeploymentUtils
     }
 
     /**
+     * Runs a command on a Cloud Foundry instance
+     *
+     * @param Deployment      $deploy          deploy handler
+     * @param OutputInterface $output          output interface
+     * @param array           $configuration   the configuration params
+     * @param string          $command         the command to be executed
+     * @param string          $applicationName the application name
+     *
+     * @return void
+     */
+    public static function runCommand(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $configuration,
+        $command,
+        $applicationName
+    ) {
+        $id = uniqid();
+        $output->writeln('Will run: <fg=cyan>' . $command . '</fg=cyan> on ' . $applicationName . '-run-' . $id);
+        $steps = [
+            new StepPush($configuration, $applicationName, 'run-' . $id, false, true, $command),
+        ];
+
+        foreach ($configuration['cf_services'] as $service => $val) {
+            array_push($steps, new StepBindService($configuration, $applicationName, 'run-' . $id, $service));
+        }
+
+        array_push($steps, new StepPush($configuration, $applicationName, 'run-' . $id, true, true, $command));
+
+        self::deploySteps(
+            $deploy,
+            $output,
+            $steps,
+            'Executing <fg=cyan>' . $command .'</fg=cyan>' . PHP_EOL,
+            '<fg=green>Command Finished</fg=green>',
+            true,
+            true
+        );
+    }
+
+    /**
+     * Initializes a single
+     *
+     * @param Deployment      $deploy               Command handler.
+     * @param OutputInterface $output               Output of the command
+     * @param StepInterface[] $steps                Process step to be executed.
+     * @param string          $startMsg             Message to  be shown on start.
+     * @param string          $endMsg               Message to be shown on end.
+     * @param bool            $returnProcessMessage Include message from process in output..
+     * @param bool            $forceImmediateOutput Forces the process to send every output to stdout immediately.
+     *
+     * @return void
+     */
+    private static function deploySteps(
+        Deployment $deploy,
+        OutputInterface $output,
+        array $steps,
+        $startMsg,
+        $endMsg = '... <fg=yellow>done</fg=yellow>',
+        $returnProcessMessage = true,
+        $forceImmediateOutput = false
+    ) {
+        $output->write($startMsg);
+        $msg = $deploy->resetSteps()
+            ->registerSteps($steps)
+            ->deploy($forceImmediateOutput);
+        $output->writeln($endMsg);
+
+        if (true === $returnProcessMessage) {
+            $output->writeln('<fg=white>' . $msg . '</fg=white>');
+        }
+    }
+
+    /**
      * Determine if the slice to be deploy
      *
      * @return bool
@@ -404,37 +478,6 @@ final class DeploymentUtils
             true,
             true
         );
-    }
-
-    /**
-     * Initializes a single
-     *
-     * @param Deployment      $deploy               Command handler.
-     * @param OutputInterface $output               Output of the command
-     * @param StepInterface[] $steps                Process step to be executed.
-     * @param string          $startMsg             Message to  be shown on start.
-     * @param string          $endMsg               Message to be shown on end.
-     * @param bool            $returnProcessMessage Include message from process in output..
-     * @param bool            $forceImmediateOutput Forces the process to send every output to stdout immediately.
-     *
-     * @return void
-     */
-    private static function deploySteps(
-        Deployment $deploy,
-        OutputInterface $output,
-        array $steps,
-        $startMsg,
-        $endMsg = '... <fg=yellow>done</fg=yellow>',
-        $returnProcessMessage = true,
-        $forceImmediateOutput = false
-    ) {
-        $output->write($startMsg);
-        $msg = $deploy->resetSteps()->registerSteps($steps)->deploy($forceImmediateOutput);
-        $output->writeln($endMsg);
-
-        if (true === $returnProcessMessage) {
-            $output->writeln('<fg=white>'.$msg.'</fg=white>');
-        }
     }
 
     /**

@@ -39,12 +39,22 @@ see tests ;)
 ## Development
 We welcome contributions as a pull request on the develop branch.
 
+### Add new Command
+Commands need to be registered within bin/deploy
+[see here](http://symfony.com/doc/current/components/console/introduction.html)
+
 ## Available Commands
 ### Cloud Foundry specific
 - **CheckApplicationCommand**
   Determines, if a special Cloud Foundry application is alive.
 - **DeployCommand**
   Deploys an application to a CF instance.
+- **RunCommand**
+  Runs a shell command on a CF instance. It does not clean up at the moment so you have to do it yourself by running: 
+  
+   ```bash
+   cf a | awk '/-run-/ {print $1}' | xargs -n 1 cf d -
+   ```
 
 ## Further ideas
 - ~~evolve a ``GravitonDeployBundle`` from this library.~~

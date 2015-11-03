@@ -71,10 +71,10 @@ bind-service graviton-unstable-green graviton-unstable-test
 Defining environment variables... done
 set-env graviton-unstable-green ERRBIT_API_KEY some_secret_key
 
-Adding route (graviton-unstable) to application (graviton-unstable).
+Starting application (graviton-unstable).
 ... done
 
-Starting application (graviton-unstable).
+Adding route (graviton-unstable) to application (graviton-unstable).
 ... done
 
 Removing graviton-unstable-blue from Cloud Foundry.... done
@@ -104,10 +104,10 @@ bind-service graviton-master-green graviton-master-test
 Defining environment variables... done
 set-env graviton-master-green ERRBIT_API_KEY some_secret_key
 
-Adding route (graviton) to application (graviton-master).
+Starting application (graviton-master).
 ... done
 
-Starting application (graviton-master).
+Adding route (graviton) to application (graviton-master).
 ... done
 
 Removing graviton-master-blue from Cloud Foundry.... done

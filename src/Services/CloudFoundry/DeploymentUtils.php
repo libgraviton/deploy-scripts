@@ -128,7 +128,7 @@ final class DeploymentUtils
         $output->writeln('... <fg=yellow>done</fg=yellow>');
         $startMsg = sprintf(
             '... found. Using slice <fg=cyan>%s</fg=cyan> as deployment target.',
-            self::renderTargetName($applicationName, $oldSlice)
+            self::renderTargetName($applicationName, $slice)
         );
 
         try {

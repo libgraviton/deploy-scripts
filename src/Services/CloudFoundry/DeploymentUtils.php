@@ -66,7 +66,6 @@ final class DeploymentUtils
                 $name = $service;
                 $type = $plan['service'];
                 $plan = $plan['plan'];
-
             }
             $steps[] = new StepCreateService($configuration, $applicationName, $type, $plan, $name);
             $steps[] = new StepBindService($configuration, $applicationName, $slice, $service);

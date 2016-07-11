@@ -57,7 +57,7 @@ Deploying application (graviton-unstable) to a Cloud Foundry instance.
 Trying to login... done
 Determining which application slice to be deployed
 ... done
-Trying to find deployment slice (blue)... found. Using slice graviton-unstable-blue as deployment target.
+Trying to find deployment slice (blue)... found. Using slice graviton-unstable-green as deployment target.
 Will deploy application: graviton-unstable-green.
 Pushing graviton-unstable-green to Cloud Foundry.
 ... done
@@ -90,7 +90,7 @@ Deploying application (graviton-master) to a Cloud Foundry instance.
 Trying to login... done
 Determining which application slice to be deployed
 ... done
-Trying to find deployment slice (blue)... found. Using slice graviton-master-blue as deployment target.
+Trying to find deployment slice (blue)... found. Using slice graviton-master-green as deployment target.
 Will deploy application: graviton-master-green.
 Pushing graviton-master-green to Cloud Foundry.
 ... done

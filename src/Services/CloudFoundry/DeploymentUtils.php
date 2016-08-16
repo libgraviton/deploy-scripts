@@ -66,7 +66,6 @@ final class DeploymentUtils
                 $name = $service;
                 $type = $plan['service'];
                 $plan = $plan['plan'];
-
             }
             $steps[] = new StepCreateService($configuration, $applicationName, $type, $plan, $name);
             $steps[] = new StepBindService($configuration, $applicationName, $slice, $service);
@@ -128,7 +127,7 @@ final class DeploymentUtils
         $output->writeln('... <fg=yellow>done</fg=yellow>');
         $startMsg = sprintf(
             '... found. Using slice <fg=cyan>%s</fg=cyan> as deployment target.',
-            self::renderTargetName($applicationName, $oldSlice)
+            self::renderTargetName($applicationName, $slice)
         );
 
         try {

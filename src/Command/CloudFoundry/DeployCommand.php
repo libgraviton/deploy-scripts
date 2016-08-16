@@ -113,6 +113,14 @@ final class DeployCommand extends AbstractCommand
             $applicationName.'-'.$slice
         );
 
+        DeploymentUtils::startApplication(
+            $this->deployHandler,
+            $output,
+            $this->configuration,
+            $applicationName,
+            $slice
+        );
+
         DeploymentUtils::addRoute(
             $this->deployHandler,
             $output,
@@ -120,14 +128,6 @@ final class DeployCommand extends AbstractCommand
             $applicationName,
             $slice,
             $applicationRoute
-        );
-
-        DeploymentUtils::startApplication(
-            $this->deployHandler,
-            $output,
-            $this->configuration,
-            $applicationName,
-            $slice
         );
 
         if (!DeploymentUtils::isInitialDeploy()) {
